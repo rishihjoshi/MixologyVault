@@ -211,13 +211,64 @@ function renderHome() {
 // ── RENDER MY VAULT ───────────────────────────────────────
 let activeBarFilter = 'all'; // 'all' | 'have' | 'canGet'
 
+// ── LOCAL STATUS OVERRIDES ────────────────────────────────
+// Lets the user mark ingredients as in-stock / needed locally.
+// Stored in localStorage so it survives page reloads.
+// Does NOT write back to Google Sheets.
+let localStatusOverrides = {}; // { [ingredientId]: 'have' | 'canGet' }
+
+function loadLocalOverrides() {
+  try {
+    const raw = localStorage.getItem('mv_ing_overrides');
+    localStatusOverrides = raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    localStatusOverrides = {};
+  }
+}
+
+function saveLocalOverrides() {
+  try {
+    localStorage.setItem('mv_ing_overrides', JSON.stringify(localStatusOverrides));
+  } catch (e) {}
+}
+
+// Returns the effective status for an ingredient, applying any local override
+function getEffectiveStatus(ing) {
+  const ov = localStatusOverrides[ing.id];
+  if (ov !== undefined) return { have: ov === 'have', canGet: ov === 'canGet' };
+  return { have: ing.have, canGet: ing.canGet };
+}
+
+// Toggles an ingredient between 'have' and 'canGet'
+function toggleIngredientStatus(id) {
+  const ing = allIngredients.find(i => i.id === id);
+  if (!ing) return;
+  const eff = getEffectiveStatus(ing);
+  // Toggle: in-stock → need-to-get → in-stock
+  localStatusOverrides[id] = eff.have ? 'canGet' : 'have';
+  saveLocalOverrides();
+  renderBar();
+}
+
+// Wire checkbox clicks via event delegation on #bar-sections
+// (Delegation survives renderBar's innerHTML replacement)
+function wireBarSections() {
+  const container = document.getElementById('bar-sections');
+  if (!container) return;
+  container.addEventListener('click', e => {
+    const checkBtn = e.target.closest('.ing-check');
+    if (!checkBtn) return;
+    e.stopPropagation();
+    toggleIngredientStatus(parseInt(checkBtn.dataset.ingId));
+  });
+}
+
 function wireBarFilters() {
   const row = document.getElementById('vault-filter-row');
   if (!row) return;
   row.addEventListener('click', e => {
     const btn = e.target.closest('.vault-filter-btn');
     if (!btn) return;
-    // Update active state on the buttons
     row.querySelectorAll('.vault-filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     activeBarFilter = btn.dataset.filter;
@@ -229,10 +280,13 @@ function renderBar() {
   const container = document.getElementById('bar-sections');
   if (!container) return;
 
-  // Always update all three count badges (these elements are stable in the DOM)
-  const total   = allIngredients.length;
-  const haveN   = allIngredients.filter(i => i.have).length;
-  const canGetN = allIngredients.filter(i => i.canGet).length;
+  // Compute effective statuses (sheet data + local overrides)
+  const effAll = allIngredients.map(i => ({ ...i, eff: getEffectiveStatus(i) }));
+
+  // Update filter tab counts using effective statuses
+  const total   = effAll.length;
+  const haveN   = effAll.filter(i => i.eff.have).length;
+  const canGetN = effAll.filter(i => i.eff.canGet).length;
 
   const cntAll    = document.getElementById('vf-count-all');
   const cntHave   = document.getElementById('vf-count-have');
@@ -241,17 +295,17 @@ function renderBar() {
   if (cntHave)   cntHave.textContent   = haveN;
   if (cntCanGet) cntCanGet.textContent = canGetN;
 
-  // Ensure the correct tab is marked active (guards against re-render edge cases)
+  // Keep correct active tab highlighted
   document.querySelectorAll('.vault-filter-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.filter === activeBarFilter);
   });
 
-  // Apply active filter to ingredient list
-  let visible = allIngredients;
-  if (activeBarFilter === 'have')   visible = allIngredients.filter(i => i.have);
-  if (activeBarFilter === 'canGet') visible = allIngredients.filter(i => i.canGet);
+  // Apply filter using effective statuses
+  let visible = effAll;
+  if (activeBarFilter === 'have')   visible = effAll.filter(i => i.eff.have);
+  if (activeBarFilter === 'canGet') visible = effAll.filter(i => i.eff.canGet);
 
-  // Update item count label
+  // Item count label
   const countEl = document.getElementById('vault-item-count');
   if (countEl) {
     const label = activeBarFilter === 'have'   ? 'in stock'
@@ -265,7 +319,7 @@ function renderBar() {
     return;
   }
 
-  // Group visible ingredients by category
+  // Group by category
   const groups = {};
   for (const ing of visible) {
     const key = ing.category.toLowerCase();
@@ -276,12 +330,41 @@ function renderBar() {
   const ORDER   = ['spirits','liqueurs','bitters','juices','syrups','garnishes','wine','top up'];
   const allKeys = [...new Set([...ORDER, ...Object.keys(groups)])];
 
+  // Checkmark SVG (inline so no external dependency)
+  const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
   let html = '';
   for (const key of allKeys) {
     if (!groups[key] || groups[key].length === 0) continue;
     const meta  = CAT_META[key] || { icon: '📦', label: key, cls: 'cat-spirits' };
     const items = groups[key];
-    html += `<div class="bar-category ${meta.cls}"><div class="cat-header"><div class="cat-icon">${meta.icon}</div><div class="cat-label">${meta.label}</div><div class="cat-count">${items.length} item${items.length > 1 ? 's' : ''}</div></div><div class="pill-grid">${items.map(ing => `<div class="pill ${ing.have ? 'have' : ing.canGet ? 'can-get' : ''}"><div class="pill-dot"></div><span class="pill-name">${esc(ing.item)}</span>${ing.brand ? `<span class="pill-brand">· ${esc(ing.brand)}</span>` : ''}</div>`).join('')}</div></div>`;
+
+    // Build full-width row for each ingredient with a checkbox on the right
+    const rowsHtml = items.map(ing => {
+      const isHave   = ing.eff.have;
+      const isCanGet = ing.eff.canGet;
+      const statusCls = isHave ? 'have' : isCanGet ? 'can-get' : '';
+      const ariaLabel = isHave ? 'Mark as needed' : 'Mark as in stock';
+      return `<div class="ing-row ${statusCls}">
+        <div class="pill-dot"></div>
+        <div class="ing-row-info">
+          <span class="ing-row-name">${esc(ing.item)}</span>
+          ${ing.brand ? `<span class="ing-row-brand">· ${esc(ing.brand)}</span>` : ''}
+        </div>
+        <button class="ing-check ${isHave ? 'checked' : ''}" data-ing-id="${ing.id}" aria-label="${ariaLabel}">
+          ${checkSVG}
+        </button>
+      </div>`;
+    }).join('');
+
+    html += `<div class="bar-category ${meta.cls}">
+      <div class="cat-header">
+        <div class="cat-icon">${meta.icon}</div>
+        <div class="cat-label">${meta.label}</div>
+        <div class="cat-count">${items.length} item${items.length > 1 ? 's' : ''}</div>
+      </div>
+      <div class="ing-list">${rowsHtml}</div>
+    </div>`;
   }
 
   container.innerHTML = html ||
@@ -665,9 +748,13 @@ async function init() {
     window.visualViewport.addEventListener('scroll', handleVisualViewport, { passive: true });
   }
 
+  // ③ Load persisted ingredient status overrides from localStorage
+  loadLocalOverrides();
+
   setGreeting();
   wireDecide();
   wireBarFilters();
+  wireBarSections();
   buildFilterChips();
 
   document.getElementById('cocktail-search')?.addEventListener('input', e => {

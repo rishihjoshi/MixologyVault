@@ -75,45 +75,47 @@
 }
 
 /* ── Base ── */
-html {
-  /* 100dvh = Dynamic Viewport Height — adjusts for iOS Safari chrome.
-     This is the correct fix for iPhone 15 Pro (iOS 17+). */
-  height: 100dvh;
-}
-body {
+html, body {
   height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-b);
-  font-size: 16px;
   overflow: hidden;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-b);
+  font-size: 16px;
+}
 
-/* ── App Shell ── */
+/* ── App Shell ──
+   position:fixed; inset:0 is the definitive fix for iPhone bottom gap.
+   Unlike height:100dvh (which has Safari implementation gaps), bottom:0
+   in a fixed element always reaches the physical screen edge, so the nav's
+   padding-bottom:env(safe-area-inset-bottom) correctly covers the home indicator.
+   Desktop overrides this at ≥520px back to flow positioning.
+*/
 #app {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
   display: flex;
   flex-direction: column;
-  /* Cascade: browser uses the LAST value it understands.
-     100vh          → old desktop / Android fallback
-     calc(--vh*100) → Android Chrome address-bar fix (set by JS)
-     100dvh         → iPhone 15 Pro / iOS 17 / Chrome 108 (wins) */
-  height: 100vh;
-  height: calc(var(--vh, 1vh) * 100);
-  height: 100dvh;
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
   background: var(--bg);
-  position: relative;
   overflow: hidden;
 }
 
-/* ── Tablet / Desktop: centred phone-frame ── */
+/* ── Desktop / Tablet: revert to centred phone-frame ── */
 @media (min-width: 520px) {
-  body { background: #05050c; }
+  body { background: #05050c; overflow: hidden; }
   #app {
+    /* Back to flow positioning for centred frame layout */
+    position: relative;
+    top: auto; left: auto; right: auto; bottom: auto;
+    width: 100%;
+    max-width: 520px;
+    height: 100vh;
+    height: 100dvh;
+    margin: 0 auto;
     box-shadow: 0 0 80px rgba(0,0,0,.9);
     border-left:  0.5px solid var(--border);
     border-right: 0.5px solid var(--border);
@@ -241,11 +243,12 @@ body {
 
 /* AI screen gets flex layout when active so chat messages fill the space
    and the chat bar sticks to the bottom naturally */
+/* AI screen is flex when active so chat messages fill space and input stays pinned */
 #screen-ai.active {
   display: flex;
   flex-direction: column;
-  /* min-height matches the scroll area — makes flex children fill correctly */
-  min-height: calc(calc(var(--vh, 1vh) * 100) - var(--nav-h) - var(--safe-b));
+  /* With #app position:fixed, 100% here fills the scroll-area reliably */
+  min-height: 100%;
 }
 
 @keyframes scr-in {
@@ -509,108 +512,94 @@ body {
    MY VAULT SCREEN
 ══════════════════════════════════════════ */
 
-/* ── Vault Filter Tabs ── */
+/* ── Vault Filter Segmented Control ──
+   One pill container, transparent buttons inside.
+   Active segment gets the surface background + shadow so it "lifts".
+   transparent buttons on dark container = no white iOS default button bleed-through.
+*/
 .vault-filter-row {
   display: flex;
-  gap: 8px;
-  margin: 16px 16px 0;
+  gap: 3px;
+  padding: 4px;
+  margin: 14px 16px 0;
+  background: var(--card);
+  border: 0.5px solid var(--border2);
+  border-radius: 14px;
   flex-shrink: 0;
-  /* No shared background — individual pill buttons like cocktail chips */
 }
 
 .vault-filter-btn {
   flex: 1;
-  /* Kill iOS Safari's white button override */
+  /* Nuke iOS Safari's default white button background */
   -webkit-appearance: none;
   appearance: none;
-  /* Explicit dark background so iOS can't override it */
-  background: var(--card);
-  border: 0.5px solid var(--border2);
-  border-radius: 22px;
-  padding: 10px 6px 9px;
+  /* transparent shows the container's dark --card behind it */
+  background: transparent;
+  border: none;
+  border-radius: 11px;
+  padding: 7px 4px 8px;
   font-family: var(--font-b);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .02em;
   color: var(--muted);
   cursor: pointer;
-  min-height: 56px;
+  min-height: 52px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  transition: background .18s, border-color .18s, color .18s;
+  gap: 2px;
+  transition: background .18s, color .18s, box-shadow .18s;
+  /* Prevent text wrapping breaking layout */
+  white-space: nowrap;
 }
 
-/* Status dot */
-.vault-filter-btn .vf-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--muted2);
-  flex-shrink: 0;
-  transition: background .18s, transform .18s;
-}
-
-/* Count badge */
+/* Big number */
 .vault-filter-btn .vf-count {
-  font-size: 15px;
-  font-weight: 700;
   font-family: var(--font-d);
-  color: var(--muted);
+  font-size: 20px;
+  font-weight: 700;
   line-height: 1;
-  transition: color .18s;
+  color: inherit;
 }
 
-/* Label text */
+/* Label under the number */
 .vault-filter-btn .vf-label {
   font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .04em;
+  font-weight: 600;
+  letter-spacing: .05em;
   text-transform: uppercase;
-  color: var(--muted);
-  transition: color .18s;
+  color: inherit;
+  opacity: .8;
 }
 
-/* ── Active states — solid, unmissable ── */
-/* All (gold) */
+/* ── Active state — lifted segment with colour ── */
+.vault-filter-btn.active {
+  background: var(--surface);
+  box-shadow: 0 1px 4px rgba(0,0,0,.55), 0 0 0 0.5px var(--border2);
+}
+
+/* All → gold */
 .vault-filter-btn[data-filter="all"].active {
-  background: var(--amber-glow);
-  border-color: var(--amber-l);
+  color: var(--amber-xl);
 }
-.vault-filter-btn[data-filter="all"].active .vf-dot   { background: var(--amber-l); transform: scale(1.2); }
-.vault-filter-btn[data-filter="all"].active .vf-count { color: var(--amber-xl); }
-.vault-filter-btn[data-filter="all"].active .vf-label { color: var(--amber-l); }
-
-/* In Stock (emerald) */
+/* In Stock → emerald */
 .vault-filter-btn[data-filter="have"].active {
-  background: var(--accent-glow);
-  border-color: var(--accent-l);
+  color: var(--accent-xl);
 }
-.vault-filter-btn[data-filter="have"].active .vf-dot   { background: var(--accent-xl); transform: scale(1.2); }
-.vault-filter-btn[data-filter="have"].active .vf-count { color: var(--accent-xl); }
-.vault-filter-btn[data-filter="have"].active .vf-label { color: var(--accent-l); }
-
-/* Need to Get (sky blue) */
+/* Need to Get → sky */
 .vault-filter-btn[data-filter="canGet"].active {
-  background: rgba(56,189,248,.1);
-  border-color: #38bdf8;
+  color: #7dd3fc;
 }
-.vault-filter-btn[data-filter="canGet"].active .vf-dot   { background: #38bdf8; transform: scale(1.2); }
-.vault-filter-btn[data-filter="canGet"].active .vf-count { color: #7dd3fc; }
-.vault-filter-btn[data-filter="canGet"].active .vf-label { color: #38bdf8; }
 
-/* Inactive dot colour hints */
-.vault-filter-btn[data-filter="have"] .vf-dot   { background: rgba(34,160,107,.35); }
-.vault-filter-btn[data-filter="canGet"] .vf-dot { background: rgba(56,189,248,.35); }
-.vault-filter-btn[data-filter="all"] .vf-dot    { background: rgba(212,160,23,.35); }
+/* Subtle inactive colour hints */
+.vault-filter-btn[data-filter="all"]    { color: rgba(212,160,23,.5); }
+.vault-filter-btn[data-filter="have"]   { color: rgba(52,211,153,.45); }
+.vault-filter-btn[data-filter="canGet"] { color: rgba(125,211,252,.4); }
 
 /* Item count label below the tabs */
 .vault-item-count {
   font-size: 11px;
   color: var(--muted);
-  padding: 10px 16px 0;
+  padding: 8px 16px 0;
   font-weight: 300;
 }
 .bar-category { margin-bottom: 24px; }
@@ -644,18 +633,103 @@ body {
 .cat-wine      .cat-icon { background: rgba(159,18,57,.15);  }
 .cat-topup     .cat-icon { background: rgba(8,145,178,.15);  }
 
-.pill-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-.pill {
+/* ── Ingredient list rows (replaces old pill chips) ── */
+.ing-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ing-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   background: var(--card);
   border: 0.5px solid var(--border2);
-  border-radius: 28px;
-  padding: 9px 14px;
-  font-size: 13px;
+  border-radius: 14px;
+  padding: 13px 10px 13px 14px;
+  min-height: 54px;
+  transition: border-color .2s, background .2s;
+}
+/* Status border tints */
+.ing-row.have    { border-color: rgba(34,160,107,.35); }
+.ing-row.can-get { border-color: rgba(56,189,248,.25); }
+
+/* Status dot (reused from pill) */
+.ing-row .pill-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.ing-row.have .pill-dot    { background: var(--accent-l); }
+.ing-row.can-get .pill-dot { background: #38bdf8; }
+.ing-row:not(.have):not(.can-get) .pill-dot { background: var(--muted2); }
+
+/* Text block */
+.ing-row-info {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+.ing-row-name {
+  font-size: 14px;
+  font-weight: 400;
   color: var(--text);
-  min-height: 44px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ing-row-brand {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Checkbox button ── */
+.ing-check {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border2);
+  background: var(--card2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: background .2s, border-color .2s, box-shadow .2s, transform .15s cubic-bezier(.34,1.56,.64,1);
+}
+.ing-check svg {
+  width: 16px; height: 16px;
+  stroke: white;
+  opacity: 0;
+  transition: opacity .15s;
+  pointer-events: none;
+}
+/* Checked state — emerald fill */
+.ing-check.checked {
+  background: var(--accent-l);
+  border-color: var(--accent-l);
+  box-shadow: 0 0 10px rgba(34,160,107,.4);
+}
+.ing-check.checked svg { opacity: 1; }
+/* Tap feedback */
+.ing-check:active { transform: scale(.88); }
+
+/* Keep old pill styles for any non-vault uses */
+.pill-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--card); border: 0.5px solid var(--border2);
+  border-radius: 28px; padding: 9px 14px;
+  font-size: 13px; color: var(--text); min-height: 44px;
   transition: border-color .2s;
 }
 .pill.have    { border-color: rgba(200,133,10,.45); }
