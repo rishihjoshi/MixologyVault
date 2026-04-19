@@ -1,23 +1,20 @@
 /* ═══════════════════════════════════════════════════════
-   MIXOLOGY VAULT — app.js  v3.0
+   THE HOME BAR — app.js
    Google Sheet ID: 12_04glNgaHvxNXlybudwtI6uHHdnZtMJlbV_9wjFoXM
-   Cocktails sheet columns (CORRECT ORDER):
-     A: Name  B: Base Spirit  C: Tag  D: Ingredients
-     E: Meas(ml)  F: Meas(oz)  G: History  H: Description
-     I: Steps  J: Mood
+   Tabs: Ingredients (5 cols) | Cocktails (7+ cols)
 ═══════════════════════════════════════════════════════ */
 
 'use strict';
 
-// ── CONFIG ───────────────────────────────────────────────
+// ── CONFIG ──────────────────────────────────────────────
 const SHEET_ID = '12_04glNgaHvxNXlybudwtI6uHHdnZtMJlbV_9wjFoXM';
 
 // ── STATE ────────────────────────────────────────────────
-let allIngredients = [];
-let allCocktails   = [];
+let allIngredients = [];   // parsed from Ingredients sheet
+let allCocktails   = [];   // parsed from Cocktails sheet (array of objects with .id)
 let favourites     = new Set();
 let activeFilter   = 'all';
-let activeUnit     = 'oz';
+let activeUnit     = 'oz'; // 'oz' or 'ml'
 let activeModalId  = null;
 let chatHistory    = [];
 
@@ -43,25 +40,6 @@ const SPIRIT_FILTERS = [
   { key: 'other',   label: 'Other',   icon: '✨' },
 ];
 
-// ── VIEWPORT / KEYBOARD FIXES (Android + iOS) ────────────
-// Sets --vh so CSS can use calc(var(--vh)*100) instead of 100dvh.
-// Fixes Android Chrome address-bar resize bug + iOS bounce.
-function setViewportVars() {
-  const vh = window.innerHeight * 0.01;
-  document.documentElement.style.setProperty('--vh', `${vh}px`);
-}
-
-// Tracks soft keyboard height via visualViewport API.
-// Updates --keyboard-h so the chat bar lifts above the keyboard.
-function handleVisualViewport() {
-  if (!window.visualViewport) return;
-  const kbH = Math.max(
-    0,
-    window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop
-  );
-  document.documentElement.style.setProperty('--keyboard-h', `${kbH}px`);
-}
-
 // ── GOOGLE SHEET FETCH ───────────────────────────────────
 async function fetchSheet(sheetName) {
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
@@ -82,104 +60,109 @@ function cellVal(c) {
 }
 
 // ── PARSE INGREDIENTS ────────────────────────────────────
-// Cols: A=Category  B=Item  C=Brand  D=Status  E=Notes
+// Columns: Category | Item | Brand/Details | Status | Notes
 function parseIngredients(table) {
   if (!table || !table.rows) return [];
   return table.rows
     .map((row, i) => {
-      const c      = row.c || [];
+      const c = row.c || [];
       const cat    = cellVal(c[0]);
       const item   = cellVal(c[1]);
       const brand  = cellVal(c[2]);
       const status = cellVal(c[3]);
       const notes  = cellVal(c[4]);
-      if (i === 0 && /^(category|cat)$/i.test(cat)) return null;
       if (!cat || !item) return null;
       return {
-        id: i, category: cat, item, brand, status, notes,
-        have:   status.includes('Have'),
-        canGet: status.includes('Can'),
+        id:       i,
+        category: cat,
+        item,
+        brand,
+        status,          // "✅ Have" | "🛒 Can Get"
+        notes,
+        have:     status.includes('Have'),
+        canGet:   status.includes('Can'),
       };
     })
     .filter(Boolean);
 }
 
 // ── PARSE COCKTAILS ──────────────────────────────────────
-// CORRECT order matching the Google Sheet:
-//   A=Name  B=BaseSpirit  C=Tag  D=Ingredients
-//   E=MeasML  F=MeasOz  G=History  H=Description  I=Steps  J=Mood
+// Columns: Cocktail Name | Base Spirit | Tag | Ingredients |
+//          Measurements(ml) | Measurements(oz) | Recipe/Steps |
+//          [History] | [Description]
 function parseCocktails(table) {
   if (!table || !table.rows) return [];
   return table.rows
     .map((row, i) => {
-      const c    = row.c || [];
-      const name = cellVal(c[0]);
-      if (i === 0 && /^(cocktail\s*name|name|cocktail)$/i.test(name)) return null;
+      const c = row.c || [];
+      const name        = cellVal(c[0]);
+      const baseSpirit  = cellVal(c[1]);
+      const tag         = cellVal(c[2]);
+      const ingredients = cellVal(c[3]);
+      const measML      = cellVal(c[4]);
+      const measOz      = cellVal(c[5]);
+      const steps       = cellVal(c[6]);
+      const history     = cellVal(c[7]);
+      const description = cellVal(c[8]);
       if (!name) return null;
       return {
-        id:          i,
+        id: i,
         name,
-        baseSpirit:  cellVal(c[1]),
-        tag:         cellVal(c[2]),
-        ingredients: cellVal(c[3]),
-        measML:      cellVal(c[4]),
-        measOz:      cellVal(c[5]),
-        history:     cellVal(c[6]),   // G
-        description: cellVal(c[7]),   // H
-        steps:       cellVal(c[8]),   // I
-        mood:        cellVal(c[9]),   // J
-        spiritKey:   normaliseSpiritKey(cellVal(c[1])),
+        baseSpirit,
+        tag,
+        ingredients,   // newline-separated list of ingredient names
+        measML,        // newline-separated ml measurements (parallel to ingredients)
+        measOz,        // newline-separated oz measurements (parallel to ingredients)
+        steps,         // full recipe steps text
+        history,
+        description,
+        // Derived: normalised spirit key for filtering
+        spiritKey: normaliseSpiritKey(baseSpirit),
       };
     })
     .filter(Boolean);
 }
 
-function normaliseSpiritKey(b) {
-  if (!b) return 'other';
-  const s = b.toLowerCase();
-  if (s.includes('gin'))                                                               return 'gin';
-  if (s.includes('whisky') || s.includes('whiskey') || s.includes('scotch') ||
-      s.includes('bourbon') || s.includes('malt')   || s.includes('irish'))          return 'whisky';
-  if (s.includes('tequila') || s.includes('mezcal'))                                  return 'tequila';
-  if (s.includes('rum'))                                                               return 'rum';
-  if (s.includes('vodka'))                                                             return 'vodka';
+function normaliseSpiritKey(baseSpirit) {
+  if (!baseSpirit) return 'other';
+  const b = baseSpirit.toLowerCase();
+  if (b.includes('gin'))     return 'gin';
+  if (b.includes('whisky') || b.includes('whiskey') || b.includes('scotch') || b.includes('bourbon') || b.includes('malt') || b.includes('irish')) return 'whisky';
+  if (b.includes('tequila') || b.includes('mezcal')) return 'tequila';
+  if (b.includes('rum'))     return 'rum';
+  if (b.includes('vodka'))   return 'vodka';
   return 'other';
 }
 
-// ── UTILITIES ────────────────────────────────────────────
-function splitLines(str) {
-  if (!str) return [];
-  const norm   = str.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const byLine = norm.split('\n').map(s => s.trim()).filter(Boolean);
-  if (byLine.length > 1) return byLine;
-  if (byLine.length === 1 && byLine[0].includes(',')) {
-    return byLine[0].split(',').map(s => s.trim()).filter(Boolean);
-  }
-  return byLine;
-}
-
-function esc(s) {
-  return String(s || '')
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
 // ── CARD HTML ─────────────────────────────────────────────
-// No leading whitespace → wrap.firstElementChild works reliably
+// Uses data-id to avoid any inline JSON / quote escaping issues
 function cardHTML(c, extraClass) {
   extraClass = extraClass || '';
   const isFav = favourites.has(c.id);
-  return `<div class="drink-card ${extraClass}" data-id="${c.id}"><button class="fav-btn ${isFav ? 'on' : ''}" data-id="${c.id}" aria-label="Favourite">${isFav ? '❤️' : '🤍'}</button><div class="dc-name">${esc(c.name)}</div>${c.baseSpirit ? `<div class="dc-eyebrow">${esc(c.baseSpirit)}</div>` : ''}${c.description ? `<div class="dc-desc">${esc(c.description)}</div>` : ''}<div class="dc-tags">${c.baseSpirit ? `<span class="dc-base">${esc(c.baseSpirit)}</span>` : ''}${c.tag ? `<span class="tag">${esc(c.tag)}</span>` : ''}</div></div>`;
+  return `
+    <div class="drink-card ${extraClass}" data-id="${c.id}">
+      <button class="fav-btn ${isFav ? 'on' : ''}" data-id="${c.id}" aria-label="Favourite">
+        ${isFav ? '❤️' : '🤍'}
+      </button>
+      <div class="dc-name">${esc(c.name)}</div>
+      ${c.baseSpirit ? `<div class="dc-eyebrow">${esc(c.baseSpirit)}</div>` : ''}
+      ${c.description ? `<div class="dc-desc">${esc(c.description)}</div>` : ''}
+      <div class="dc-tags">
+        ${c.baseSpirit ? `<span class="dc-base">${esc(c.baseSpirit)}</span>` : ''}
+        ${c.tag ? `<span class="tag">${esc(c.tag)}</span>` : ''}
+      </div>
+    </div>`;
 }
 
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── DELEGATION: card clicks & fav clicks ─────────────────
 function wireCardArea(el) {
   el.addEventListener('click', e => {
     const favBtn = e.target.closest('.fav-btn');
-    if (favBtn) {
-      e.stopPropagation();
-      toggleFav(favBtn, parseInt(favBtn.dataset.id));
-      return;
-    }
+    if (favBtn) { e.stopPropagation(); toggleFav(e, parseInt(favBtn.dataset.id)); return; }
     const card = e.target.closest('.drink-card');
     if (card) openModal(parseInt(card.dataset.id));
   });
@@ -187,196 +170,80 @@ function wireCardArea(el) {
 
 // ── RENDER HOME ───────────────────────────────────────────
 function renderHome() {
+  // Featured: pick a random cocktail from sheet
   if (allCocktails.length > 0) {
     const pick = allCocktails[Math.floor(Math.random() * allCocktails.length)];
-    const fcEl = document.getElementById('featured-card');
-    fcEl.innerHTML = cardHTML(pick, 'hero-size featured');
-    wireCardArea(fcEl);
+    document.getElementById('featured-card').innerHTML = cardHTML(pick, 'hero-size featured');
+    wireCardArea(document.getElementById('featured-card'));
   }
 
-  const sigs  = allCocktails.filter(c => (c.tag || '').toLowerCase().includes('signature'));
+  // Signature cocktails: tag contains 'Signature'
+  const sigs = allCocktails.filter(c => (c.tag || '').toLowerCase().includes('signature'));
   const sigEl = document.getElementById('home-signatures');
   if (sigs.length > 0) {
     sigEl.innerHTML = sigs.slice(0, 3).map(c => cardHTML(c, 'featured')).join('');
     wireCardArea(sigEl);
   } else {
-    sigEl.innerHTML = '<div class="empty"><div class="ei">✨</div>Add cocktails tagged "Signature" in your Google Sheet</div>';
+    sigEl.innerHTML = '<div class="empty"><div class="ei">✨</div>Add cocktails with tag "Signature" in your Google Sheet</div>';
   }
 
+  // Stats
   document.getElementById('count-ingredients').textContent = allIngredients.length;
   document.getElementById('count-cocktails').textContent   = allCocktails.length;
   document.getElementById('count-favourites').textContent  = favourites.size;
 }
 
-// ── RENDER MY VAULT ───────────────────────────────────────
-let activeBarFilter = 'all'; // 'all' | 'have' | 'canGet'
-
-// ── LOCAL STATUS OVERRIDES ────────────────────────────────
-// Lets the user mark ingredients as in-stock / needed locally.
-// Stored in localStorage so it survives page reloads.
-// Does NOT write back to Google Sheets.
-let localStatusOverrides = {}; // { [ingredientId]: 'have' | 'canGet' }
-
-function loadLocalOverrides() {
-  try {
-    const raw = localStorage.getItem('mv_ing_overrides');
-    localStatusOverrides = raw ? JSON.parse(raw) : {};
-  } catch (e) {
-    localStatusOverrides = {};
-  }
-}
-
-function saveLocalOverrides() {
-  try {
-    localStorage.setItem('mv_ing_overrides', JSON.stringify(localStatusOverrides));
-  } catch (e) {}
-}
-
-// Returns the effective status for an ingredient, applying any local override
-function getEffectiveStatus(ing) {
-  const ov = localStatusOverrides[ing.id];
-  if (ov !== undefined) return { have: ov === 'have', canGet: ov === 'canGet' };
-  return { have: ing.have, canGet: ing.canGet };
-}
-
-// Toggles an ingredient between 'have' and 'canGet'
-function toggleIngredientStatus(id) {
-  const ing = allIngredients.find(i => i.id === id);
-  if (!ing) return;
-  const eff = getEffectiveStatus(ing);
-  // Toggle: in-stock → need-to-get → in-stock
-  localStatusOverrides[id] = eff.have ? 'canGet' : 'have';
-  saveLocalOverrides();
-  renderBar();
-}
-
-// Wire checkbox clicks via event delegation on #bar-sections
-// (Delegation survives renderBar's innerHTML replacement)
-function wireBarSections() {
-  const container = document.getElementById('bar-sections');
-  if (!container) return;
-  container.addEventListener('click', e => {
-    const checkBtn = e.target.closest('.ing-check');
-    if (!checkBtn) return;
-    e.stopPropagation();
-    toggleIngredientStatus(parseInt(checkBtn.dataset.ingId));
-  });
-}
-
-function wireBarFilters() {
-  const row = document.getElementById('vault-filter-row');
-  if (!row) return;
-  row.addEventListener('click', e => {
-    const btn = e.target.closest('.vault-filter-btn');
-    if (!btn) return;
-    row.querySelectorAll('.vault-filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeBarFilter = btn.dataset.filter;
-    renderBar();
-  });
-}
-
+// ── RENDER MY BAR ─────────────────────────────────────────
 function renderBar() {
   const container = document.getElementById('bar-sections');
   if (!container) return;
 
-  // Compute effective statuses (sheet data + local overrides)
-  const effAll = allIngredients.map(i => ({ ...i, eff: getEffectiveStatus(i) }));
-
-  // Update filter tab counts using effective statuses
-  const total   = effAll.length;
-  const haveN   = effAll.filter(i => i.eff.have).length;
-  const canGetN = effAll.filter(i => i.eff.canGet).length;
-
-  const cntAll    = document.getElementById('vf-count-all');
-  const cntHave   = document.getElementById('vf-count-have');
-  const cntCanGet = document.getElementById('vf-count-canGet');
-  if (cntAll)    cntAll.textContent    = total;
-  if (cntHave)   cntHave.textContent   = haveN;
-  if (cntCanGet) cntCanGet.textContent = canGetN;
-
-  // Keep correct active tab highlighted
-  document.querySelectorAll('.vault-filter-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.filter === activeBarFilter);
-  });
-
-  // Apply filter using effective statuses
-  let visible = effAll;
-  if (activeBarFilter === 'have')   visible = effAll.filter(i => i.eff.have);
-  if (activeBarFilter === 'canGet') visible = effAll.filter(i => i.eff.canGet);
-
-  // Item count label
-  const countEl = document.getElementById('vault-item-count');
-  if (countEl) {
-    const label = activeBarFilter === 'have'   ? 'in stock'
-                : activeBarFilter === 'canGet' ? 'to get'
-                : 'total';
-    countEl.textContent = `${visible.length} ingredient${visible.length !== 1 ? 's' : ''} ${label}`;
-  }
-
-  if (visible.length === 0) {
-    container.innerHTML = '<div class="empty"><div class="ei">🛒</div>No items match this filter.</div>';
-    return;
-  }
-
-  // Group by category
+  // Group by category (case-insensitive)
   const groups = {};
-  for (const ing of visible) {
+  for (const ing of allIngredients) {
     const key = ing.category.toLowerCase();
     if (!groups[key]) groups[key] = [];
     groups[key].push(ing);
   }
 
-  const ORDER   = ['spirits','liqueurs','bitters','juices','syrups','garnishes','wine','top up'];
+  // Defined order
+  const ORDER = ['spirits','liqueurs','bitters','juices','syrups','garnishes','wine','top up'];
   const allKeys = [...new Set([...ORDER, ...Object.keys(groups)])];
-
-  // Checkmark SVG (inline so no external dependency)
-  const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
 
   let html = '';
   for (const key of allKeys) {
     if (!groups[key] || groups[key].length === 0) continue;
-    const meta  = CAT_META[key] || { icon: '📦', label: key, cls: 'cat-spirits' };
+    const meta = CAT_META[key] || { icon: '📦', label: key, cls: 'cat-spirits' };
     const items = groups[key];
-
-    // Build full-width row for each ingredient with a checkbox on the right
-    const rowsHtml = items.map(ing => {
-      const isHave   = ing.eff.have;
-      const isCanGet = ing.eff.canGet;
-      const statusCls = isHave ? 'have' : isCanGet ? 'can-get' : '';
-      const ariaLabel = isHave ? 'Mark as needed' : 'Mark as in stock';
-      return `<div class="ing-row ${statusCls}">
-        <div class="pill-dot"></div>
-        <div class="ing-row-info">
-          <span class="ing-row-name">${esc(ing.item)}</span>
-          ${ing.brand ? `<span class="ing-row-brand">· ${esc(ing.brand)}</span>` : ''}
+    html += `
+      <div class="bar-category ${meta.cls}">
+        <div class="cat-header">
+          <div class="cat-icon">${meta.icon}</div>
+          <div class="cat-label">${meta.label}</div>
+          <div class="cat-count">${items.length} item${items.length > 1 ? 's' : ''}</div>
         </div>
-        <button class="ing-check ${isHave ? 'checked' : ''}" data-ing-id="${ing.id}" aria-label="${ariaLabel}">
-          ${checkSVG}
-        </button>
+        <div class="pill-grid">
+          ${items.map(ing => `
+            <div class="pill ${ing.have ? 'have' : ing.canGet ? 'can-get' : ''}">
+              <div class="pill-dot"></div>
+              <span class="pill-name">${esc(ing.item)}</span>
+              ${ing.brand ? `<span class="pill-brand">· ${esc(ing.brand)}</span>` : ''}
+            </div>
+          `).join('')}
+        </div>
       </div>`;
-    }).join('');
-
-    html += `<div class="bar-category ${meta.cls}">
-      <div class="cat-header">
-        <div class="cat-icon">${meta.icon}</div>
-        <div class="cat-label">${meta.label}</div>
-        <div class="cat-count">${items.length} item${items.length > 1 ? 's' : ''}</div>
-      </div>
-      <div class="ing-list">${rowsHtml}</div>
-    </div>`;
   }
 
-  container.innerHTML = html ||
-    '<div class="empty"><div class="ei">📦</div>Could not load vault data. Make sure your Google Sheet is shared publicly.</div>';
+  container.innerHTML = html || '<div class="empty"><div class="ei">📦</div>Could not load bar data. Make sure your Google Sheet is shared publicly.</div>';
 }
 
 // ── RENDER COCKTAILS ──────────────────────────────────────
 function buildFilterChips() {
   const row = document.getElementById('filter-row');
-  row.innerHTML = SPIRIT_FILTERS.map(f =>
-    `<button class="filter-chip ${f.key === 'all' ? 'active' : ''}" data-filter="${f.key}"><span class="chip-icon">${f.icon}</span>${f.label}</button>`
-  ).join('');
+  row.innerHTML = SPIRIT_FILTERS.map(f => `
+    <button class="filter-chip ${f.key === 'all' ? 'active' : ''}" data-filter="${f.key}">
+      <span class="chip-icon">${f.icon}</span>${f.label}
+    </button>`).join('');
 
   row.addEventListener('click', e => {
     const chip = e.target.closest('.filter-chip');
@@ -390,23 +257,25 @@ function buildFilterChips() {
 
 function renderCocktails(filterKey, search) {
   filterKey = filterKey || 'all';
-  const q   = (search || '').toLowerCase().trim();
+  const q = (search || '').toLowerCase();
 
   let list = allCocktails.filter(c => {
     if (!q) return true;
     return (c.name + ' ' + c.baseSpirit + ' ' + c.tag + ' ' + c.ingredients)
-      .toLowerCase().includes(q);
+      .toLowerCase()
+      .includes(q);
   });
 
-  if (filterKey !== 'all') list = list.filter(c => c.spiritKey === filterKey);
+  if (filterKey !== 'all') {
+    list = list.filter(c => c.spiritKey === filterKey);
+  }
 
   document.getElementById('cocktail-count').textContent =
     `${list.length} cocktail${list.length !== 1 ? 's' : ''}`;
 
   const el = document.getElementById('cocktail-list');
   if (list.length === 0) {
-    const label = SPIRIT_FILTERS.find(f => f.key === filterKey)?.label || filterKey;
-    el.innerHTML = `<div class="empty"><div class="ei">🍸</div>No ${filterKey !== 'all' ? label + ' ' : ''}cocktails found${q ? ` matching "${esc(q)}"` : ''}.</div>`;
+    el.innerHTML = '<div class="empty"><div class="ei">🍸</div>No cocktails found. Try a different filter.</div>';
     return;
   }
   el.innerHTML = list.map(c => cardHTML(c)).join('');
@@ -414,7 +283,8 @@ function renderCocktails(filterKey, search) {
 }
 
 // ── FAVOURITES ────────────────────────────────────────────
-function toggleFav(btn, id) {
+function toggleFav(e, id) {
+  const btn = e.currentTarget;
   if (favourites.has(id)) {
     favourites.delete(id);
     btn.textContent = '🤍';
@@ -432,34 +302,46 @@ function toggleFav(btn, id) {
 // ── MODAL ─────────────────────────────────────────────────
 function openModal(id) {
   const c = allCocktails.find(x => x.id === id);
-  if (!c) return;
+  if (!c) { console.warn('Cocktail not found:', id); return; }
   activeModalId = id;
 
-  document.getElementById('modal-tag').textContent  = c.tag || '';
-  document.getElementById('modal-name').textContent = c.name;
-  document.getElementById('modal-base').textContent = c.baseSpirit || '—';
+  document.getElementById('modal-tag').textContent   = c.tag || '';
+  document.getElementById('modal-name').textContent  = c.name;
+  document.getElementById('modal-base').textContent  = c.baseSpirit || '—';
 
+  // Description
   const descEl = document.getElementById('modal-description');
-  descEl.parentElement.style.display = c.description ? 'block' : 'none';
-  descEl.textContent = c.description || '';
+  if (c.description) {
+    descEl.parentElement.style.display = 'block';
+    descEl.textContent = c.description;
+  } else {
+    descEl.parentElement.style.display = 'none';
+  }
 
+  // History
   const histEl = document.getElementById('modal-history');
-  histEl.parentElement.style.display = c.history ? 'block' : 'none';
-  histEl.textContent = c.history || '';
+  if (c.history) {
+    histEl.parentElement.style.display = 'block';
+    histEl.textContent = c.history;
+  } else {
+    histEl.parentElement.style.display = 'none';
+  }
 
+  // Reset unit to oz
   activeUnit = 'oz';
   document.getElementById('unit-oz').classList.add('on');
   document.getElementById('unit-ml').classList.remove('on');
 
+  // Render ingredient table and steps
   renderModalIngredients(c);
   renderModalSteps(c);
 
   document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
 }
 
 function renderModalIngredients(c) {
-  const tbl       = document.getElementById('modal-ingredients');
+  const tbl = document.getElementById('modal-ingredients');
+
   const ingLines  = splitLines(c.ingredients);
   const mlLines   = splitLines(c.measML);
   const ozLines   = splitLines(c.measOz);
@@ -469,37 +351,38 @@ function renderModalIngredients(c) {
     tbl.innerHTML = '<tr><td colspan="2" style="color:var(--muted);font-size:13px;padding:8px 0">See recipe steps below</td></tr>';
     return;
   }
-  tbl.innerHTML = ingLines.map((ing, i) =>
-    `<tr><td class="ing-meas">${esc(measLines[i] || '—')}</td><td class="ing-name">${esc(ing)}</td></tr>`
-  ).join('');
+
+  tbl.innerHTML = ingLines.map((ing, i) => `
+    <tr>
+      <td class="ing-meas">${esc(measLines[i] || '')}</td>
+      <td class="ing-name">${esc(ing)}</td>
+    </tr>`).join('');
 }
 
 function renderModalSteps(c) {
   const ol = document.getElementById('modal-steps');
-  if (!c.steps) {
-    ol.innerHTML = '<li class="step-item"><div class="step-text" style="color:var(--muted)">No steps recorded.</div></li>';
-    return;
-  }
+  if (!c.steps) { ol.innerHTML = '<li class="step-item"><div class="step-text" style="color:var(--muted)">No steps recorded.</div></li>'; return; }
 
-  let steps = splitLines(c.steps)
+  const steps = c.steps
+    .split('\n')
     .map(s => s.replace(/^\s*\d+[\.\)]\s*/, '').trim())
     .filter(Boolean);
-
-  if (steps.length === 1 && steps[0].length > 80) {
-    steps = steps[0]
-      .split(/\.\s+(?=[A-Z1-9])/)
-      .map(s => s.trim().replace(/\.$/, ''))
-      .filter(Boolean);
-  }
 
   if (steps.length === 0) {
     ol.innerHTML = '<li class="step-item"><div class="step-text" style="color:var(--muted)">See ingredients above.</div></li>';
     return;
   }
 
-  ol.innerHTML = steps.map((s, i) =>
-    `<li class="step-item"><div class="step-num">${i + 1}</div><div class="step-text">${esc(s)}</div></li>`
-  ).join('');
+  ol.innerHTML = steps.map((s, i) => `
+    <li class="step-item">
+      <div class="step-num">${i + 1}</div>
+      <div class="step-text">${esc(s)}</div>
+    </li>`).join('');
+}
+
+function splitLines(str) {
+  if (!str) return [];
+  return str.split('\n').map(s => s.trim()).filter(Boolean);
 }
 
 function setUnit(u) {
@@ -515,7 +398,6 @@ function setUnit(u) {
 function closeModal(e) {
   if (!e || e.target === document.getElementById('modal-overlay') || !e.target) {
     document.getElementById('modal-overlay').classList.remove('open');
-    document.body.style.overflow = '';
     activeModalId = null;
   }
 }
@@ -524,9 +406,11 @@ function closeModal(e) {
 function switchScreen(id, btn) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
   const sc = document.getElementById('screen-' + id);
   if (sc) sc.classList.add('active');
   if (btn && btn.classList) btn.classList.add('active');
+
   document.getElementById('scroll-area').scrollTop = 0;
   if (id === 'ai') checkApiKey();
 }
@@ -536,35 +420,37 @@ function setGreeting() {
   const h = new Date().getHours();
   document.getElementById('hero-greet').textContent =
     h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+
+  // Auto-select time of day on decide screen
   const tod = h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : h < 22 ? 'Evening' : 'Late night';
   document.querySelectorAll('.tod-btn').forEach(b =>
-    b.classList.toggle('on', b.dataset.tod === tod)
-  );
+    b.classList.toggle('on', b.dataset.tod === tod));
 }
 
 // ── DECIDE ENGINE ─────────────────────────────────────────
 function wireDecide() {
+  // Mood
   document.getElementById('mood-grid')?.addEventListener('click', e => {
-    const b = e.target.closest('.mood-btn');
-    if (!b) return;
+    const b = e.target.closest('.mood-btn'); if (!b) return;
     document.querySelectorAll('.mood-btn').forEach(x => x.classList.remove('on'));
     b.classList.add('on');
   });
+  // Spirit
   document.getElementById('decide-spirits')?.addEventListener('click', e => {
-    const b = e.target.closest('.spirit-btn');
-    if (!b) return;
+    const b = e.target.closest('.spirit-btn'); if (!b) return;
     document.querySelectorAll('.spirit-btn').forEach(x => x.classList.remove('on'));
     b.classList.add('on');
   });
+  // Time
   document.getElementById('tod-grid')?.addEventListener('click', e => {
-    const b = e.target.closest('.tod-btn');
-    if (!b) return;
+    const b = e.target.closest('.tod-btn'); if (!b) return;
     document.querySelectorAll('.tod-btn').forEach(x => x.classList.remove('on'));
     b.classList.add('on');
   });
+  // Sweetness slider
   const slider = document.getElementById('sweet-slider');
   const sMap   = { 1: 'Dry / Bitter', 2: 'Medium', 3: 'Sweet' };
-  slider?.addEventListener('input', function () {
+  slider?.addEventListener('input', function() {
     document.getElementById('sweet-val').textContent = sMap[this.value];
   });
 }
@@ -574,59 +460,32 @@ function generateDrinks() {
   btn.classList.add('shaking');
   setTimeout(() => btn.classList.remove('shaking'), 550);
 
-  if (!allCocktails.length) {
-    const ra = document.getElementById('results-area');
-    ra.style.display = 'block';
-    document.getElementById('results-list').innerHTML =
-      '<div class="empty"><div class="ei">⏳</div>Still loading — please try again.</div>';
-    return;
-  }
-
-  const spirit   = document.querySelector('.spirit-btn.on')?.dataset.spirit || 'any';
-  const sweetVal = parseInt(document.getElementById('sweet-slider')?.value || 2);
+  const spirit = document.querySelector('.spirit-btn.on')?.dataset.spirit || 'any';
+  const sweet  = parseInt(document.getElementById('sweet-slider')?.value || 2);
 
   let pool = [...allCocktails];
-  if (spirit !== 'any') pool = pool.filter(c => c.spiritKey === spirit);
-
-  if (pool.length > 3) {
-    const dryWords   = ['dry', 'bitter', 'negroni', 'martini', 'manhattan', 'old fashioned'];
-    const sweetWords = ['sweet', 'sour', 'daiquiri', 'mojito', 'fizz', 'collins', 'liqueur'];
-    const words      = sweetVal === 1 ? dryWords : sweetVal === 3 ? sweetWords : [];
-    if (words.length) {
-      pool = pool
-        .map(c => {
-          const hay   = (c.name + ' ' + c.tag + ' ' + c.description).toLowerCase();
-          const score = words.reduce((n, w) => n + (hay.includes(w) ? 1 : 0), 0);
-          return { c, score };
-        })
-        .sort((a, b) => b.score - a.score || Math.random() - 0.5)
-        .map(x => x.c);
-    }
+  if (spirit !== 'any') {
+    pool = pool.filter(c => c.spiritKey === spirit);
   }
-
   if (!pool.length) pool = [...allCocktails];
-
-  const picks = pool.slice().sort(() => Math.random() - 0.5).slice(0, Math.min(3, pool.length));
+  const picks = pool.sort(() => Math.random() - .5).slice(0, 3);
 
   const ra = document.getElementById('results-area');
   ra.style.display = 'block';
   const rl = document.getElementById('results-list');
   rl.innerHTML = '';
-
   picks.forEach((c, i) => {
     const wrap = document.createElement('div');
     wrap.innerHTML = cardHTML(c, 'pour-in');
-    const card = wrap.firstElementChild; // firstElementChild skips text nodes
-    if (!card) return;
+    const card = wrap.firstChild;
     card.style.animationDelay = `${i * 0.12}s`;
     rl.appendChild(card);
   });
-
   wireCardArea(rl);
-  requestAnimationFrame(() => ra.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  ra.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ── AI MIXOLOGIST ─────────────────────────────────────────
+// ── AI BARTENDER ──────────────────────────────────────────
 function checkApiKey() {
   const key = localStorage.getItem('anthropic_key');
   document.getElementById('apikey-banner').style.display = key ? 'none' : 'block';
@@ -634,10 +493,7 @@ function checkApiKey() {
 
 function saveApiKey() {
   const val = document.getElementById('apikey-input').value.trim();
-  if (!val.startsWith('sk-')) {
-    alert('Please enter a valid Anthropic API key (starts with sk-)');
-    return;
-  }
+  if (!val.startsWith('sk-')) { alert('Please enter a valid Anthropic API key (starts with sk-)'); return; }
   localStorage.setItem('anthropic_key', val);
   document.getElementById('apikey-banner').style.display = 'none';
 }
@@ -652,14 +508,14 @@ function chatKeydown(e) {
 }
 
 function quickPrompt(el) {
-  document.getElementById('chat-input').value = el.textContent.trim();
+  document.getElementById('chat-input').value = el.textContent;
   sendChat();
 }
 
 function addMessage(role, text) {
   const el = document.createElement('div');
   el.className = `msg ${role}`;
-  el.innerHTML = role === 'ai' ? `<strong>Mixologist</strong>${text}` : esc(text);
+  el.innerHTML = role === 'ai' ? `<strong>Bartender</strong>${text}` : esc(text);
   document.getElementById('chat-messages').appendChild(el);
   el.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }
@@ -682,18 +538,13 @@ async function sendChat() {
 
   const loadEl = document.createElement('div');
   loadEl.className = 'msg ai';
-  loadEl.innerHTML = `<strong>Mixologist</strong><div class="dots"><span></span><span></span><span></span></div>`;
+  loadEl.innerHTML = `<strong>Bartender</strong><div class="dots"><span></span><span></span><span></span></div>`;
   document.getElementById('chat-messages').appendChild(loadEl);
   loadEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
-  const haveItems     = allIngredients.filter(i => i.have)
-    .map(i => `${i.item}${i.brand ? ' (' + i.brand + ')' : ''}`)
-    .join(', ');
+  const haveItems = allIngredients.filter(i => i.have).map(i => `${i.item}${i.brand ? ' (' + i.brand + ')' : ''}`).join(', ');
   const cocktailNames = allCocktails.map(c => c.name).join(', ');
-  const systemPrompt  = `You are an expert AI mixologist for Mixology Vault. ` +
-    `Available ingredients: ${haveItems || 'Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo, Monkey Shoulder, Cointreau, Angostura Bitters, Prosecco'}. ` +
-    `Cocktails in the recipe book: ${cocktailNames || 'various classics'}. ` +
-    `Be warm, specific and confident. Give full recipes with measurements when asked. Keep responses concise.`;
+  const systemPrompt = `You are an expert home bartender AI. Available ingredients: ${haveItems || 'Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo, Monkey Shoulder, Cointreau, Angostura Bitters, Prosecco'}. Cocktails in the bar: ${cocktailNames}. Be warm, specific, confident. Give full recipes with measurements. Keep responses concise.`;
 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -701,71 +552,38 @@ async function sendChat() {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        // REQUIRED for browser-direct API calls — Anthropic blocks requests without this
-        'anthropic-dangerous-direct-browser-access': 'true',
+        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
+        model: 'claude-sonnet-4-20250514',
         max_tokens: 800,
         system: systemPrompt,
-        messages: chatHistory,
-      }),
+        messages: chatHistory
+      })
     });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      // Show real API error (auth failure, quota, invalid key, etc.)
-      const errMsg = data?.error?.message || `API error ${res.status}`;
-      loadEl.innerHTML = `<strong>Mixologist</strong>⚠️ ${esc(errMsg)}`;
-      sendBtn.disabled = false;
-      return;
-    }
-
+    const data  = await res.json();
     const reply = data.content?.[0]?.text || 'Sorry, something went wrong. Try again.';
     chatHistory.push({ role: 'assistant', content: reply });
-    loadEl.innerHTML = `<strong>Mixologist</strong>${reply.replace(/\n/g, '<br>')}`;
+    loadEl.innerHTML = `<strong>Bartender</strong>${reply.replace(/\n/g, '<br>')}`;
     loadEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
   } catch (err) {
-    console.error('Chat error:', err);
-    loadEl.innerHTML = `<strong>Mixologist</strong>⚠️ Network error: ${esc(err.message)}`;
+    loadEl.innerHTML = `<strong>Bartender</strong>Connection issue — check your API key and try again.`;
   }
-
   sendBtn.disabled = false;
 }
 
 // ── INIT ──────────────────────────────────────────────────
 async function init() {
-  // ① Viewport height fix — run immediately and on every resize
-  setViewportVars();
-  window.addEventListener('resize', setViewportVars, { passive: true });
-
-  // ② Soft-keyboard tracking (Android Chrome 61+ / iOS Safari 15.4+)
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', handleVisualViewport, { passive: true });
-    window.visualViewport.addEventListener('scroll', handleVisualViewport, { passive: true });
-  }
-
-  // ③ Load persisted ingredient status overrides from localStorage
-  loadLocalOverrides();
-
   setGreeting();
   wireDecide();
-  wireBarFilters();
-  wireBarSections();
   buildFilterChips();
 
+  // Wire search
   document.getElementById('cocktail-search')?.addEventListener('input', e => {
     renderCocktails(activeFilter, e.target.value);
   });
 
-  // Escape key closes modal
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && activeModalId !== null) closeModal(null);
-  });
-
+  // Fetch both sheets in parallel
   const [ingTable, cktTable] = await Promise.all([
     fetchSheet('Ingredients'),
     fetchSheet('Cocktails'),
@@ -779,6 +597,7 @@ async function init() {
   renderCocktails('all', '');
 }
 
+// Run when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {

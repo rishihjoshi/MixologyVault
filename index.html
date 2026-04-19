@@ -2,43 +2,29 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<!--
-  viewport-fit=cover  → lets env(safe-area-inset-*) work on iPhone notch / home indicator
-  user-scalable=no    → prevents accidental pinch-zoom on mobile
--->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0a0a0f">
-<title>Mixology Vault</title>
+<meta name="theme-color" content="#090909">
+<title>The Home Bar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div id="app">
   <div id="scroll-area">
 
-    <!-- ══════════════ HOME ══════════════ -->
+    <!-- HOME -->
     <div class="screen active" id="screen-home">
       <div id="hero">
         <div id="hero-greet">Good evening</div>
-        <h1>Mixology<br><em>Vault</em></h1>
-        <p id="hero-sub">Your personal cocktail companion, powered by what's in your vault.</p>
+        <h1>The Home<br><em>Bar</em></h1>
+        <p id="hero-sub">Your personal cocktail companion, powered by what's in your bar.</p>
         <div class="stats-row">
-          <div class="stat-pill">
-            <div class="stat-num" id="count-ingredients">–</div>
-            <div class="stat-lbl">Ingredients</div>
-          </div>
-          <div class="stat-pill">
-            <div class="stat-num" id="count-cocktails">–</div>
-            <div class="stat-lbl">Cocktails</div>
-          </div>
-          <div class="stat-pill">
-            <div class="stat-num" id="count-favourites">0</div>
-            <div class="stat-lbl">Favourites</div>
-          </div>
+          <div class="stat-pill"><div class="stat-num" id="count-ingredients">–</div><div class="stat-lbl">Ingredients</div></div>
+          <div class="stat-pill"><div class="stat-num" id="count-cocktails">–</div><div class="stat-lbl">Cocktails</div></div>
+          <div class="stat-pill"><div class="stat-num" id="count-favourites">0</div><div class="stat-lbl">Favourites</div></div>
         </div>
       </div>
 
@@ -52,82 +38,45 @@
           <div class="section-title">Tonight's Pick</div>
           <button class="section-action" onclick="renderHome()">Shuffle ✦</button>
         </div>
-        <div id="featured-card">
-          <div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading…</div>
-        </div>
+        <div id="featured-card"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading…</div></div>
       </div>
 
       <div class="section">
-        <div class="section-hd">
-          <div class="section-title">Signature Cocktails</div>
-        </div>
-        <div id="home-signatures">
-          <div class="loader"><div class="dots"><span></span><span></span><span></span></div></div>
-        </div>
+        <div class="section-hd"><div class="section-title">Signature Cocktails</div></div>
+        <div id="home-signatures"><div class="loader"><div class="dots"><span></span><span></span><span></span></div></div></div>
       </div>
     </div>
 
-    <!-- ══════════════ MY VAULT ══════════════ -->
+    <!-- MY BAR -->
     <div class="screen" id="screen-bar">
-      <div class="page-header">
-        <h1>My Vault</h1>
-        <p>Your ingredients, synced from Google Sheets</p>
-      </div>
-
-      <!-- Three filter tabs -->
-      <div class="vault-filter-row" id="vault-filter-row">
-        <button class="vault-filter-btn active" data-filter="all">
-          <div class="vf-dot"></div>
-          <span class="vf-count" id="vf-count-all">–</span>
-          <span class="vf-label">All</span>
-        </button>
-        <button class="vault-filter-btn" data-filter="have">
-          <div class="vf-dot"></div>
-          <span class="vf-count" id="vf-count-have">–</span>
-          <span class="vf-label">In Stock</span>
-        </button>
-        <button class="vault-filter-btn" data-filter="canGet">
-          <div class="vf-dot"></div>
-          <span class="vf-count" id="vf-count-canGet">–</span>
-          <span class="vf-label">Need to Get</span>
-        </button>
-      </div>
-
-      <div class="vault-item-count" id="vault-item-count"></div>
-
+      <div class="page-header"><h1>My Bar</h1><p>Your ingredients, synced from Google Sheets</p></div>
       <div class="section">
-        <div id="bar-sections">
-          <div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading vault…</div>
+        <div class="bar-legend">
+          <div class="legend-item"><div class="legend-dot have"></div>Have it</div>
+          <div class="legend-item"><div class="legend-dot can-get"></div>Can get it</div>
         </div>
+        <div id="bar-sections"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading bar…</div></div>
       </div>
     </div>
 
-    <!-- ══════════════ COCKTAILS ══════════════ -->
+    <!-- COCKTAILS -->
     <div class="screen" id="screen-cocktails">
-      <div class="page-header">
-        <h1>Cocktails</h1>
-        <p>Filter by base spirit — tap any card for full recipe</p>
-      </div>
+      <div class="page-header"><h1>Cocktails</h1><p>Filter by base spirit — tap any card for full recipe</p></div>
       <div class="search-wrap">
-        <input class="search-input" type="search" id="cocktail-search"
-               placeholder="Search cocktails…" autocomplete="off" autocorrect="off"
-               autocapitalize="none" spellcheck="false">
+        <input class="search-input" type="search" id="cocktail-search" placeholder="Search cocktails…" autocomplete="off">
       </div>
       <div class="filter-row" id="filter-row"></div>
       <div class="cocktail-count" id="cocktail-count"></div>
-      <div id="cocktail-list" class="cocktail-list-wrap">
+      <div id="cocktail-list" style="padding:4px 16px 0">
         <div class="loader"><div class="dots"><span></span><span></span><span></span></div></div>
       </div>
     </div>
 
-    <!-- ══════════════ DECIDE ══════════════ -->
+    <!-- DECIDE -->
     <div class="screen" id="screen-decide">
-      <div class="page-header">
-        <h1>What should I<br><em>drink?</em></h1>
-        <p>Tell me your mood and I'll pick the perfect drink.</p>
-      </div>
+      <div class="page-header"><h1>What should I<br><em>drink?</em></h1><p>Tell me your mood and I'll pick the perfect drink.</p></div>
 
-      <div class="decide-block">
+      <div style="padding:14px 16px 0">
         <div class="decide-label">Mood</div>
         <div class="mood-grid" id="mood-grid">
           <button class="mood-btn" data-mood="Celebratory"><span class="m-em">🥳</span><span class="m-lbl">Party</span></button>
@@ -141,7 +90,7 @@
         </div>
       </div>
 
-      <div class="decide-block">
+      <div style="padding:16px 16px 0">
         <div class="decide-label">Spirit</div>
         <div class="spirit-btns" id="decide-spirits">
           <button class="spirit-btn" data-spirit="any">Any</button>
@@ -153,16 +102,16 @@
         </div>
       </div>
 
-      <div class="decide-block">
+      <div style="padding:16px 16px 0">
         <div class="decide-label">Sweetness</div>
         <div class="slider-row">
-          <span class="slider-edge-lbl">Dry</span>
+          <span style="font-size:12px;color:var(--muted)">Dry</span>
           <input class="decide-slider" type="range" min="1" max="3" value="2" id="sweet-slider" step="1">
           <span class="slider-val" id="sweet-val">Medium</span>
         </div>
       </div>
 
-      <div class="decide-block">
+      <div style="padding:16px 16px 0">
         <div class="decide-label">Time of Day</div>
         <div class="tod-grid" id="tod-grid">
           <button class="tod-btn" data-tod="Morning"><span class="t-em">🌅</span><span class="t-lbl">Morning</span></button>
@@ -185,44 +134,30 @@
       </div>
     </div>
 
-    <!-- ══════════════ AI MIXOLOGIST ══════════════ -->
-    <!--
-      #screen-ai uses display:flex when active (see CSS: #screen-ai.active)
-      so that #chat-messages fills available space and .chat-bar stays pinned.
-    -->
+    <!-- AI BARTENDER -->
     <div class="screen" id="screen-ai">
-      <div id="ai-top">
-        <div class="page-header">
-          <h1>AI Mixologist</h1>
-          <p>Tell me what you're in the mood for</p>
-        </div>
-
-        <div id="apikey-banner">
-          <p>Enter your Anthropic API key to activate the AI Mixologist. Your key is stored locally on this device only.</p>
-          <input type="password" id="apikey-input" placeholder="sk-ant-…" autocomplete="off">
-          <button class="save-key-btn" onclick="saveApiKey()">Save Key &amp; Start Mixing</button>
-        </div>
-
-        <div class="suggest-chips">
-          <div class="suggest-chip" onclick="quickPrompt(this)">What can I make tonight?</div>
-          <div class="suggest-chip" onclick="quickPrompt(this)">Something with Empress gin</div>
-          <div class="suggest-chip" onclick="quickPrompt(this)">A smoky Scotch cocktail</div>
-          <div class="suggest-chip" onclick="quickPrompt(this)">Impress my wife tonight</div>
-          <div class="suggest-chip" onclick="quickPrompt(this)">Tequila, not too sweet</div>
-          <div class="suggest-chip" onclick="quickPrompt(this)">Surprise me!</div>
-        </div>
+      <div class="page-header"><h1>AI Bartender</h1><p>Tell me what you're in the mood for</p></div>
+      <div id="apikey-banner">
+        <p>Enter your Anthropic API key to activate the AI Bartender. Your key is stored locally on this device only.</p>
+        <input type="password" id="apikey-input" placeholder="sk-ant-…">
+        <button class="save-key-btn" onclick="saveApiKey()">Save Key &amp; Start Chatting</button>
       </div>
-
+      <div class="suggest-chips">
+        <div class="suggest-chip" onclick="quickPrompt(this)">What can I make tonight?</div>
+        <div class="suggest-chip" onclick="quickPrompt(this)">Something with Empress gin</div>
+        <div class="suggest-chip" onclick="quickPrompt(this)">A smoky Scotch cocktail</div>
+        <div class="suggest-chip" onclick="quickPrompt(this)">Impress my wife tonight</div>
+        <div class="suggest-chip" onclick="quickPrompt(this)">Tequila, not too sweet</div>
+        <div class="suggest-chip" onclick="quickPrompt(this)">Surprise me!</div>
+      </div>
       <div id="chat-messages">
         <div class="msg ai">
-          <strong>Mixologist</strong>
-          Welcome to Mixology Vault! I know your collection — Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo and more. Tell me your mood and I'll craft something perfect.
+          <strong>Bartender</strong>
+          Welcome! I know your bar — Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo and more. Tell me your mood and I'll craft something perfect.
         </div>
       </div>
-
       <div class="chat-bar">
-        <textarea id="chat-input" rows="1" placeholder="Ask your mixologist…"
-                  oninput="autoResize(this)" onkeydown="chatKeydown(event)"></textarea>
+        <textarea id="chat-input" rows="1" placeholder="Ask your bartender…" oninput="autoResize(this)" onkeydown="chatKeydown(event)"></textarea>
         <button class="send-btn" id="send-btn" onclick="sendChat()">
           <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
         </button>
@@ -231,46 +166,35 @@
 
   </div><!-- /scroll-area -->
 
-  <!-- ══════════════ BOTTOM NAV ══════════════ -->
+  <!-- BOTTOM NAV -->
   <nav id="nav">
     <button class="nav-btn active" id="nb-home" onclick="switchScreen('home',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
       <span>Home</span>
     </button>
     <button class="nav-btn" id="nb-bar" onclick="switchScreen('bar',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M8 3H4l4 8H4v10h16V11h-4l4-8h-4M8 3h8M7 8h10"/>
-      </svg>
-      <span>My Vault</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 3H4l4 8H4v10h16V11h-4l4-8h-4M8 3h8M7 8h10"/></svg>
+      <span>My Bar</span>
     </button>
     <button id="nav-decide" onclick="switchScreen('decide',null)">
       <div id="nav-decide-inner">
-        <svg viewBox="0 0 24 24" fill="white">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0-2a12 12 0 100 24A12 12 0 0012 0zm1 17h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
+        <svg viewBox="0 0 24 24"><path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10zm0-18a8 8 0 100 16A8 8 0 0012 4zm1 11v2h-2v-2h2zm0-8v6h-2V7h2z"/></svg>
       </div>
       <span>Decide</span>
     </button>
     <button class="nav-btn" id="nb-cocktails" onclick="switchScreen('cocktails',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M8 3l4 8 4-8M5 8h14l-2 10H7L5 8zM12 18v3M9 21h6"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 3l4 8 4-8M5 8h14l-2 10H7L5 8zM12 18v3M9 21h6"/></svg>
       <span>Cocktails</span>
     </button>
     <button class="nav-btn" id="nb-ai" onclick="switchScreen('ai',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
-      </svg>
-      <span>Mix</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      <span>AI Bar</span>
     </button>
   </nav>
 
 </div><!-- /app -->
 
-<!-- ══════════════ COCKTAIL MODAL ══════════════ -->
+<!-- COCKTAIL MODAL -->
 <div id="modal-overlay" onclick="closeModal(event)">
   <div id="modal">
     <div class="modal-handle"></div>
