@@ -9,8 +9,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#090909">
-<title>The Home Bar</title>
+<meta name="theme-color" content="#0a0a0f">
+<title>Mixology Vault</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
@@ -24,8 +24,8 @@
     <div class="screen active" id="screen-home">
       <div id="hero">
         <div id="hero-greet">Good evening</div>
-        <h1>The Home<br><em>Bar</em></h1>
-        <p id="hero-sub">Your personal cocktail companion, powered by what's in your bar.</p>
+        <h1>Mixology<br><em>Vault</em></h1>
+        <p id="hero-sub">Your personal cocktail companion, powered by what's in your vault.</p>
         <div class="stats-row">
           <div class="stat-pill">
             <div class="stat-num" id="count-ingredients">–</div>
@@ -67,19 +67,37 @@
       </div>
     </div>
 
-    <!-- ══════════════ MY BAR ══════════════ -->
+    <!-- ══════════════ MY VAULT ══════════════ -->
     <div class="screen" id="screen-bar">
       <div class="page-header">
-        <h1>My Bar</h1>
+        <h1>My Vault</h1>
         <p>Your ingredients, synced from Google Sheets</p>
       </div>
+
+      <!-- Three filter tabs -->
+      <div class="vault-filter-row" id="vault-filter-row">
+        <button class="vault-filter-btn active" data-filter="all">
+          <div class="vf-dot"></div>
+          All
+          <span class="vf-count" id="vf-count-all">–</span>
+        </button>
+        <button class="vault-filter-btn" data-filter="have">
+          <div class="vf-dot"></div>
+          In Stock
+          <span class="vf-count" id="vf-count-have">–</span>
+        </button>
+        <button class="vault-filter-btn" data-filter="canGet">
+          <div class="vf-dot"></div>
+          Need to Get
+          <span class="vf-count" id="vf-count-canGet">–</span>
+        </button>
+      </div>
+
+      <div class="vault-item-count" id="vault-item-count"></div>
+
       <div class="section">
-        <div class="bar-legend">
-          <div class="legend-item"><div class="legend-dot have"></div>Have it</div>
-          <div class="legend-item"><div class="legend-dot can-get"></div>Can get it</div>
-        </div>
         <div id="bar-sections">
-          <div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading bar…</div>
+          <div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading vault…</div>
         </div>
       </div>
     </div>
@@ -167,7 +185,7 @@
       </div>
     </div>
 
-    <!-- ══════════════ AI BARTENDER ══════════════ -->
+    <!-- ══════════════ AI MIXOLOGIST ══════════════ -->
     <!--
       #screen-ai uses display:flex when active (see CSS: #screen-ai.active)
       so that #chat-messages fills available space and .chat-bar stays pinned.
@@ -175,14 +193,14 @@
     <div class="screen" id="screen-ai">
       <div id="ai-top">
         <div class="page-header">
-          <h1>AI Bartender</h1>
+          <h1>AI Mixologist</h1>
           <p>Tell me what you're in the mood for</p>
         </div>
 
         <div id="apikey-banner">
-          <p>Enter your Anthropic API key to activate the AI Bartender. Your key is stored locally on this device only.</p>
+          <p>Enter your Anthropic API key to activate the AI Mixologist. Your key is stored locally on this device only.</p>
           <input type="password" id="apikey-input" placeholder="sk-ant-…" autocomplete="off">
-          <button class="save-key-btn" onclick="saveApiKey()">Save Key &amp; Start Chatting</button>
+          <button class="save-key-btn" onclick="saveApiKey()">Save Key &amp; Start Mixing</button>
         </div>
 
         <div class="suggest-chips">
@@ -197,13 +215,13 @@
 
       <div id="chat-messages">
         <div class="msg ai">
-          <strong>Bartender</strong>
-          Welcome! I know your bar — Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo and more. Tell me your mood and I'll craft something perfect.
+          <strong>Mixologist</strong>
+          Welcome to Mixology Vault! I know your collection — Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo and more. Tell me your mood and I'll craft something perfect.
         </div>
       </div>
 
       <div class="chat-bar">
-        <textarea id="chat-input" rows="1" placeholder="Ask your bartender…"
+        <textarea id="chat-input" rows="1" placeholder="Ask your mixologist…"
                   oninput="autoResize(this)" onkeydown="chatKeydown(event)"></textarea>
         <button class="send-btn" id="send-btn" onclick="sendChat()">
           <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
@@ -225,7 +243,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <path d="M8 3H4l4 8H4v10h16V11h-4l4-8h-4M8 3h8M7 8h10"/>
       </svg>
-      <span>My Bar</span>
+      <span>My Vault</span>
     </button>
     <button id="nav-decide" onclick="switchScreen('decide',null)">
       <div id="nav-decide-inner">
@@ -246,7 +264,7 @@
         <circle cx="12" cy="12" r="3"/>
         <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
       </svg>
-      <span>AI Bar</span>
+      <span>Mix</span>
     </button>
   </nav>
 
