@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   THE HOME BAR — styles.css  v3.0
+   MIXOLOGY VAULT — styles.css  v3.0
    Mobile-first. Tested on: iPhone (Safari), Pixel (Chrome)
    Key fixes vs v1/v2:
      • --vh JS variable replaces fragile 100dvh
@@ -21,22 +21,31 @@
 
 /* ── Design Tokens ── */
 :root {
-  --bg:          #090909;
-  --surface:     #111111;
-  --card:        #181818;
-  --card2:       #1e1e1e;
-  --border:      #252525;
-  --border2:     #2e2e2e;
-  --amber:       #c8850a;
-  --amber-l:     #f0a830;
-  --amber-xl:    #ffc95e;
-  --amber-glow:  rgba(200,133,10,0.13);
-  --text:        #f0ece4;
-  --muted:       #6e6e6e;
-  --muted2:      #444444;
+  --bg:          #08080f;
+  --surface:     #0f0f1a;
+  --card:        #141422;
+  --card2:       #1a1a2e;
+  --border:      #1e1e30;
+  --border2:     #27273d;
+
+  /* Primary gold accent */
+  --amber:       #9c6b00;
+  --amber-l:     #d4a017;
+  --amber-xl:    #f0c040;
+  --amber-glow:  rgba(212,160,23,0.12);
+
+  /* Secondary emerald accent — used on hero glow & nav FAB */
+  --accent:      #1a6b4a;
+  --accent-l:    #22a06b;
+  --accent-xl:   #34d399;
+  --accent-glow: rgba(34,160,107,0.12);
+
+  --text:        #edeae4;
+  --muted:       #5e5e78;
+  --muted2:      #38384e;
 
   /* Category accent colours */
-  --cat-spirits-c:   #c8850a;
+  --cat-spirits-c:   #d4a017;
   --cat-liqueurs-c:  #7c3aed;
   --cat-bitters-c:   #16a34a;
   --cat-juices-c:    #0284c7;
@@ -67,18 +76,19 @@
 
 /* ── Base ── */
 html {
-  /* Use --vh so Android Chrome's collapsing address bar doesn't break layout */
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100%;
+  /* -webkit-fill-available: iOS Safari fills the screen correctly
+     accounting for the address bar / home indicator */
+  height: -webkit-fill-available;
 }
 body {
   height: 100%;
+  min-height: -webkit-fill-available;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-b);
   font-size: 16px;
-  /* overflow:hidden locks the root — do NOT put this on html, only body */
   overflow: hidden;
-  /* Prevent text size adjustment on orientation change (iOS) */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -87,8 +97,13 @@ body {
 #app {
   display: flex;
   flex-direction: column;
-  /* Use JS-set --vh for reliable full-screen on Android */
+  /* Layered height values — browser picks the last one it understands:
+     1. 100vh          → desktop fallback
+     2. calc(--vh*100) → Android Chrome fix (set by JS)
+     3. -webkit-fill-available → iOS Safari fix (accounts for browser chrome) */
+  height: 100vh;
   height: calc(var(--vh, 1vh) * 100);
+  min-height: -webkit-fill-available;
   width: 100%;
   max-width: 520px;
   margin: 0 auto;
@@ -99,7 +114,7 @@ body {
 
 /* ── Tablet / Desktop: centred phone-frame ── */
 @media (min-width: 520px) {
-  body { background: #06060a; }
+  body { background: #05050c; }
   #app {
     box-shadow: 0 0 80px rgba(0,0,0,.9);
     border-left:  0.5px solid var(--border);
@@ -129,8 +144,10 @@ body {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   scrollbar-width: none;
-  /* Extra bottom pad: nav height + safe area + breathing room */
-  padding-bottom: calc(var(--nav-h) + var(--safe-b) + 20px);
+  /* The nav is a flex sibling (not fixed/absolute), so it does NOT overlap
+     the scroll area. We only need breathing room below the last content item.
+     Including nav-height here was causing the blank gap on iPhone. */
+  padding-bottom: calc(var(--safe-b) + 20px);
 }
 #scroll-area::-webkit-scrollbar { display: none; }
 
@@ -198,11 +215,11 @@ body {
   height: 50px;
   border-radius: 50%;
   margin-top: -18px;
-  background: linear-gradient(135deg, var(--amber), var(--amber-l));
+  background: linear-gradient(135deg, var(--accent), var(--accent-l));
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 22px rgba(200,133,10,.5);
+  box-shadow: 0 0 22px rgba(34,160,107,.45);
   transition: transform .2s cubic-bezier(.34,1.56,.64,1);
 }
 #nav-decide:active #nav-decide-inner { transform: scale(.91); }
@@ -211,7 +228,7 @@ body {
   font-weight: 600;
   letter-spacing: .04em;
   text-transform: uppercase;
-  color: var(--amber-l);
+  color: var(--accent-l);
 }
 #nav-decide svg { width: 22px; height: 22px; }
 
@@ -335,9 +352,9 @@ body {
   content: '';
   position: absolute;
   top: -80px; right: -60px;
-  width: 260px; height: 260px;
+  width: 280px; height: 280px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(200,133,10,.2) 0%, transparent 68%);
+  background: radial-gradient(circle, rgba(34,160,107,.18) 0%, transparent 68%);
   pointer-events: none;
 }
 #hero-greet {
@@ -386,7 +403,7 @@ body {
   margin: 18px 16px 0;
   width: calc(100% - 32px);
   min-height: 54px;
-  background: linear-gradient(135deg, var(--amber) 0%, var(--amber-l) 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-l) 100%);
   border: none;
   border-radius: var(--rlg);
   display: flex;
@@ -398,7 +415,7 @@ body {
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 22px rgba(200,133,10,.38);
+  box-shadow: 0 4px 22px rgba(34,160,107,.35);
   transition: transform .18s cubic-bezier(.34,1.56,.64,1), opacity .1s;
 }
 #home-cta:active { transform: scale(.97); opacity: .9; }
@@ -491,8 +508,66 @@ body {
 }
 
 /* ══════════════════════════════════════════
-   MY BAR SCREEN
+   MY VAULT SCREEN
 ══════════════════════════════════════════ */
+
+/* ── Filter tabs ── */
+.vault-filter-row {
+  display: flex;
+  gap: 0;
+  margin: 16px 16px 0;
+  background: var(--card);
+  border: 0.5px solid var(--border2);
+  border-radius: var(--r);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.vault-filter-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  border-right: 0.5px solid var(--border2);
+  padding: 11px 6px;
+  font-family: var(--font-b);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .2s;
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  line-height: 1.2;
+}
+.vault-filter-btn:last-child { border-right: none; }
+.vault-filter-btn .vf-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--muted2);
+  transition: background .2s;
+}
+.vault-filter-btn .vf-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  transition: color .2s;
+}
+/* Active states */
+.vault-filter-btn.active               { background: var(--amber-glow); color: var(--amber-l); }
+.vault-filter-btn.active .vf-count     { color: var(--amber-l); }
+.vault-filter-btn[data-filter="have"].active .vf-dot   { background: var(--amber-l); }
+.vault-filter-btn[data-filter="canGet"].active .vf-dot { background: #38bdf8; }
+.vault-filter-btn[data-filter="all"].active .vf-dot    { background: var(--amber-l); }
+
+/* Ingredient count label */
+.vault-item-count {
+  font-size: 11px;
+  color: var(--muted);
+  padding: 8px 16px 0;
+  font-weight: 300;
+}
 .bar-category { margin-bottom: 24px; }
 .bar-category:last-child { margin-bottom: 0; }
 
@@ -740,7 +815,7 @@ body {
   margin: 20px 16px 0;
   width: calc(100% - 32px);
   min-height: 56px;
-  background: linear-gradient(135deg, var(--amber) 0%, var(--amber-l) 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-l) 100%);
   border: none;
   border-radius: var(--rlg);
   display: flex;
@@ -752,7 +827,7 @@ body {
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 22px rgba(200,133,10,.4);
+  box-shadow: 0 4px 22px rgba(34,160,107,.35);
   transition: transform .18s cubic-bezier(.34,1.56,.64,1);
 }
 #gen-btn:active { transform: scale(.97); }
@@ -774,7 +849,7 @@ body {
 #results-area .section-title { margin: 0 0 12px; display: block; }
 
 /* ══════════════════════════════════════════
-   AI BARTENDER SCREEN
+   AI MIXOLOGIST SCREEN
    Layout: flex column inside #scroll-area.
    #ai-top    → fixed header / chips (flex-shrink:0)
    #chat-messages → grows to fill space (flex:1)
@@ -904,7 +979,7 @@ body {
 .send-btn {
   width: 48px;
   height: 48px;
-  background: var(--amber);
+  background: var(--accent-l);
   border: none;
   border-radius: var(--r);
   display: flex;
@@ -921,8 +996,8 @@ body {
 /* API key banner */
 #apikey-banner {
   margin: 12px 16px;
-  background: rgba(200,133,10,.06);
-  border: 0.5px solid var(--amber);
+  background: var(--accent-glow);
+  border: 0.5px solid var(--accent-l);
   border-radius: var(--r);
   padding: 16px;
   display: none;
@@ -947,7 +1022,7 @@ body {
 .save-key-btn {
   margin-top: 10px;
   width: 100%;
-  background: var(--amber);
+  background: var(--accent-l);
   border: none;
   border-radius: 10px;
   padding: 14px;
