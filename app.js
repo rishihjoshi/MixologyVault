@@ -217,7 +217,8 @@ function wireBarFilters() {
   row.addEventListener('click', e => {
     const btn = e.target.closest('.vault-filter-btn');
     if (!btn) return;
-    document.querySelectorAll('.vault-filter-btn').forEach(b => b.classList.remove('active'));
+    // Update active state on the buttons
+    row.querySelectorAll('.vault-filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     activeBarFilter = btn.dataset.filter;
     renderBar();
@@ -228,18 +229,24 @@ function renderBar() {
   const container = document.getElementById('bar-sections');
   if (!container) return;
 
-  // Update badge counts on all three tabs
-  const total    = allIngredients.length;
-  const haveN    = allIngredients.filter(i => i.have).length;
-  const canGetN  = allIngredients.filter(i => i.canGet).length;
-  const cntAll   = document.getElementById('vf-count-all');
-  const cntHave  = document.getElementById('vf-count-have');
-  const cntCanGet= document.getElementById('vf-count-canGet');
+  // Always update all three count badges (these elements are stable in the DOM)
+  const total   = allIngredients.length;
+  const haveN   = allIngredients.filter(i => i.have).length;
+  const canGetN = allIngredients.filter(i => i.canGet).length;
+
+  const cntAll    = document.getElementById('vf-count-all');
+  const cntHave   = document.getElementById('vf-count-have');
+  const cntCanGet = document.getElementById('vf-count-canGet');
   if (cntAll)    cntAll.textContent    = total;
   if (cntHave)   cntHave.textContent   = haveN;
   if (cntCanGet) cntCanGet.textContent = canGetN;
 
-  // Apply active filter
+  // Ensure the correct tab is marked active (guards against re-render edge cases)
+  document.querySelectorAll('.vault-filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === activeBarFilter);
+  });
+
+  // Apply active filter to ingredient list
   let visible = allIngredients;
   if (activeBarFilter === 'have')   visible = allIngredients.filter(i => i.have);
   if (activeBarFilter === 'canGet') visible = allIngredients.filter(i => i.canGet);

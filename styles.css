@@ -76,14 +76,12 @@
 
 /* ── Base ── */
 html {
-  height: 100%;
-  /* -webkit-fill-available: iOS Safari fills the screen correctly
-     accounting for the address bar / home indicator */
-  height: -webkit-fill-available;
+  /* 100dvh = Dynamic Viewport Height — adjusts for iOS Safari chrome.
+     This is the correct fix for iPhone 15 Pro (iOS 17+). */
+  height: 100dvh;
 }
 body {
   height: 100%;
-  min-height: -webkit-fill-available;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-b);
@@ -97,13 +95,13 @@ body {
 #app {
   display: flex;
   flex-direction: column;
-  /* Layered height values — browser picks the last one it understands:
-     1. 100vh          → desktop fallback
-     2. calc(--vh*100) → Android Chrome fix (set by JS)
-     3. -webkit-fill-available → iOS Safari fix (accounts for browser chrome) */
+  /* Cascade: browser uses the LAST value it understands.
+     100vh          → old desktop / Android fallback
+     calc(--vh*100) → Android Chrome address-bar fix (set by JS)
+     100dvh         → iPhone 15 Pro / iOS 17 / Chrome 108 (wins) */
   height: 100vh;
   height: calc(var(--vh, 1vh) * 100);
-  min-height: -webkit-fill-available;
+  height: 100dvh;
   width: 100%;
   max-width: 520px;
   margin: 0 auto;
@@ -511,61 +509,108 @@ body {
    MY VAULT SCREEN
 ══════════════════════════════════════════ */
 
-/* ── Filter tabs ── */
+/* ── Vault Filter Tabs ── */
 .vault-filter-row {
   display: flex;
-  gap: 0;
+  gap: 8px;
   margin: 16px 16px 0;
-  background: var(--card);
-  border: 0.5px solid var(--border2);
-  border-radius: var(--r);
-  overflow: hidden;
   flex-shrink: 0;
+  /* No shared background — individual pill buttons like cocktail chips */
 }
+
 .vault-filter-btn {
   flex: 1;
-  background: none;
-  border: none;
-  border-right: 0.5px solid var(--border2);
-  padding: 11px 6px;
+  /* Kill iOS Safari's white button override */
+  -webkit-appearance: none;
+  appearance: none;
+  /* Explicit dark background so iOS can't override it */
+  background: var(--card);
+  border: 0.5px solid var(--border2);
+  border-radius: 22px;
+  padding: 10px 6px 9px;
   font-family: var(--font-b);
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .02em;
   color: var(--muted);
   cursor: pointer;
-  transition: all .2s;
-  min-height: 44px;
+  min-height: 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  line-height: 1.2;
+  justify-content: center;
+  gap: 4px;
+  transition: background .18s, border-color .18s, color .18s;
 }
-.vault-filter-btn:last-child { border-right: none; }
+
+/* Status dot */
 .vault-filter-btn .vf-dot {
-  width: 7px; height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--muted2);
-  transition: background .2s;
+  flex-shrink: 0;
+  transition: background .18s, transform .18s;
 }
-.vault-filter-btn .vf-count {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--muted);
-  transition: color .2s;
-}
-/* Active states */
-.vault-filter-btn.active               { background: var(--amber-glow); color: var(--amber-l); }
-.vault-filter-btn.active .vf-count     { color: var(--amber-l); }
-.vault-filter-btn[data-filter="have"].active .vf-dot   { background: var(--amber-l); }
-.vault-filter-btn[data-filter="canGet"].active .vf-dot { background: #38bdf8; }
-.vault-filter-btn[data-filter="all"].active .vf-dot    { background: var(--amber-l); }
 
-/* Ingredient count label */
+/* Count badge */
+.vault-filter-btn .vf-count {
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--font-d);
+  color: var(--muted);
+  line-height: 1;
+  transition: color .18s;
+}
+
+/* Label text */
+.vault-filter-btn .vf-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color .18s;
+}
+
+/* ── Active states — solid, unmissable ── */
+/* All (gold) */
+.vault-filter-btn[data-filter="all"].active {
+  background: var(--amber-glow);
+  border-color: var(--amber-l);
+}
+.vault-filter-btn[data-filter="all"].active .vf-dot   { background: var(--amber-l); transform: scale(1.2); }
+.vault-filter-btn[data-filter="all"].active .vf-count { color: var(--amber-xl); }
+.vault-filter-btn[data-filter="all"].active .vf-label { color: var(--amber-l); }
+
+/* In Stock (emerald) */
+.vault-filter-btn[data-filter="have"].active {
+  background: var(--accent-glow);
+  border-color: var(--accent-l);
+}
+.vault-filter-btn[data-filter="have"].active .vf-dot   { background: var(--accent-xl); transform: scale(1.2); }
+.vault-filter-btn[data-filter="have"].active .vf-count { color: var(--accent-xl); }
+.vault-filter-btn[data-filter="have"].active .vf-label { color: var(--accent-l); }
+
+/* Need to Get (sky blue) */
+.vault-filter-btn[data-filter="canGet"].active {
+  background: rgba(56,189,248,.1);
+  border-color: #38bdf8;
+}
+.vault-filter-btn[data-filter="canGet"].active .vf-dot   { background: #38bdf8; transform: scale(1.2); }
+.vault-filter-btn[data-filter="canGet"].active .vf-count { color: #7dd3fc; }
+.vault-filter-btn[data-filter="canGet"].active .vf-label { color: #38bdf8; }
+
+/* Inactive dot colour hints */
+.vault-filter-btn[data-filter="have"] .vf-dot   { background: rgba(34,160,107,.35); }
+.vault-filter-btn[data-filter="canGet"] .vf-dot { background: rgba(56,189,248,.35); }
+.vault-filter-btn[data-filter="all"] .vf-dot    { background: rgba(212,160,23,.35); }
+
+/* Item count label below the tabs */
 .vault-item-count {
   font-size: 11px;
   color: var(--muted);
-  padding: 8px 16px 0;
+  padding: 10px 16px 0;
   font-weight: 300;
 }
 .bar-category { margin-bottom: 24px; }
