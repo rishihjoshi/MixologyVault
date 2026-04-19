@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   THE HOME BAR — app.js  v3.0
+   MIXOLOGY VAULT — app.js  v3.0
    Google Sheet ID: 12_04glNgaHvxNXlybudwtI6uHHdnZtMJlbV_9wjFoXM
    Cocktails sheet columns (CORRECT ORDER):
      A: Name  B: Base Spirit  C: Tag  D: Ingredients
@@ -208,13 +208,59 @@ function renderHome() {
   document.getElementById('count-favourites').textContent  = favourites.size;
 }
 
-// ── RENDER MY BAR ─────────────────────────────────────────
+// ── RENDER MY VAULT ───────────────────────────────────────
+let activeBarFilter = 'all'; // 'all' | 'have' | 'canGet'
+
+function wireBarFilters() {
+  const row = document.getElementById('vault-filter-row');
+  if (!row) return;
+  row.addEventListener('click', e => {
+    const btn = e.target.closest('.vault-filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.vault-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeBarFilter = btn.dataset.filter;
+    renderBar();
+  });
+}
+
 function renderBar() {
   const container = document.getElementById('bar-sections');
   if (!container) return;
 
+  // Update badge counts on all three tabs
+  const total    = allIngredients.length;
+  const haveN    = allIngredients.filter(i => i.have).length;
+  const canGetN  = allIngredients.filter(i => i.canGet).length;
+  const cntAll   = document.getElementById('vf-count-all');
+  const cntHave  = document.getElementById('vf-count-have');
+  const cntCanGet= document.getElementById('vf-count-canGet');
+  if (cntAll)    cntAll.textContent    = total;
+  if (cntHave)   cntHave.textContent   = haveN;
+  if (cntCanGet) cntCanGet.textContent = canGetN;
+
+  // Apply active filter
+  let visible = allIngredients;
+  if (activeBarFilter === 'have')   visible = allIngredients.filter(i => i.have);
+  if (activeBarFilter === 'canGet') visible = allIngredients.filter(i => i.canGet);
+
+  // Update item count label
+  const countEl = document.getElementById('vault-item-count');
+  if (countEl) {
+    const label = activeBarFilter === 'have'   ? 'in stock'
+                : activeBarFilter === 'canGet' ? 'to get'
+                : 'total';
+    countEl.textContent = `${visible.length} ingredient${visible.length !== 1 ? 's' : ''} ${label}`;
+  }
+
+  if (visible.length === 0) {
+    container.innerHTML = '<div class="empty"><div class="ei">🛒</div>No items match this filter.</div>';
+    return;
+  }
+
+  // Group visible ingredients by category
   const groups = {};
-  for (const ing of allIngredients) {
+  for (const ing of visible) {
     const key = ing.category.toLowerCase();
     if (!groups[key]) groups[key] = [];
     groups[key].push(ing);
@@ -232,7 +278,7 @@ function renderBar() {
   }
 
   container.innerHTML = html ||
-    '<div class="empty"><div class="ei">📦</div>Could not load bar data. Make sure your Google Sheet is shared publicly.</div>';
+    '<div class="empty"><div class="ei">📦</div>Could not load vault data. Make sure your Google Sheet is shared publicly.</div>';
 }
 
 // ── RENDER COCKTAILS ──────────────────────────────────────
@@ -490,7 +536,7 @@ function generateDrinks() {
   requestAnimationFrame(() => ra.scrollIntoView({ behavior: 'smooth', block: 'start' }));
 }
 
-// ── AI BARTENDER ──────────────────────────────────────────
+// ── AI MIXOLOGIST ─────────────────────────────────────────
 function checkApiKey() {
   const key = localStorage.getItem('anthropic_key');
   document.getElementById('apikey-banner').style.display = key ? 'none' : 'block';
@@ -523,7 +569,7 @@ function quickPrompt(el) {
 function addMessage(role, text) {
   const el = document.createElement('div');
   el.className = `msg ${role}`;
-  el.innerHTML = role === 'ai' ? `<strong>Bartender</strong>${text}` : esc(text);
+  el.innerHTML = role === 'ai' ? `<strong>Mixologist</strong>${text}` : esc(text);
   document.getElementById('chat-messages').appendChild(el);
   el.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }
@@ -546,7 +592,7 @@ async function sendChat() {
 
   const loadEl = document.createElement('div');
   loadEl.className = 'msg ai';
-  loadEl.innerHTML = `<strong>Bartender</strong><div class="dots"><span></span><span></span><span></span></div>`;
+  loadEl.innerHTML = `<strong>Mixologist</strong><div class="dots"><span></span><span></span><span></span></div>`;
   document.getElementById('chat-messages').appendChild(loadEl);
   loadEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
@@ -554,7 +600,7 @@ async function sendChat() {
     .map(i => `${i.item}${i.brand ? ' (' + i.brand + ')' : ''}`)
     .join(', ');
   const cocktailNames = allCocktails.map(c => c.name).join(', ');
-  const systemPrompt  = `You are an expert home bartender AI. ` +
+  const systemPrompt  = `You are an expert AI mixologist for Mixology Vault. ` +
     `Available ingredients: ${haveItems || 'Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo, Monkey Shoulder, Cointreau, Angostura Bitters, Prosecco'}. ` +
     `Cocktails in the recipe book: ${cocktailNames || 'various classics'}. ` +
     `Be warm, specific and confident. Give full recipes with measurements when asked. Keep responses concise.`;
@@ -582,19 +628,19 @@ async function sendChat() {
     if (!res.ok) {
       // Show real API error (auth failure, quota, invalid key, etc.)
       const errMsg = data?.error?.message || `API error ${res.status}`;
-      loadEl.innerHTML = `<strong>Bartender</strong>⚠️ ${esc(errMsg)}`;
+      loadEl.innerHTML = `<strong>Mixologist</strong>⚠️ ${esc(errMsg)}`;
       sendBtn.disabled = false;
       return;
     }
 
     const reply = data.content?.[0]?.text || 'Sorry, something went wrong. Try again.';
     chatHistory.push({ role: 'assistant', content: reply });
-    loadEl.innerHTML = `<strong>Bartender</strong>${reply.replace(/\n/g, '<br>')}`;
+    loadEl.innerHTML = `<strong>Mixologist</strong>${reply.replace(/\n/g, '<br>')}`;
     loadEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
   } catch (err) {
     console.error('Chat error:', err);
-    loadEl.innerHTML = `<strong>Bartender</strong>⚠️ Network error: ${esc(err.message)}`;
+    loadEl.innerHTML = `<strong>Mixologist</strong>⚠️ Network error: ${esc(err.message)}`;
   }
 
   sendBtn.disabled = false;
@@ -614,6 +660,7 @@ async function init() {
 
   setGreeting();
   wireDecide();
+  wireBarFilters();
   buildFilterChips();
 
   document.getElementById('cocktail-search')?.addEventListener('input', e => {
