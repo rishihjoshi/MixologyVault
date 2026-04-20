@@ -1,6 +1,5 @@
 /* ═══════════════════════════════════════════════════════
    MIXOLOGY VAULT — app.js
-   Google Sheet ID: 12_04glNgaHvxNXlybudwtI6uHHdnZtMJlbV_9wjFoXM
    Tabs: Ingredients (5 cols) | Cocktails (9 cols)
 ═══════════════════════════════════════════════════════ */
 'use strict';
@@ -25,7 +24,20 @@ let ingredientOverrides = {};
 (function loadOverrides() {
   try {
     const s = localStorage.getItem('mv_ing_overrides');
-    if (s) ingredientOverrides = JSON.parse(s);
+    if (!s) return;
+    const parsed = JSON.parse(s);
+    // Validate: only accept plain objects with 'have'/'need' values
+    // Rejects prototype pollution attempts (__proto__, constructor, etc.)
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      const safe = Object.create(null); // no prototype — immune to pollution
+      for (const [k, v] of Object.entries(parsed)) {
+        const numKey = parseInt(k, 10);
+        if (Number.isFinite(numKey) && numKey >= 0 && (v === 'have' || v === 'need')) {
+          safe[numKey] = v;
+        }
+      }
+      ingredientOverrides = safe;
+    }
   } catch (e) {}
 })();
 
@@ -66,7 +78,11 @@ async function fetchSheet(sheetName) {
   try {
     const res  = await fetch(url);
     const text = await res.text();
-    const json = JSON.parse(text.replace(/^[^(]+\(/, '').replace(/\);\s*$/, ''));
+    // Slice JSONP wrapper safely: find first '(' and last ')'
+    const start = text.indexOf('(');
+    const end   = text.lastIndexOf(')');
+    if (start === -1 || end === -1 || end <= start) throw new Error('Unexpected sheet response format');
+    const json = JSON.parse(text.slice(start + 1, end));
     return json.table;
   } catch (e) {
     console.warn(`Sheet fetch failed for "${sheetName}":`, e.message);
@@ -97,7 +113,12 @@ function parseIngredients(table) {
 //                Meas(ml) | Meas(oz) | Steps | History | Description
 function parseCocktails(table) {
   if (!table || !table.rows) return [];
-  return table.rows.map((row, i) => {
+  // Skip the first row if it looks like a header row
+  // (i.e. the first cell contains "name" or "cocktail" — not an actual cocktail name)
+  const rows = table.rows;
+  const firstCell = cellVal(rows[0]?.c?.[0]).toLowerCase();
+  const startRow  = (firstCell.includes('name') || firstCell.includes('cocktail') || firstCell.includes('spirit')) ? 1 : 0;
+  return rows.slice(startRow).map((row, i) => {
     const c    = row.c || [];
     const name = cellVal(c[0]);
     if (!name) return null;
@@ -147,6 +168,12 @@ function esc(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+// safeMarkup: for AI replies — escape all HTML, then allow line breaks only.
+// Never call .replace(newline, '<br>') on raw API text without escaping first.
+function safeMarkup(s) {
+  return esc(s).replace(/\n/g, '<br>');
+}
+
 // ── CARD CLICK DELEGATION ─────────────────────────────────
 // FIX: containers are wired ONCE in init().
 // FIX: pass the favBtn element directly — NOT the event object.
@@ -157,11 +184,11 @@ function wireCardArea(el) {
     const favBtn = e.target.closest('.fav-btn');
     if (favBtn) {
       e.stopPropagation();
-      toggleFav(favBtn, parseInt(favBtn.dataset.id));   // ← pass element, not event
+      toggleFav(favBtn, parseInt(favBtn.dataset.id, 10));   // ← pass element, not event
       return;
     }
     const card = e.target.closest('.drink-card');
-    if (card) openModal(parseInt(card.dataset.id));
+    if (card) openModal(parseInt(card.dataset.id, 10));
   });
 }
 
@@ -254,7 +281,7 @@ function renderBar() {
   // Wire pill toggle
   container.querySelectorAll('.pill[data-ing-id]').forEach(pill => {
     pill.addEventListener('click', () => {
-      const id  = parseInt(pill.dataset.ingId);
+      const id  = parseInt(pill.dataset.ingId, 10);
       const ing = allIngredients.find(x => x.id === id);
       if (!ing) return;
       ingredientOverrides[id] = getIngStatus(ing) === 'have' ? 'need' : 'have';
@@ -401,7 +428,9 @@ function closeModal(e) {
 }
 
 // ── NAVIGATION ────────────────────────────────────────────
+const VALID_SCREENS = new Set(['home','bar','cocktails','decide','ai']);
 function switchScreen(id, btn) {
+  if (!VALID_SCREENS.has(id)) return; // reject unknown screen IDs
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   const sc = document.getElementById('screen-' + id);
@@ -516,6 +545,8 @@ async function sendChat() {
   input.style.height = 'auto';
   addMessage('user', text);
   chatHistory.push({ role: 'user', content: text });
+  // Keep last 20 messages to cap API cost + memory (10 exchanges)
+  if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
 
   const sendBtn = document.getElementById('send-btn');
   sendBtn.disabled = true;
@@ -553,7 +584,7 @@ async function sendChat() {
     if (data.error) throw new Error(data.error.message || 'API error');
     const reply = data.content?.[0]?.text || 'Sorry, something went wrong. Try again.';
     chatHistory.push({ role: 'assistant', content: reply });
-    loadEl.innerHTML = `<strong>Mixologist</strong>${reply.replace(/\n/g, '<br>')}`;
+    loadEl.innerHTML = `<strong>Mixologist</strong>${safeMarkup(reply)}`;
     loadEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
   } catch (err) {
     loadEl.innerHTML = `<strong>Mixologist</strong>Connection issue — ${esc(err.message || 'check your API key and try again')}.`;

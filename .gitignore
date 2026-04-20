@@ -1,0 +1,39 @@
+# ── Mixology Vault — .gitignore ──────────────────────────
+# NEVER commit secrets. API keys, tokens, and credentials
+# must never appear in any file tracked by Git.
+
+# ── Environment / secrets (never commit) ─────────────────
+.env
+.env.*
+*.key
+*.pem
+*.p12
+secrets.js
+config.local.js
+
+# ── macOS ─────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ── Node (if you ever add a build step) ──────────────────
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ── Editor cruft ─────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Python build artefacts (icon generation scripts) ─────
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# ── Temp / build output ───────────────────────────────────
+dist/
+build/
+.cache/

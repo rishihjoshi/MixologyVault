@@ -2,15 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src https://fonts.gstatic.com;
+  connect-src https://docs.google.com https://api.anthropic.com;
+  img-src 'self' data: blob:;
+  object-src 'none';
+  frame-ancestors 'none';
+">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#090909">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="X-Frame-Options" content="DENY">
 <title>Mixology Vault</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="icon" type="image/svg+xml" href="icon.svg">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -198,7 +210,7 @@
       <div class="page-header"><h1>AI <em>Mixologist</em></h1><p>Tell me what you're in the mood for</p></div>
       <div id="apikey-banner">
         <p>Enter your Anthropic API key to activate the AI Mixologist. Your key is stored locally on this device only.</p>
-        <input type="password" id="apikey-input" placeholder="sk-ant-…" style="font-size:16px">
+        <input type="password" id="apikey-input" placeholder="sk-ant-…" style="font-size:16px" autocomplete="off" autocorrect="off" spellcheck="false">
         <button class="save-key-btn" onclick="saveApiKey()">Save Key &amp; Start Chatting</button>
       </div>
       <div class="suggest-chips">
@@ -216,7 +228,7 @@
         </div>
       </div>
       <div class="chat-bar">
-        <textarea id="chat-input" rows="1" placeholder="Ask your mixologist…" oninput="autoResize(this)" onkeydown="chatKeydown(event)" style="font-size:16px"></textarea>
+        <textarea id="chat-input" rows="1" placeholder="Ask your mixologist…" oninput="autoResize(this)" onkeydown="chatKeydown(event)" style="font-size:16px" autocomplete="off" spellcheck="false"></textarea>
         <button class="send-btn" id="send-btn" onclick="sendChat()">
           <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
         </button>
