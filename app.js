@@ -74,7 +74,10 @@ const SPIRIT_FILTERS = [
 
 // ── GOOGLE SHEET FETCH ───────────────────────────────────
 async function fetchSheet(sheetName) {
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+  // &headers=1 tells the gviz API that row 1 is a header row.
+  // Google will exclude it from table.rows — table.rows[0] is then
+  // the first real data row (e.g. 'Classic Margarita' / first ingredient).
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${encodeURIComponent(sheetName)}`;
   try {
     const res  = await fetch(url);
     const text = await res.text();
@@ -113,12 +116,9 @@ function parseIngredients(table) {
 //                Meas(ml) | Meas(oz) | Steps | History | Description
 function parseCocktails(table) {
   if (!table || !table.rows) return [];
-  // Skip the first row if it looks like a header row
-  // (i.e. the first cell contains "name" or "cocktail" — not an actual cocktail name)
-  const rows = table.rows;
-  const firstCell = cellVal(rows[0]?.c?.[0]).toLowerCase();
-  const startRow  = (firstCell.includes('name') || firstCell.includes('cocktail') || firstCell.includes('spirit')) ? 1 : 0;
-  return rows.slice(startRow).map((row, i) => {
+  // With &headers=1 in the URL, table.rows[0] is already the first
+  // real data row — no manual header skipping needed here.
+  return table.rows.map((row, i) => {
     const c    = row.c || [];
     const name = cellVal(c[0]);
     if (!name) return null;
