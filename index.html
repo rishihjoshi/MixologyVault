@@ -15,12 +15,10 @@
 <div id="app">
   <div id="scroll-area">
 
-    <!-- HOME -->
+    <!-- ══ HOME ══ -->
     <div class="screen active" id="screen-home">
       <div id="hero">
         <div id="hero-greet">Good evening</div>
-
-        <!-- Vault Brand Mark -->
         <div class="hero-brand-mark">
           <svg class="vault-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -29,21 +27,14 @@
                 <stop offset="100%" stop-color="#f0a830"/>
               </linearGradient>
             </defs>
-            <!-- Outer diamond frame -->
             <path d="M26 2 L50 26 L26 50 L2 26 Z" stroke="url(#vg1)" stroke-width="1.5" stroke-linejoin="round"/>
-            <!-- Inner diamond accent -->
             <path d="M26 11 L41 26 L26 41 L11 26 Z" stroke="url(#vg1)" stroke-width="0.75" opacity="0.35" stroke-linejoin="round"/>
-            <!-- Cocktail glass bowl (triangle) -->
             <path d="M18 17 L26 31 L34 17 Z" stroke="url(#vg1)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
-            <!-- Glass stem -->
             <line x1="26" y1="31" x2="26" y2="37" stroke="url(#vg1)" stroke-width="1.6" stroke-linecap="round"/>
-            <!-- Glass base -->
             <line x1="21" y1="37" x2="31" y2="37" stroke="url(#vg1)" stroke-width="1.6" stroke-linecap="round"/>
-            <!-- Garnish dot -->
             <circle cx="29.5" cy="21" r="1.8" fill="url(#vg1)" opacity="0.85"/>
           </svg>
         </div>
-
         <h1>Mixology<br><em>Vault</em></h1>
         <p id="hero-sub">Your personal cocktail vault, powered by what's in your bar.</p>
         <div class="stats-row">
@@ -72,32 +63,23 @@
       </div>
     </div>
 
-    <!-- MY VAULT -->
+    <!-- ══ MY VAULT ══ -->
     <div class="screen" id="screen-bar">
       <div class="page-header">
         <h1>My <em>Vault</em></h1>
         <p>Tap any ingredient to toggle availability</p>
       </div>
-
-      <!-- 3-tab Filter Bar -->
       <div class="bar-filter-row">
-        <button class="bar-filter-btn active" data-bar-filter="all">
-          All <span class="bf-badge" id="bf-count-all">–</span>
-        </button>
-        <button class="bar-filter-btn" data-bar-filter="available">
-          ✅ Available <span class="bf-badge" id="bf-count-available">–</span>
-        </button>
-        <button class="bar-filter-btn" data-bar-filter="need">
-          🛒 Need <span class="bf-badge" id="bf-count-need">–</span>
-        </button>
+        <button class="bar-filter-btn active" data-bar-filter="all">All <span class="bf-badge" id="bf-count-all">–</span></button>
+        <button class="bar-filter-btn" data-bar-filter="available">✅ Available <span class="bf-badge" id="bf-count-available">–</span></button>
+        <button class="bar-filter-btn" data-bar-filter="need">🛒 Need <span class="bf-badge" id="bf-count-need">–</span></button>
       </div>
-
       <div class="section" style="margin-top:16px">
         <div id="bar-sections"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading vault…</div></div>
       </div>
     </div>
 
-    <!-- COCKTAILS -->
+    <!-- ══ COCKTAILS ══ -->
     <div class="screen" id="screen-cocktails">
       <div class="page-header"><h1>Cocktails</h1><p>Filter by base spirit — tap any card for full recipe</p></div>
       <div class="search-wrap">
@@ -110,7 +92,7 @@
       </div>
     </div>
 
-    <!-- DECIDE -->
+    <!-- ══ DECIDE ══ -->
     <div class="screen" id="screen-decide">
       <div class="page-header"><h1>What should I<br><em>drink?</em></h1><p>Tell me your mood and I'll pick the perfect drink.</p></div>
 
@@ -172,7 +154,7 @@
       </div>
     </div>
 
-    <!-- AI MIXOLOGIST -->
+    <!-- ══ AI MIXOLOGIST ══ -->
     <div class="screen" id="screen-ai">
       <div class="page-header"><h1>AI <em>Mixologist</em></h1><p>Tell me what you're in the mood for</p></div>
       <div id="apikey-banner">
@@ -204,14 +186,13 @@
 
   </div><!-- /scroll-area -->
 
-  <!-- BOTTOM NAV -->
+  <!-- ══ BOTTOM NAV ══ -->
   <nav id="nav">
     <button class="nav-btn active" id="nb-home" onclick="switchScreen('home',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
       <span>Home</span>
     </button>
     <button class="nav-btn" id="nb-bar" onclick="switchScreen('bar',this)">
-      <!-- Mini vault diamond icon -->
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <path d="M12 2L22 12L12 22L2 12Z" stroke-linejoin="round"/>
         <path d="M9 10L12 16L15 10Z" stroke-linejoin="round" stroke-linecap="round"/>
@@ -237,12 +218,11 @@
 
 </div><!-- /app -->
 
-<!-- COCKTAIL MODAL -->
+<!-- ══ COCKTAIL MODAL (outside #app so it's not clipped by overflow:hidden) ══ -->
 <div id="modal-overlay" onclick="closeModal(event)">
   <div id="modal">
     <div class="modal-handle"></div>
     <button class="modal-close" onclick="closeModal(null)">✕</button>
-
     <div class="modal-header">
       <div class="modal-tag" id="modal-tag"></div>
       <div class="modal-name" id="modal-name"></div>
@@ -251,27 +231,22 @@
         <span class="modal-base-value" id="modal-base"></span>
       </div>
     </div>
-
     <div class="unit-toggle">
       <button class="unit-btn on" id="unit-oz" onclick="setUnit('oz')">oz</button>
       <button class="unit-btn" id="unit-ml" onclick="setUnit('ml')">ml</button>
     </div>
-
     <div class="modal-section">
       <div class="modal-section-label">Ingredients</div>
       <table class="ing-table" id="modal-ingredients"></table>
     </div>
-
     <div class="modal-section" id="desc-wrap">
       <div class="modal-section-label">Description</div>
       <div class="modal-text" id="modal-description"></div>
     </div>
-
     <div class="modal-section" id="hist-wrap">
       <div class="modal-section-label">History</div>
       <div class="modal-history" id="modal-history"></div>
     </div>
-
     <div class="modal-section">
       <div class="modal-section-label">Recipe</div>
       <ol class="step-list" id="modal-steps"></ol>
