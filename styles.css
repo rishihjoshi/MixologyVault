@@ -57,17 +57,16 @@ html, body {
 
 /* ══════════════════════════════════════════
    APP SHELL
-   — Uses 100dvh (dynamic viewport height).
-   — This is the approach confirmed working on
-     iPhone 15 Pro: nav in flex flow, scroll
-     area flex:1, no position:fixed gaps.
+   — height:100% inherits from html/body
+     (both also height:100%). This is the
+     only value guaranteed to match the exact
+     computed body height on iOS Safari.
+     No dvh vs % rounding gap on iPhone 15 Pro.
 ══════════════════════════════════════════ */
 #app {
   display: flex;
   flex-direction: column;
-  /* dvh respects the Dynamic Island & home indicator correctly */
-  height: 100vh;
-  height: 100dvh;
+  height: 100%;
   width: 100%;
   max-width: 520px;
   margin: 0 auto;
