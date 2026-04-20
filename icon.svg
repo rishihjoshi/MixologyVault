@@ -1,0 +1,57 @@
+<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- App icon background: deep charcoal rounded square -->
+  <rect width="80" height="80" rx="18" fill="#0d0d0d"/>
+  <rect width="80" height="80" rx="18" fill="url(#ic-bg-grad)" opacity="0.4"/>
+  <defs>
+    <radialGradient id="ic-bg-grad" cx="30%" cy="25%" r="70%">
+      <stop offset="0%" stop-color="#2a1a00" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ic-gold" x1="5" y1="5" x2="75" y2="75" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffc95e"/>
+      <stop offset="50%" stop-color="#f0a830"/>
+      <stop offset="100%" stop-color="#c8850a"/>
+    </linearGradient>
+    <filter id="ic-glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b2"/>
+      <feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="ic-halo" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="7"/>
+    </filter>
+  </defs>
+  <!-- Soft background halo -->
+  <circle cx="40" cy="40" r="33" stroke="#c8850a" stroke-width="10" opacity="0.1" filter="url(#ic-halo)"/>
+  <!-- Vault ring -->
+  <circle cx="40" cy="40" r="33" stroke="url(#ic-gold)" stroke-width="2.5" filter="url(#ic-glow)"/>
+  <circle cx="40" cy="40" r="27.5" stroke="#f0a830" stroke-width="0.7" opacity="0.3"/>
+  <!-- Top bolt -->
+  <circle cx="40" cy="7" r="2.8" fill="#c8850a" stroke="#ffc95e" stroke-width="0.7" filter="url(#ic-glow)"/>
+  <!-- Rivets -->
+  <circle cx="61.2" cy="14.7" r="1.7" fill="#c8850a" opacity="0.85"/>
+  <circle cx="72.5" cy="34.3" r="1.7" fill="#c8850a" opacity="0.85"/>
+  <circle cx="68.6" cy="56.5" r="1.7" fill="#c8850a" opacity="0.85"/>
+  <circle cx="53.9" cy="69.9" r="1.7" fill="#c8850a" opacity="0.85"/>
+  <circle cx="40"   cy="73"   r="1.7" fill="#c8850a" opacity="0.85"/>
+  <circle cx="26.1" cy="69.9" r="1.7" fill="#c8850a" opacity="0.85"/>
+  <circle cx="13.0" cy="58.9" r="1.7" fill="#c8850a" opacity="0.85"/>
+  <circle cx="21.1" cy="13.0" r="1.7" fill="#c8850a" opacity="0.85"/>
+  <!-- Upper hinge -->
+  <rect x="2" y="24" width="10" height="9" rx="2.5" fill="#6b4f0c" stroke="#c8850a" stroke-width="0.8"/>
+  <line x1="7" y1="25.5" x2="7" y2="31.5" stroke="#ffc95e" stroke-width="0.7" opacity="0.6" stroke-linecap="round"/>
+  <!-- Lower hinge -->
+  <rect x="2" y="47" width="10" height="9" rx="2.5" fill="#6b4f0c" stroke="#c8850a" stroke-width="0.8"/>
+  <line x1="7" y1="48.5" x2="7" y2="54.5" stroke="#ffc95e" stroke-width="0.7" opacity="0.6" stroke-linecap="round"/>
+  <!-- Glass glow underlayer -->
+  <path d="M26 22 L54 22 L40 50 Z" stroke="#f0a830" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" opacity="0.15" filter="url(#ic-halo)"/>
+  <!-- Martini glass crisp lines -->
+  <path d="M26 22 L54 22 L40 50 Z" stroke="url(#ic-gold)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" filter="url(#ic-glow)"/>
+  <line x1="40" y1="50" x2="40" y2="58" stroke="url(#ic-gold)" stroke-width="2.2" stroke-linecap="round" filter="url(#ic-glow)"/>
+  <line x1="33" y1="58" x2="47" y2="58" stroke="url(#ic-gold)" stroke-width="2.2" stroke-linecap="round" filter="url(#ic-glow)"/>
+  <!-- Olive -->
+  <circle cx="43.5" cy="31.5" r="2.8" fill="#c8850a" stroke="#ffc95e" stroke-width="0.8" filter="url(#ic-glow)"/>
+  <!-- Pick -->
+  <line x1="43.5" y1="31.5" x2="48" y2="24.5" stroke="#ffc95e" stroke-width="1.1" stroke-linecap="round"/>
+  <circle cx="48" cy="24.5" r="1.2" fill="#ffc95e"/>
+</svg>

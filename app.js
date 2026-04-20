@@ -561,6 +561,18 @@ async function sendChat() {
   sendBtn.disabled = false;
 }
 
+// ── VAULT ICON — UNLOCK ANIMATION ────────────────────────
+function triggerVaultUnlock() {
+  const icon = document.getElementById('vault-hero-icon');
+  if (!icon) return;
+  // Remove class first (force reflow so animation restarts if clicked rapidly)
+  icon.classList.remove('unlocking');
+  void icon.offsetWidth;
+  icon.classList.add('unlocking');
+  // Clean up after animation completes
+  setTimeout(() => icon.classList.remove('unlocking'), 700);
+}
+
 // ── INIT ──────────────────────────────────────────────────
 async function init() {
   setGreeting();
