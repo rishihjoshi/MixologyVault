@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   THE HOME BAR — app.js
+   MIXOLOGY VAULT — app.js
    Google Sheet ID: 12_04glNgaHvxNXlybudwtI6uHHdnZtMJlbV_9wjFoXM
    Tabs: Ingredients (5 cols) | Cocktails (7+ cols)
 ═══════════════════════════════════════════════════════ */
@@ -10,13 +10,44 @@
 const SHEET_ID = '12_04glNgaHvxNXlybudwtI6uHHdnZtMJlbV_9wjFoXM';
 
 // ── STATE ────────────────────────────────────────────────
-let allIngredients = [];   // parsed from Ingredients sheet
-let allCocktails   = [];   // parsed from Cocktails sheet (array of objects with .id)
-let favourites     = new Set();
-let activeFilter   = 'all';
-let activeUnit     = 'oz'; // 'oz' or 'ml'
-let activeModalId  = null;
-let chatHistory    = [];
+let allIngredients    = [];
+let allCocktails      = [];
+let favourites        = new Set();
+let activeFilter      = 'all';
+let activeUnit        = 'oz';
+let activeModalId     = null;
+let chatHistory       = [];
+
+// ── INGREDIENT OVERRIDES ─────────────────────────────────
+// Stores local user toggles: { [ingId]: 'have' | 'need' }
+// Persisted to localStorage so state survives page reload
+let ingredientOverrides = {};
+let barActiveFilter     = 'all'; // 'all' | 'available' | 'need'
+
+(function loadOverrides() {
+  try {
+    const stored = localStorage.getItem('mv_ing_overrides');
+    if (stored) ingredientOverrides = JSON.parse(stored);
+  } catch (e) {}
+})();
+
+function saveOverrides() {
+  try { localStorage.setItem('mv_ing_overrides', JSON.stringify(ingredientOverrides)); } catch (e) {}
+}
+
+/**
+ * Returns the effective status for an ingredient,
+ * respecting any local override set by the user.
+ * @returns {'have'|'need'}
+ */
+function getIngStatus(ing) {
+  if (ingredientOverrides[ing.id] !== undefined) {
+    return ingredientOverrides[ing.id];
+  }
+  // Fall back to sheet data
+  if (ing.have) return 'have';
+  return 'need'; // canGet or blank → still needs purchasing
+}
 
 // ── CATEGORY META ────────────────────────────────────────
 const CAT_META = {
@@ -73,23 +104,22 @@ function parseIngredients(table) {
       const notes  = cellVal(c[4]);
       if (!cat || !item) return null;
       return {
-        id:       i,
+        id: i,
         category: cat,
         item,
         brand,
-        status,          // "✅ Have" | "🛒 Can Get"
+        status,
         notes,
-        have:     status.includes('Have'),
-        canGet:   status.includes('Can'),
+        have:   status.includes('Have'),
+        canGet: status.includes('Can'),
       };
     })
     .filter(Boolean);
 }
 
 // ── PARSE COCKTAILS ──────────────────────────────────────
-// Columns: Cocktail Name | Base Spirit | Tag | Ingredients |
-//          Measurements(ml) | Measurements(oz) | Recipe/Steps |
-//          [History] | [Description]
+// Columns: Name | Base Spirit | Tag | Ingredients |
+//          Measurements(ml) | Measurements(oz) | Steps | History | Description
 function parseCocktails(table) {
   if (!table || !table.rows) return [];
   return table.rows
@@ -106,17 +136,8 @@ function parseCocktails(table) {
       const description = cellVal(c[8]);
       if (!name) return null;
       return {
-        id: i,
-        name,
-        baseSpirit,
-        tag,
-        ingredients,   // newline-separated list of ingredient names
-        measML,        // newline-separated ml measurements (parallel to ingredients)
-        measOz,        // newline-separated oz measurements (parallel to ingredients)
-        steps,         // full recipe steps text
-        history,
-        description,
-        // Derived: normalised spirit key for filtering
+        id: i, name, baseSpirit, tag,
+        ingredients, measML, measOz, steps, history, description,
         spiritKey: normaliseSpiritKey(baseSpirit),
       };
     })
@@ -135,7 +156,6 @@ function normaliseSpiritKey(baseSpirit) {
 }
 
 // ── CARD HTML ─────────────────────────────────────────────
-// Uses data-id to avoid any inline JSON / quote escaping issues
 function cardHTML(c, extraClass) {
   extraClass = extraClass || '';
   const isFav = favourites.has(c.id);
@@ -158,7 +178,6 @@ function esc(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── DELEGATION: card clicks & fav clicks ─────────────────
 function wireCardArea(el) {
   el.addEventListener('click', e => {
     const favBtn = e.target.closest('.fav-btn');
@@ -170,71 +189,115 @@ function wireCardArea(el) {
 
 // ── RENDER HOME ───────────────────────────────────────────
 function renderHome() {
-  // Featured: pick a random cocktail from sheet
   if (allCocktails.length > 0) {
     const pick = allCocktails[Math.floor(Math.random() * allCocktails.length)];
     document.getElementById('featured-card').innerHTML = cardHTML(pick, 'hero-size featured');
     wireCardArea(document.getElementById('featured-card'));
   }
 
-  // Signature cocktails: tag contains 'Signature'
   const sigs = allCocktails.filter(c => (c.tag || '').toLowerCase().includes('signature'));
   const sigEl = document.getElementById('home-signatures');
   if (sigs.length > 0) {
     sigEl.innerHTML = sigs.slice(0, 3).map(c => cardHTML(c, 'featured')).join('');
     wireCardArea(sigEl);
   } else {
-    sigEl.innerHTML = '<div class="empty"><div class="ei">✨</div>Add cocktails with tag "Signature" in your Google Sheet</div>';
+    sigEl.innerHTML = '<div class="empty"><div class="ei">✨</div>Add cocktails tagged "Signature" in your Google Sheet</div>';
   }
 
-  // Stats
   document.getElementById('count-ingredients').textContent = allIngredients.length;
   document.getElementById('count-cocktails').textContent   = allCocktails.length;
   document.getElementById('count-favourites').textContent  = favourites.size;
 }
 
-// ── RENDER MY BAR ─────────────────────────────────────────
+// ── RENDER MY VAULT ───────────────────────────────────────
 function renderBar() {
   const container = document.getElementById('bar-sections');
   if (!container) return;
 
-  // Group by category (case-insensitive)
+  // Count for each filter badge
+  const countAll       = allIngredients.length;
+  const countAvailable = allIngredients.filter(i => getIngStatus(i) === 'have').length;
+  const countNeed      = allIngredients.filter(i => getIngStatus(i) === 'need').length;
+
+  // Update badge counts
+  const elAll  = document.getElementById('bf-count-all');
+  const elAvail = document.getElementById('bf-count-available');
+  const elNeed = document.getElementById('bf-count-need');
+  if (elAll)   elAll.textContent   = countAll;
+  if (elAvail) elAvail.textContent = countAvailable;
+  if (elNeed)  elNeed.textContent  = countNeed;
+
+  // Filter ingredient list
+  let filtered = allIngredients;
+  if (barActiveFilter === 'available') {
+    filtered = allIngredients.filter(i => getIngStatus(i) === 'have');
+  } else if (barActiveFilter === 'need') {
+    filtered = allIngredients.filter(i => getIngStatus(i) === 'need');
+  }
+
+  // Group by category
   const groups = {};
-  for (const ing of allIngredients) {
+  for (const ing of filtered) {
     const key = ing.category.toLowerCase();
     if (!groups[key]) groups[key] = [];
     groups[key].push(ing);
   }
 
-  // Defined order
   const ORDER = ['spirits','liqueurs','bitters','juices','syrups','garnishes','wine','top up'];
   const allKeys = [...new Set([...ORDER, ...Object.keys(groups)])];
 
   let html = '';
   for (const key of allKeys) {
     if (!groups[key] || groups[key].length === 0) continue;
-    const meta = CAT_META[key] || { icon: '📦', label: key, cls: 'cat-spirits' };
+    const meta  = CAT_META[key] || { icon: '📦', label: key, cls: 'cat-spirits' };
     const items = groups[key];
+
     html += `
       <div class="bar-category ${meta.cls}">
         <div class="cat-header">
           <div class="cat-icon">${meta.icon}</div>
           <div class="cat-label">${meta.label}</div>
-          <div class="cat-count">${items.length} item${items.length > 1 ? 's' : ''}</div>
+          <div class="cat-count">${items.length} item${items.length !== 1 ? 's' : ''}</div>
         </div>
         <div class="pill-grid">
-          ${items.map(ing => `
-            <div class="pill ${ing.have ? 'have' : ing.canGet ? 'can-get' : ''}">
+          ${items.map(ing => {
+            const status = getIngStatus(ing);
+            const isHave = status === 'have';
+            return `<button class="pill ${isHave ? 'have' : 'need-it'}" data-ing-id="${ing.id}" aria-label="${esc(ing.item)}: ${isHave ? 'available, tap to mark as needed' : 'needed, tap to mark as available'}">
               <div class="pill-dot"></div>
               <span class="pill-name">${esc(ing.item)}</span>
               ${ing.brand ? `<span class="pill-brand">· ${esc(ing.brand)}</span>` : ''}
-            </div>
-          `).join('')}
+              <span class="pill-chk">${isHave ? '✓' : '+'}</span>
+            </button>`;
+          }).join('')}
         </div>
       </div>`;
   }
 
-  container.innerHTML = html || '<div class="empty"><div class="ei">📦</div>Could not load bar data. Make sure your Google Sheet is shared publicly.</div>';
+  if (!html) {
+    container.innerHTML = '<div class="empty"><div class="ei">📦</div>No ingredients match this filter.</div>';
+    return;
+  }
+
+  container.innerHTML = html;
+
+  // Wire pill tap → toggle ingredient status
+  container.querySelectorAll('.pill[data-ing-id]').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const id = parseInt(pill.dataset.ingId);
+      const ing = allIngredients.find(x => x.id === id);
+      if (!ing) return;
+      const current = getIngStatus(ing);
+      ingredientOverrides[id] = current === 'have' ? 'need' : 'have';
+      saveOverrides();
+      // Animate briefly before re-render
+      pill.style.transform = 'scale(0.94)';
+      setTimeout(() => {
+        pill.style.transform = '';
+        renderBar();
+      }, 120);
+    });
+  });
 }
 
 // ── RENDER COCKTAILS ──────────────────────────────────────
@@ -262,8 +325,7 @@ function renderCocktails(filterKey, search) {
   let list = allCocktails.filter(c => {
     if (!q) return true;
     return (c.name + ' ' + c.baseSpirit + ' ' + c.tag + ' ' + c.ingredients)
-      .toLowerCase()
-      .includes(q);
+      .toLowerCase().includes(q);
   });
 
   if (filterKey !== 'all') {
@@ -302,14 +364,13 @@ function toggleFav(e, id) {
 // ── MODAL ─────────────────────────────────────────────────
 function openModal(id) {
   const c = allCocktails.find(x => x.id === id);
-  if (!c) { console.warn('Cocktail not found:', id); return; }
+  if (!c) return;
   activeModalId = id;
 
-  document.getElementById('modal-tag').textContent   = c.tag || '';
-  document.getElementById('modal-name').textContent  = c.name;
-  document.getElementById('modal-base').textContent  = c.baseSpirit || '—';
+  document.getElementById('modal-tag').textContent  = c.tag || '';
+  document.getElementById('modal-name').textContent = c.name;
+  document.getElementById('modal-base').textContent = c.baseSpirit || '—';
 
-  // Description
   const descEl = document.getElementById('modal-description');
   if (c.description) {
     descEl.parentElement.style.display = 'block';
@@ -318,7 +379,6 @@ function openModal(id) {
     descEl.parentElement.style.display = 'none';
   }
 
-  // History
   const histEl = document.getElementById('modal-history');
   if (c.history) {
     histEl.parentElement.style.display = 'block';
@@ -327,12 +387,10 @@ function openModal(id) {
     histEl.parentElement.style.display = 'none';
   }
 
-  // Reset unit to oz
   activeUnit = 'oz';
   document.getElementById('unit-oz').classList.add('on');
   document.getElementById('unit-ml').classList.remove('on');
 
-  // Render ingredient table and steps
   renderModalIngredients(c);
   renderModalSteps(c);
 
@@ -341,7 +399,6 @@ function openModal(id) {
 
 function renderModalIngredients(c) {
   const tbl = document.getElementById('modal-ingredients');
-
   const ingLines  = splitLines(c.ingredients);
   const mlLines   = splitLines(c.measML);
   const ozLines   = splitLines(c.measOz);
@@ -421,7 +478,6 @@ function setGreeting() {
   document.getElementById('hero-greet').textContent =
     h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
 
-  // Auto-select time of day on decide screen
   const tod = h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : h < 22 ? 'Evening' : 'Late night';
   document.querySelectorAll('.tod-btn').forEach(b =>
     b.classList.toggle('on', b.dataset.tod === tod));
@@ -429,25 +485,21 @@ function setGreeting() {
 
 // ── DECIDE ENGINE ─────────────────────────────────────────
 function wireDecide() {
-  // Mood
   document.getElementById('mood-grid')?.addEventListener('click', e => {
     const b = e.target.closest('.mood-btn'); if (!b) return;
     document.querySelectorAll('.mood-btn').forEach(x => x.classList.remove('on'));
     b.classList.add('on');
   });
-  // Spirit
   document.getElementById('decide-spirits')?.addEventListener('click', e => {
     const b = e.target.closest('.spirit-btn'); if (!b) return;
     document.querySelectorAll('.spirit-btn').forEach(x => x.classList.remove('on'));
     b.classList.add('on');
   });
-  // Time
   document.getElementById('tod-grid')?.addEventListener('click', e => {
     const b = e.target.closest('.tod-btn'); if (!b) return;
     document.querySelectorAll('.tod-btn').forEach(x => x.classList.remove('on'));
     b.classList.add('on');
   });
-  // Sweetness slider
   const slider = document.getElementById('sweet-slider');
   const sMap   = { 1: 'Dry / Bitter', 2: 'Medium', 3: 'Sweet' };
   slider?.addEventListener('input', function() {
@@ -461,12 +513,9 @@ function generateDrinks() {
   setTimeout(() => btn.classList.remove('shaking'), 550);
 
   const spirit = document.querySelector('.spirit-btn.on')?.dataset.spirit || 'any';
-  const sweet  = parseInt(document.getElementById('sweet-slider')?.value || 2);
 
   let pool = [...allCocktails];
-  if (spirit !== 'any') {
-    pool = pool.filter(c => c.spiritKey === spirit);
-  }
+  if (spirit !== 'any') pool = pool.filter(c => c.spiritKey === spirit);
   if (!pool.length) pool = [...allCocktails];
   const picks = pool.sort(() => Math.random() - .5).slice(0, 3);
 
@@ -477,7 +526,8 @@ function generateDrinks() {
   picks.forEach((c, i) => {
     const wrap = document.createElement('div');
     wrap.innerHTML = cardHTML(c, 'pour-in');
-    const card = wrap.firstChild;
+    const card = wrap.firstElementChild;
+    if (!card) return;
     card.style.animationDelay = `${i * 0.12}s`;
     rl.appendChild(card);
   });
@@ -485,7 +535,7 @@ function generateDrinks() {
   ra.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ── AI BARTENDER ──────────────────────────────────────────
+// ── AI MIXOLOGIST ─────────────────────────────────────────
 function checkApiKey() {
   const key = localStorage.getItem('anthropic_key');
   document.getElementById('apikey-banner').style.display = key ? 'none' : 'block';
@@ -515,7 +565,7 @@ function quickPrompt(el) {
 function addMessage(role, text) {
   const el = document.createElement('div');
   el.className = `msg ${role}`;
-  el.innerHTML = role === 'ai' ? `<strong>Bartender</strong>${text}` : esc(text);
+  el.innerHTML = role === 'ai' ? `<strong>Mixologist</strong>${text}` : esc(text);
   document.getElementById('chat-messages').appendChild(el);
   el.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }
@@ -538,13 +588,13 @@ async function sendChat() {
 
   const loadEl = document.createElement('div');
   loadEl.className = 'msg ai';
-  loadEl.innerHTML = `<strong>Bartender</strong><div class="dots"><span></span><span></span><span></span></div>`;
+  loadEl.innerHTML = `<strong>Mixologist</strong><div class="dots"><span></span><span></span><span></span></div>`;
   document.getElementById('chat-messages').appendChild(loadEl);
   loadEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
-  const haveItems = allIngredients.filter(i => i.have).map(i => `${i.item}${i.brand ? ' (' + i.brand + ')' : ''}`).join(', ');
+  const haveItems     = allIngredients.filter(i => getIngStatus(i) === 'have').map(i => `${i.item}${i.brand ? ' (' + i.brand + ')' : ''}`).join(', ');
   const cocktailNames = allCocktails.map(c => c.name).join(', ');
-  const systemPrompt = `You are an expert home bartender AI. Available ingredients: ${haveItems || 'Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo, Monkey Shoulder, Cointreau, Angostura Bitters, Prosecco'}. Cocktails in the bar: ${cocktailNames}. Be warm, specific, confident. Give full recipes with measurements. Keep responses concise.`;
+  const systemPrompt  = `You are an expert AI mixologist for "Mixology Vault", a personal home bar app. Available ingredients: ${haveItems || 'Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo, Monkey Shoulder, Cointreau, Angostura Bitters, Prosecco'}. Cocktails in the vault: ${cocktailNames}. Be warm, specific, and confident. Give full recipes with measurements. Keep responses concise and elegant.`;
 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -552,22 +602,24 @@ async function sendChat() {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': key,
-        'anthropic-version': '2023-06-01'
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 800,
         system: systemPrompt,
         messages: chatHistory
       })
     });
     const data  = await res.json();
+    if (data.error) throw new Error(data.error.message || 'API error');
     const reply = data.content?.[0]?.text || 'Sorry, something went wrong. Try again.';
     chatHistory.push({ role: 'assistant', content: reply });
-    loadEl.innerHTML = `<strong>Bartender</strong>${reply.replace(/\n/g, '<br>')}`;
+    loadEl.innerHTML = `<strong>Mixologist</strong>${reply.replace(/\n/g, '<br>')}`;
     loadEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
   } catch (err) {
-    loadEl.innerHTML = `<strong>Bartender</strong>Connection issue — check your API key and try again.`;
+    loadEl.innerHTML = `<strong>Mixologist</strong>Connection issue — ${esc(err.message || 'check your API key and try again')}.`;
   }
   sendBtn.disabled = false;
 }
@@ -578,9 +630,24 @@ async function init() {
   wireDecide();
   buildFilterChips();
 
-  // Wire search
+  // Close modal on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && activeModalId !== null) closeModal(null);
+  });
+
+  // Cocktail search
   document.getElementById('cocktail-search')?.addEventListener('input', e => {
     renderCocktails(activeFilter, e.target.value);
+  });
+
+  // Bar filter tabs
+  document.querySelectorAll('.bar-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.bar-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      barActiveFilter = btn.dataset.barFilter;
+      renderBar();
+    });
   });
 
   // Fetch both sheets in parallel
@@ -597,7 +664,6 @@ async function init() {
   renderCocktails('all', '');
 }
 
-// Run when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {

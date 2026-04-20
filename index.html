@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#090909">
-<title>The Home Bar</title>
+<title>Mixology Vault</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -19,8 +19,33 @@
     <div class="screen active" id="screen-home">
       <div id="hero">
         <div id="hero-greet">Good evening</div>
-        <h1>The Home<br><em>Bar</em></h1>
-        <p id="hero-sub">Your personal cocktail companion, powered by what's in your bar.</p>
+
+        <!-- Vault Brand Mark -->
+        <div class="hero-brand-mark">
+          <svg class="vault-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="vg1" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#c8850a"/>
+                <stop offset="100%" stop-color="#f0a830"/>
+              </linearGradient>
+            </defs>
+            <!-- Outer diamond frame -->
+            <path d="M26 2 L50 26 L26 50 L2 26 Z" stroke="url(#vg1)" stroke-width="1.5" stroke-linejoin="round"/>
+            <!-- Inner diamond accent -->
+            <path d="M26 11 L41 26 L26 41 L11 26 Z" stroke="url(#vg1)" stroke-width="0.75" opacity="0.35" stroke-linejoin="round"/>
+            <!-- Cocktail glass bowl (triangle) -->
+            <path d="M18 17 L26 31 L34 17 Z" stroke="url(#vg1)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+            <!-- Glass stem -->
+            <line x1="26" y1="31" x2="26" y2="37" stroke="url(#vg1)" stroke-width="1.6" stroke-linecap="round"/>
+            <!-- Glass base -->
+            <line x1="21" y1="37" x2="31" y2="37" stroke="url(#vg1)" stroke-width="1.6" stroke-linecap="round"/>
+            <!-- Garnish dot -->
+            <circle cx="29.5" cy="21" r="1.8" fill="url(#vg1)" opacity="0.85"/>
+          </svg>
+        </div>
+
+        <h1>Mixology<br><em>Vault</em></h1>
+        <p id="hero-sub">Your personal cocktail vault, powered by what's in your bar.</p>
         <div class="stats-row">
           <div class="stat-pill"><div class="stat-num" id="count-ingredients">–</div><div class="stat-lbl">Ingredients</div></div>
           <div class="stat-pill"><div class="stat-num" id="count-cocktails">–</div><div class="stat-lbl">Cocktails</div></div>
@@ -47,15 +72,28 @@
       </div>
     </div>
 
-    <!-- MY BAR -->
+    <!-- MY VAULT -->
     <div class="screen" id="screen-bar">
-      <div class="page-header"><h1>My Bar</h1><p>Your ingredients, synced from Google Sheets</p></div>
-      <div class="section">
-        <div class="bar-legend">
-          <div class="legend-item"><div class="legend-dot have"></div>Have it</div>
-          <div class="legend-item"><div class="legend-dot can-get"></div>Can get it</div>
-        </div>
-        <div id="bar-sections"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading bar…</div></div>
+      <div class="page-header">
+        <h1>My <em>Vault</em></h1>
+        <p>Tap any ingredient to toggle availability</p>
+      </div>
+
+      <!-- 3-tab Filter Bar -->
+      <div class="bar-filter-row">
+        <button class="bar-filter-btn active" data-bar-filter="all">
+          All <span class="bf-badge" id="bf-count-all">–</span>
+        </button>
+        <button class="bar-filter-btn" data-bar-filter="available">
+          ✅ Available <span class="bf-badge" id="bf-count-available">–</span>
+        </button>
+        <button class="bar-filter-btn" data-bar-filter="need">
+          🛒 Need <span class="bf-badge" id="bf-count-need">–</span>
+        </button>
+      </div>
+
+      <div class="section" style="margin-top:16px">
+        <div id="bar-sections"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading vault…</div></div>
       </div>
     </div>
 
@@ -134,12 +172,12 @@
       </div>
     </div>
 
-    <!-- AI BARTENDER -->
+    <!-- AI MIXOLOGIST -->
     <div class="screen" id="screen-ai">
-      <div class="page-header"><h1>AI Bartender</h1><p>Tell me what you're in the mood for</p></div>
+      <div class="page-header"><h1>AI <em>Mixologist</em></h1><p>Tell me what you're in the mood for</p></div>
       <div id="apikey-banner">
-        <p>Enter your Anthropic API key to activate the AI Bartender. Your key is stored locally on this device only.</p>
-        <input type="password" id="apikey-input" placeholder="sk-ant-…">
+        <p>Enter your Anthropic API key to activate the AI Mixologist. Your key is stored locally on this device only.</p>
+        <input type="password" id="apikey-input" placeholder="sk-ant-…" style="font-size:16px">
         <button class="save-key-btn" onclick="saveApiKey()">Save Key &amp; Start Chatting</button>
       </div>
       <div class="suggest-chips">
@@ -152,12 +190,12 @@
       </div>
       <div id="chat-messages">
         <div class="msg ai">
-          <strong>Bartender</strong>
-          Welcome! I know your bar — Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo and more. Tell me your mood and I'll craft something perfect.
+          <strong>Mixologist</strong>
+          Welcome to your Vault! I know your bar — Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo and more. Tell me your mood and I'll craft something perfect.
         </div>
       </div>
       <div class="chat-bar">
-        <textarea id="chat-input" rows="1" placeholder="Ask your bartender…" oninput="autoResize(this)" onkeydown="chatKeydown(event)"></textarea>
+        <textarea id="chat-input" rows="1" placeholder="Ask your mixologist…" oninput="autoResize(this)" onkeydown="chatKeydown(event)" style="font-size:16px"></textarea>
         <button class="send-btn" id="send-btn" onclick="sendChat()">
           <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
         </button>
@@ -173,8 +211,13 @@
       <span>Home</span>
     </button>
     <button class="nav-btn" id="nb-bar" onclick="switchScreen('bar',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 3H4l4 8H4v10h16V11h-4l4-8h-4M8 3h8M7 8h10"/></svg>
-      <span>My Bar</span>
+      <!-- Mini vault diamond icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2L22 12L12 22L2 12Z" stroke-linejoin="round"/>
+        <path d="M9 10L12 16L15 10Z" stroke-linejoin="round" stroke-linecap="round"/>
+        <line x1="12" y1="16" x2="12" y2="18.5" stroke-linecap="round"/>
+      </svg>
+      <span>My Vault</span>
     </button>
     <button id="nav-decide" onclick="switchScreen('decide',null)">
       <div id="nav-decide-inner">
@@ -188,7 +231,7 @@
     </button>
     <button class="nav-btn" id="nb-ai" onclick="switchScreen('ai',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-      <span>AI Bar</span>
+      <span>AI Mix</span>
     </button>
   </nav>
 
