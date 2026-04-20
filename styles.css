@@ -56,41 +56,37 @@ html, body {
 }
 
 /* ══════════════════════════════════════════
-   APP SHELL — position:fixed is the most
-   bulletproof fix for iPhone 15 Pro viewport
-   gaps (avoids 100vh / dvh inconsistencies)
+   APP SHELL
+   — Uses 100dvh (dynamic viewport height).
+   — This is the approach confirmed working on
+     iPhone 15 Pro: nav in flex flow, scroll
+     area flex:1, no position:fixed gaps.
 ══════════════════════════════════════════ */
 #app {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
   display: flex;
   flex-direction: column;
-  background: var(--bg);
-  /* Centering on wider screens via left:0/right:0 + max-width + margin:auto */
+  /* dvh respects the Dynamic Island & home indicator correctly */
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
   max-width: 520px;
   margin: 0 auto;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
 }
 
 @media (min-width: 520px) {
   body { background: #06060a; }
-  #app { border-left: 0.5px solid var(--border); border-right: 0.5px solid var(--border); }
+  #app { box-shadow: 0 0 80px rgba(0,0,0,.9); border-left: 0.5px solid var(--border); border-right: 0.5px solid var(--border); }
 }
 @media (min-width: 900px) {
-  body { background: #06060a; display: flex; align-items: center; justify-content: center; }
+  body { background: #06060a; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
   #app {
-    /* Switch from fixed to relative for the desktop "phone card" layout */
-    position: relative;
     max-width: 480px;
-    width: 100%;
-    top: auto; right: auto; bottom: auto; left: auto;
     height: min(900px, 96vh);
     border-radius: var(--rxl);
-    overflow: hidden;
     border: 0.5px solid var(--border2);
-    box-shadow: 0 0 80px rgba(0,0,0,.9);
   }
 }
 
@@ -197,7 +193,7 @@ html, body {
 .page-header h1 em { font-style: italic; color: var(--amber-xl); }
 .page-header p { margin-top: 5px; font-size: 13px; color: var(--muted); font-weight: 300; }
 
-.section { padding: 0 16px; margin-top: 22px; }
+.section { padding: 0 16px; margin-top: 16px; }
 .section-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .section-title { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .section-action { font-size: 12px; color: var(--amber-l); background: none; border: none; cursor: pointer; font-family: var(--font-b); font-weight: 500; }
@@ -228,7 +224,8 @@ html, body {
 #hero {
   position: relative;
   overflow: hidden;
-  padding: calc(var(--safe-t) + 36px) 20px 24px;
+  /* Reduced top padding so hero is compact — more content fits below on iPhone */
+  padding: calc(var(--safe-t) + 18px) 20px 18px;
   background: var(--surface);
 }
 /* Decorative gold radial glow */
@@ -252,34 +249,34 @@ html, body {
   pointer-events: none;
 }
 
-#hero-greet { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; font-weight: 500; }
+#hero-greet { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
 
 /* Vault mark in hero */
 .hero-brand-mark {
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 .vault-icon {
-  width: 46px;
-  height: 46px;
+  width: 38px;
+  height: 38px;
   display: block;
-  filter: drop-shadow(0 0 12px rgba(200,133,10,.35));
+  filter: drop-shadow(0 0 10px rgba(200,133,10,.35));
 }
 
-#hero h1 { font-family: var(--font-d); font-size: clamp(30px, 7vw, 44px); font-weight: 700; line-height: 1.05; }
+#hero h1 { font-family: var(--font-d); font-size: clamp(28px, 7vw, 42px); font-weight: 700; line-height: 1.05; }
 #hero h1 em { font-style: italic; color: var(--amber-xl); }
-#hero-sub { margin-top: 6px; font-size: 13px; color: var(--muted); font-weight: 300; }
+#hero-sub { margin-top: 4px; font-size: 13px; color: var(--muted); font-weight: 300; }
 
 /* Stats */
-.stats-row { display: flex; gap: 10px; margin-top: 18px; }
-.stat-pill { background: var(--card); border: 0.5px solid var(--border2); border-radius: var(--r); padding: 12px 14px; flex: 1; text-align: center; }
-.stat-num { font-family: var(--font-d); font-size: 24px; color: var(--amber-l); font-weight: 600; }
-.stat-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; letter-spacing: .05em; text-transform: uppercase; }
+.stats-row { display: flex; gap: 10px; margin-top: 14px; }
+.stat-pill { background: var(--card); border: 0.5px solid var(--border2); border-radius: var(--r); padding: 10px 12px; flex: 1; text-align: center; }
+.stat-num { font-family: var(--font-d); font-size: 22px; color: var(--amber-l); font-weight: 600; }
+.stat-lbl { font-size: 10px; color: var(--muted); margin-top: 1px; letter-spacing: .05em; text-transform: uppercase; }
 
 /* Home CTA */
 #home-cta {
-  margin: 18px 16px 0;
+  margin: 14px 16px 0;
   width: calc(100% - 32px);
-  min-height: 54px;
+  min-height: 50px;
   background: linear-gradient(135deg, var(--amber) 0%, var(--amber-l) 100%);
   border: none; border-radius: var(--rlg);
   display: flex; align-items: center; justify-content: center; gap: 10px;
