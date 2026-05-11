@@ -1,0 +1,384 @@
+[
+  {
+    "id": "virgin-mojito",
+    "name": "Virgin Mojito",
+    "baseIngredient": "Lime",
+    "tags": [
+      "Classic",
+      "Refreshing"
+    ],
+    "ingredients": [
+      "Fresh Lime Juice",
+      "Simple Syrup",
+      "Mint",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "15 ml",
+      "Handful",
+      "Top"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "0.5 oz",
+      "Handful",
+      "Top"
+    ],
+    "history": "The non-alcoholic version of Cuba's iconic Mojito, popularised in hotel bars across Havana for guests who wanted the experience without the rum. As beloved as the original on humid Caribbean evenings.",
+    "description": "All the soul of a Mojito minus the rum — bright lime, fresh mint, and a long soda top. Effortlessly cooling.",
+    "recipe": "Muddle mint leaves gently with lime juice and simple syrup in a highball glass. Fill with crushed ice. Top with chilled soda. Stir gently from the bottom. Garnish with a mint sprig and a lime wheel.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "pomegranate-lemonade",
+    "name": "Pomegranate Lemonade",
+    "baseIngredient": "Pomegranate",
+    "tags": [
+      "Fruity",
+      "Refreshing"
+    ],
+    "ingredients": [
+      "Pomegranate Juice",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "Top"
+    ],
+    "history": "Pomegranate lemonade has roots in Persian and Mediterranean cuisines where pomegranate juice has been a staple beverage ingredient for millennia. The modern fizzy version is a brunch and summer staple.",
+    "description": "Jewel-toned and tart — bright lemon balanced by sweet-tart pomegranate, finished with a lively soda lift.",
+    "recipe": "Add pomegranate juice, lemon juice, and simple syrup to a shaker with ice. Shake 10 seconds. Strain into a tall glass over ice. Top with soda. Stir gently. Garnish with a lemon wheel and pomegranate seeds.",
+    "mood": "Energised"
+  },
+  {
+    "id": "shirley-temple",
+    "name": "Shirley Temple",
+    "baseIngredient": "Ginger Beer",
+    "tags": [
+      "Classic",
+      "Sweet"
+    ],
+    "ingredients": [
+      "Ginger Beer",
+      "Pomegranate Juice",
+      "Fresh Lime Juice"
+    ],
+    "measurementsMl": [
+      "Top",
+      "30 ml",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "Top",
+      "1 oz",
+      "0.25 oz"
+    ],
+    "history": "Named after the child actress Shirley Temple, invented in the 1930s at Chasen's restaurant in Hollywood (or by Royal Hawaiian bartenders, depending on whom you ask). The classic non-alcoholic 'grown-up' drink for children — and adults who want to feel young.",
+    "description": "A pretty, fizzy pink classic — ginger beer's spice meeting sweet-tart pomegranate (the modern grenadine substitute) with a squeeze of lime.",
+    "recipe": "Fill a highball glass with ice. Add pomegranate juice and lime juice. Top with chilled ginger beer. Stir gently. Garnish with a maraschino cherry and an orange slice if available.",
+    "mood": "Party"
+  },
+  {
+    "id": "virgin-pomegranate-spritz",
+    "name": "Virgin Pomegranate Spritz",
+    "baseIngredient": "Pomegranate",
+    "tags": [
+      "Sparkling",
+      "Aperitif"
+    ],
+    "ingredients": [
+      "Pomegranate Juice",
+      "Fresh Lime Juice",
+      "Simple Syrup",
+      "Soda",
+      "Tonic"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "15 ml",
+      "7.5 ml",
+      "60 ml",
+      "30 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.5 oz",
+      "0.25 oz",
+      "2 oz",
+      "1 oz"
+    ],
+    "history": "A modern home-bar invention designed to capture the spritz experience without alcohol — tonic's quinine adds a gentle bitter complexity that mimics aperitivo liqueurs.",
+    "description": "A jewel-toned non-alcoholic spritz — pomegranate's tart sweetness brightened by lime, lifted by soda and finished with tonic's bitter botanicals.",
+    "recipe": "Fill a large wine glass with ice. Add pomegranate juice, lime juice, and simple syrup. Top with soda and tonic. Stir gently. Garnish with an orange slice and pomegranate seeds.",
+    "mood": "Chill"
+  },
+  {
+    "id": "nojito-royale",
+    "name": "Nojito Royale",
+    "baseIngredient": "Mint",
+    "tags": [
+      "Refreshing",
+      "Sparkling"
+    ],
+    "ingredients": [
+      "Mint",
+      "Fresh Lime Juice",
+      "Simple Syrup",
+      "Pomegranate Juice",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "Handful",
+      "22.5 ml",
+      "15 ml",
+      "30 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "Handful",
+      "0.75 oz",
+      "0.5 oz",
+      "1 oz",
+      "Top"
+    ],
+    "history": "An elevated take on the virgin mojito that adds pomegranate juice for visual drama and a deeper, slightly tart fruit note. Popular in modern bars for designated drivers who still want a celebratory experience.",
+    "description": "A blush-pink mojito with attitude — mint and lime over crushed ice with a pomegranate twist. Looks like a cocktail, drinks like summer.",
+    "recipe": "Muddle mint gently with lime juice and simple syrup in a highball glass. Fill with crushed ice. Add pomegranate juice. Top with soda. Stir from the bottom. Garnish with a mint crown and a lime wheel.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "citrus-cooler",
+    "name": "Citrus Cooler",
+    "baseIngredient": "Citrus",
+    "tags": [
+      "Citrus",
+      "Refreshing"
+    ],
+    "ingredients": [
+      "Fresh Lemon Juice",
+      "Fresh Lime Juice",
+      "Orange Juice",
+      "Simple Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "15 ml",
+      "15 ml",
+      "60 ml",
+      "15 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "0.5 oz",
+      "0.5 oz",
+      "2 oz",
+      "0.5 oz",
+      "Top"
+    ],
+    "history": "A classic three-citrus cooler template that's existed since the early 20th century soda fountain era. The combination of lemon, lime, and orange produces a more complex citrus profile than any single fruit alone.",
+    "description": "Brightly citrus and endlessly refreshing — three different citrus juices layered with sweet syrup and a long soda top.",
+    "recipe": "Add all citrus juices and simple syrup to a shaker with ice. Shake 10 seconds. Strain into a tall glass over ice. Top with soda. Stir gently. Garnish with an orange wheel and a lemon twist.",
+    "mood": "Energised"
+  },
+  {
+    "id": "ginger-lime-fizz",
+    "name": "Ginger Lime Fizz",
+    "baseIngredient": "Ginger Beer",
+    "tags": [
+      "Spicy",
+      "Refreshing"
+    ],
+    "ingredients": [
+      "Fresh Lime Juice",
+      "Demerara Sugar Syrup",
+      "Ginger Beer",
+      "Mint"
+    ],
+    "measurementsMl": [
+      "22.5 ml",
+      "7.5 ml",
+      "Top",
+      "Garnish"
+    ],
+    "measurementsOz": [
+      "0.75 oz",
+      "0.25 oz",
+      "Top",
+      "Garnish"
+    ],
+    "history": "A modern non-alcoholic riff on the Moscow Mule template — same spicy ginger, citrus, and crisp finish, just without the vodka.",
+    "description": "Spicy, tart, and grown-up — ginger beer's punch with bright lime and a hint of demerara's caramel depth.",
+    "recipe": "Add lime juice and demerara syrup to a copper mug or highball glass. Fill with crushed ice. Top with chilled ginger beer. Stir gently. Garnish with a fresh mint sprig and a lime wedge.",
+    "mood": "Energised"
+  },
+  {
+    "id": "cinderella",
+    "name": "Cinderella",
+    "baseIngredient": "Mixed Fruit",
+    "tags": [
+      "Classic",
+      "Fruity"
+    ],
+    "ingredients": [
+      "Orange Juice",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "15 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "0.5 oz",
+      "Top"
+    ],
+    "history": "A vintage mocktail dating to the 1930s, originally made with pineapple, orange, and lemon juices. The 'Cinderella' name reflected the idea of a non-alcoholic drink dressed up for the ball.",
+    "description": "A simple, sunny refresher — orange and lemon balanced by a touch of sweetness and a lively soda lift.",
+    "recipe": "Add orange juice, lemon juice, and simple syrup to a shaker with ice. Shake hard 10 seconds. Strain into a tall glass over fresh ice. Top with soda. Garnish with an orange wedge and a maraschino cherry if available.",
+    "mood": "Party"
+  },
+  {
+    "id": "virgin-margarita",
+    "name": "Virgin Margarita",
+    "baseIngredient": "Lime",
+    "tags": [
+      "Citrus",
+      "Classic"
+    ],
+    "ingredients": [
+      "Fresh Lime Juice",
+      "Orange Juice",
+      "Simple Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "30 ml",
+      "15 ml",
+      "Splash"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "1 oz",
+      "0.5 oz",
+      "Splash"
+    ],
+    "history": "The non-alcoholic Margarita has been a beach-bar fixture since the original gained popularity. Orange juice stands in for the orange liqueur, and a splash of soda adds the lift you'd otherwise get from quality tequila.",
+    "description": "All the citrus snap of a Margarita without the kick — tart lime, sweet orange, balanced by syrup with a salty rim.",
+    "recipe": "Optional: rim a rocks glass with salt. Add lime juice, orange juice, and simple syrup to a shaker with ice. Shake hard 10 seconds. Strain into the salted glass over fresh ice. Add a splash of soda. Garnish with a lime wheel.",
+    "mood": "Party"
+  },
+  {
+    "id": "pomegranate-mint-cooler",
+    "name": "Pomegranate Mint Cooler",
+    "baseIngredient": "Pomegranate",
+    "tags": [
+      "Refreshing",
+      "Fruity"
+    ],
+    "ingredients": [
+      "Pomegranate Juice",
+      "Fresh Lemon Juice",
+      "Mint",
+      "Simple Syrup",
+      "Tonic"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml",
+      "Handful",
+      "7.5 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz",
+      "Handful",
+      "0.25 oz",
+      "Top"
+    ],
+    "history": "A home-bar original combining the Middle Eastern tradition of pomegranate with the British tradition of tonic. Tonic's quinine adds a subtle bitter complexity that mimics aperitivo character.",
+    "description": "Aromatic, complex, and refreshing — pomegranate's tartness meets mint's coolness with tonic's gentle bitter finish.",
+    "recipe": "Slap a handful of mint between your palms to release aromas. Add to a wine glass with ice. Add pomegranate juice, lemon juice, and simple syrup. Top with chilled tonic. Stir gently. Garnish with a fresh mint sprig and pomegranate seeds.",
+    "mood": "Chill"
+  },
+  {
+    "id": "empress-g-t-virgin",
+    "name": "Empress G&T (Virgin)",
+    "baseIngredient": "Tonic",
+    "tags": [
+      "Refreshing",
+      "Aperitif"
+    ],
+    "ingredients": [
+      "Tonic",
+      "Fresh Lime Juice",
+      "Mint",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "180 ml",
+      "15 ml",
+      "Handful",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "6 oz",
+      "0.5 oz",
+      "Handful",
+      "0.25 oz"
+    ],
+    "history": "A non-alcoholic riff on the classic G&T template. Tonic's quinine provides the bitter botanical complexity normally added by gin, while mint and lime bring brightness.",
+    "description": "Quietly sophisticated — tonic's botanical depth lifted by mint, lime, and a whisper of sweetness. The grown-up zero-proof option.",
+    "recipe": "Slap mint to release aromas. Fill a large wine glass with ice. Add mint, lime juice, and simple syrup. Top with chilled tonic water. Stir gently once. Garnish with a lime wheel and a fresh mint sprig.",
+    "mood": "Chill"
+  },
+  {
+    "id": "rooh-afza-rose-cooler",
+    "name": "Rooh Afza Rose Cooler",
+    "baseIngredient": "Rose",
+    "tags": [
+      "Floral",
+      "Refreshing",
+      "Signature"
+    ],
+    "ingredients": [
+      "Rooh Afza",
+      "Fresh Lemon Juice",
+      "Mint",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "15 ml",
+      "Handful",
+      "Top"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "0.5 oz",
+      "Handful",
+      "Top"
+    ],
+    "history": "Rooh Afza has been a beloved South Asian summer staple since 1906, traditionally served with cold water or milk during Ramadan iftars. This sparkling, citrus-lifted version is a modern home-bar update.",
+    "description": "A rose-tinted, cardamom-kissed refresher — Rooh Afza's iconic floral sweetness brightened by lemon and lifted by soda.",
+    "recipe": "Gently slap mint between your palms. Add to a highball glass with ice. Add Rooh Afza and lemon juice. Top with chilled soda. Stir gently. Garnish with a fresh mint sprig and a lemon slice. Optional: edible rose petals.",
+    "mood": "Romantic"
+  }
+]

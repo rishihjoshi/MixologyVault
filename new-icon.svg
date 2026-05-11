@@ -1,0 +1,94 @@
+
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="900" y2="940" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#18110D"/>
+      <stop offset="1" stop-color="#050505"/>
+    </linearGradient>
+
+    <linearGradient id="gold" x1="220" y1="180" x2="780" y2="860" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F5D08A"/>
+      <stop offset="0.35" stop-color="#D4A35F"/>
+      <stop offset="0.7" stop-color="#B97632"/>
+      <stop offset="1" stop-color="#FFD79A"/>
+    </linearGradient>
+
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(512 420) rotate(90) scale(380)">
+      <stop stop-color="#F7C97A" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#F7C97A" stop-opacity="0"/>
+    </radialGradient>
+
+    <filter id="softGlow" x="0" y="0" width="1024" height="1024" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="240" fill="url(#bg)"/>
+
+  <!-- Ambient Glow -->
+  <circle cx="512" cy="420" r="320" fill="url(#glow)"/>
+
+  <!-- Outer Vault Ring -->
+  <circle
+    cx="512"
+    cy="512"
+    r="285"
+    stroke="url(#gold)"
+    stroke-width="24"
+    opacity="0.95"
+  />
+
+  <!-- Inner Vault Ring -->
+  <circle
+    cx="512"
+    cy="512"
+    r="235"
+    stroke="url(#gold)"
+    stroke-width="6"
+    opacity="0.35"
+  />
+
+  <!-- Vault Dial Marks -->
+  <g opacity="0.85">
+    <rect x="502" y="165" width="20" height="48" rx="10" fill="url(#gold)"/>
+    <rect x="502" y="811" width="20" height="48" rx="10" fill="url(#gold)"/>
+    <rect x="811" y="502" width="48" height="20" rx="10" fill="url(#gold)"/>
+    <rect x="165" y="502" width="48" height="20" rx="10" fill="url(#gold)"/>
+  </g>
+
+  <!-- Cocktail Glass -->
+  <g filter="url(#softGlow)">
+    <path
+      d="M365 332H659C659 332 634 462 548 547V660H632C648 660 660 672 660 688C660 704 648 716 632 716H392C376 716 364 704 364 688C364 672 376 660 392 660H476V547C390 462 365 332 365 332Z"
+      stroke="url(#gold)"
+      stroke-width="22"
+      stroke-linejoin="round"
+    />
+
+    <!-- Liquid Line -->
+    <path
+      d="M414 430C452 450 490 460 512 460C536 460 578 450 612 430"
+      stroke="url(#gold)"
+      stroke-width="14"
+      stroke-linecap="round"
+      opacity="0.9"
+    />
+
+    <!-- Olive Accent -->
+    <circle cx="585" cy="395" r="18" fill="#D4A35F" opacity="0.9"/>
+  </g>
+
+  <!-- Subtle Highlight -->
+  <path
+    d="M292 300C360 230 446 190 540 190"
+    stroke="#FFF4D6"
+    stroke-opacity="0.22"
+    stroke-width="18"
+    stroke-linecap="round"
+  />
+</svg>

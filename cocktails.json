@@ -1,0 +1,2746 @@
+[
+  {
+    "id": "classic-margarita",
+    "name": "Classic Margarita",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Citrus"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Cointreau",
+      "Fresh Lime Juice"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "30 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "1 oz"
+    ],
+    "history": "Origin debated between Mexico and Texas in 1930s",
+    "description": "Citrusy tequila favorite",
+    "recipe": "Rim glass with salt. Add all ingredients to shaker with ice. Shake vigorously 10 sec. Strain into rocks glass over fresh ice.",
+    "mood": "Party"
+  },
+  {
+    "id": "tequila-sour",
+    "name": "Tequila Sour",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Citrus"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Fresh Lemon Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "0.5 oz"
+    ],
+    "history": "A classic Tequila cocktail developed as part of traditional bar culture.",
+    "description": "A balanced tequila-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add all ingredients to shaker with ice. Shake vigorously 10 sec. Strain into rocks glass over ice. Optional: garnish with a lime wheel.",
+    "mood": "Energised"
+  },
+  {
+    "id": "tequila-old-fashioned",
+    "name": "Tequila Old Fashioned",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Citrus"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Demerara Sugar Syrup",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "7.5 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.25 oz",
+      "2 dashes"
+    ],
+    "history": "A modern riff on the 19th-century Old Fashioned, substituting tequila for whiskey.",
+    "description": "A balanced tequila-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add syrup and bitters to mixing glass. Add Tequila and ice. Stir 30 sec until chilled. Strain over large ice cube in rocks glass. Garnish with lime peel.",
+    "mood": "Bold"
+  },
+  {
+    "id": "gin-martini",
+    "name": "Gin Martini",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Signature"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Dolin Vermouth"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz"
+    ],
+    "history": "One of the most iconic cocktails of the early 20th century, associated with elegance and refinement.",
+    "description": "A balanced gin-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Chill martini glass with ice water. Add gin and vermouth to mixing glass with ice. Stir 30 sec. Strain into chilled martini glass. Garnish with lime twist.",
+    "mood": "Bold"
+  },
+  {
+    "id": "gimlet",
+    "name": "Gimlet",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Fresh Lime Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz"
+    ],
+    "history": "A classic Gin cocktail developed as part of traditional bar culture.",
+    "description": "A balanced gin-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add all ingredients to shaker with ice. Shake vigorously 15 sec. Double strain into chilled coupe glass. Garnish with lime wheel.",
+    "mood": "Energised"
+  },
+  {
+    "id": "bee-s-knees",
+    "name": "Bee's Knees",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Fresh Lemon Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "22.5 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.75 oz"
+    ],
+    "history": "A classic Gin cocktail developed as part of traditional bar culture.",
+    "description": "A balanced gin-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add all ingredients to shaker with ice. Shake vigorously 15 sec. Double strain into chilled coupe. Garnish with lemon peel. Note: Use honey syrup instead of simple syrup if available.",
+    "mood": "Romantic"
+  },
+  {
+    "id": "french-75",
+    "name": "French 75",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Prosecco"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "15 ml",
+      "15 ml",
+      "90 ml"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "0.5 oz",
+      "0.5 oz",
+      "3 oz"
+    ],
+    "history": "Created during World War I and named after a French field gun, symbolizing its strength and sparkle.",
+    "description": "A balanced gin-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add gin, lemon juice, and syrup to shaker with ice. Shake 10 sec. Strain into champagne flute. Top with chilled Prosecco. Garnish with lemon twist.",
+    "mood": "Romantic"
+  },
+  {
+    "id": "mimosa",
+    "name": "Mimosa",
+    "baseSpirit": "Prosecco",
+    "tags": [
+      "Refreshing",
+      "Aperitif"
+    ],
+    "ingredients": [
+      "Prosecco",
+      "Orange Juice"
+    ],
+    "measurementsMl": [
+      "90 ml",
+      "90 ml"
+    ],
+    "measurementsOz": [
+      "3 oz",
+      "3 oz"
+    ],
+    "history": "Popularized in early 20th-century France, especially as a brunch cocktail.",
+    "description": "A balanced prosecco-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Chill champagne flute. Pour OJ into flute first. Slowly top with chilled Prosecco. Gently stir once. Garnish with orange slice.",
+    "mood": "Party"
+  },
+  {
+    "id": "rob-roy",
+    "name": "Rob Roy",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Whisky",
+      "Spirit-Forward"
+    ],
+    "ingredients": [
+      "Monkey Shoulder Scotch",
+      "Dolin Vermouth",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "2 dashes"
+    ],
+    "history": "A classic Scotch cocktail developed as part of traditional bar culture.",
+    "description": "A balanced scotch-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add all ingredients to mixing glass with ice. Stir 30 sec until well chilled. Strain into chilled coupe or martini glass. Garnish with lime or lemon twist.",
+    "mood": "Bold"
+  },
+  {
+    "id": "scotch-sour",
+    "name": "Scotch Sour",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Whisky",
+      "Spirit-Forward"
+    ],
+    "ingredients": [
+      "Glenfiddich 12 Scotch",
+      "Fresh Lemon Juice",
+      "Demerara Sugar Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "0.5 oz"
+    ],
+    "history": "A classic Scotch cocktail developed as part of traditional bar culture.",
+    "description": "A balanced scotch-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add all ingredients to shaker with ice. Shake vigorously 15 sec. Strain into rocks glass over ice. Garnish with lemon wheel and cherry if available.",
+    "mood": "Cozy"
+  },
+  {
+    "id": "old-fashioned",
+    "name": "Old Fashioned",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Signature"
+    ],
+    "ingredients": [
+      "Whisky",
+      "Demerara Sugar Syrup",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "7.5 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.25 oz",
+      "2 dashes"
+    ],
+    "history": "One of the earliest documented cocktails, dating to the early 19th century. The name emerged in the 1880s to distinguish it from newer, more elaborate drinks - literally the \"old-fashioned\" way to mix whisky.",
+    "description": "The original cocktail - a spirit-forward pour of whisky softened by a whisper of sugar and bitters over a large cube.",
+    "recipe": "Add syrup and bitters to mixing glass. Add whisky and ice. Stir 30 sec. Strain over large ice cube in rocks glass. Garnish with orange or lemon peel.",
+    "mood": "Cozy"
+  },
+  {
+    "id": "penicillin",
+    "name": "Penicillin",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Whisky",
+      "Spirit-Forward"
+    ],
+    "ingredients": [
+      "Glenfiddich 12 Scotch",
+      "Fresh Lemon Juice",
+      "Demerara Sugar Syrup",
+      "Angostura Cocoa Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "1 dash"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "1 dash"
+    ],
+    "history": "A classic Scotch cocktail developed as part of traditional bar culture.",
+    "description": "A balanced scotch-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add Scotch, lemon juice, and syrup to shaker with ice. Shake vigorously 15 sec. Strain into rocks glass over ice. Add a dash of cocoa bitters on top. Note: Traditionally uses honey-ginger syrup \"” demerara is a solid substitute.",
+    "mood": "Bold"
+  },
+  {
+    "id": "godfather",
+    "name": "Godfather",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Monkey Shoulder Scotch",
+      "Disaronno Amaretto"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz"
+    ],
+    "history": "A classic Scotch cocktail developed as part of traditional bar culture.",
+    "description": "A balanced scotch-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Fill rocks glass with ice. Pour Scotch over ice. Add Amaretto. Stir gently to combine. Garnish with orange peel.",
+    "mood": "Bold"
+  },
+  {
+    "id": "amaretto-sour",
+    "name": "Amaretto Sour",
+    "baseSpirit": "Amaretto",
+    "tags": [
+      "Nutty",
+      "Sweet"
+    ],
+    "ingredients": [
+      "Disaronno Amaretto",
+      "Fresh Lemon Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "0.25 oz"
+    ],
+    "history": "A classic Amaretto cocktail developed as part of traditional bar culture.",
+    "description": "A balanced amaretto-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add all ingredients to shaker with ice. Shake vigorously 15 sec. Strain into rocks glass over ice. Garnish with lemon slice.",
+    "mood": "Curious"
+  },
+  {
+    "id": "disaronno-fizz",
+    "name": "Disaronno Fizz",
+    "baseSpirit": "Amaretto",
+    "tags": [
+      "Nutty",
+      "Sweet"
+    ],
+    "ingredients": [
+      "Disaronno Amaretto",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Prosecco"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml",
+      "15 ml",
+      "60 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "2 oz"
+    ],
+    "history": "A classic Amaretto cocktail developed as part of traditional bar culture.",
+    "description": "A balanced amaretto-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Shake Amaretto, lemon juice, and syrup with ice. Strain into highball glass over ice. Top with Prosecco. Stir gently. Garnish with lemon wedge.",
+    "mood": "Chill"
+  },
+  {
+    "id": "vodka-sour",
+    "name": "Vodka Sour",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Vodka",
+      "Fresh Lemon Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "0.5 oz"
+    ],
+    "history": "A classic Vodka cocktail developed as part of traditional bar culture.",
+    "description": "A balanced vodka-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add all ingredients to shaker with ice. Shake vigorously 15 sec. Strain into rocks glass over ice. Garnish with lemon wheel.",
+    "mood": "Energised"
+  },
+  {
+    "id": "kamikaze",
+    "name": "Kamikaze",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Vodka",
+      "Cointreau",
+      "Fresh Lime Juice"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml",
+      "22.5 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz",
+      "0.75 oz"
+    ],
+    "history": "A classic Vodka cocktail developed as part of traditional bar culture.",
+    "description": "A balanced vodka-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add all ingredients to shaker with ice. Shake vigorously 15 sec. Strain into chilled martini glass or shot glasses. Garnish with lime wheel.",
+    "mood": "Party"
+  },
+  {
+    "id": "pomegranate-martini",
+    "name": "Pomegranate Martini",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Vodka",
+      "Cointreau",
+      "Pomegranate Juice",
+      "Fresh Lime Juice"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml",
+      "30 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz",
+      "1 oz",
+      "0.5 oz"
+    ],
+    "history": "A classic Vodka cocktail developed as part of traditional bar culture.",
+    "description": "A balanced vodka-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add all ingredients to shaker with ice. Shake vigorously 15 sec. Double strain into chilled martini glass. Garnish with lime twist or pomegranate seeds.",
+    "mood": "Romantic"
+  },
+  {
+    "id": "screwdriver",
+    "name": "Screwdriver",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Vodka",
+      "Orange Juice"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "120 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "4 oz"
+    ],
+    "history": "A classic Vodka cocktail developed as part of traditional bar culture.",
+    "description": "A balanced vodka-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Fill highball glass with ice. Pour Vodka over ice. Top with fresh OJ. Stir gently. Garnish with orange slice.",
+    "mood": "Party"
+  },
+  {
+    "id": "tequila-sunrise",
+    "name": "Tequila Sunrise",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Citrus"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Orange Juice",
+      "Pomegranate Juice"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "120 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "4 oz",
+      "0.5 oz"
+    ],
+    "history": "A classic Tequila cocktail developed as part of traditional bar culture.",
+    "description": "A balanced tequila-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Fill highball glass with ice. Pour Tequila and OJ over ice and stir. Slowly pour pomegranate juice down the side of the glass. Do NOT stir \"” let it sink for sunrise effect. Garnish with orange slice.",
+    "mood": "Party"
+  },
+  {
+    "id": "white-lady",
+    "name": "White Lady",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Cointreau",
+      "Fresh Lemon Juice"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "22.5 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.75 oz"
+    ],
+    "history": "A classic Gin cocktail developed as part of traditional bar culture.",
+    "description": "A balanced gin-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add all ingredients to shaker with ice. Shake hard 15 sec. Double strain into chilled coupe. Garnish with lemon twist.",
+    "mood": "Romantic"
+  },
+  {
+    "id": "vodka-martini",
+    "name": "Vodka Martini",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Vodka",
+      "Dolin Vermouth (Dry/Blanc)"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz"
+    ],
+    "history": "A classic Vodka cocktail developed as part of traditional bar culture.",
+    "description": "A balanced vodka-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Chill martini glass. Stir ingredients with ice 30 sec. Strain into chilled glass. Garnish with lemon twist.",
+    "mood": "Bold"
+  },
+  {
+    "id": "vodka-gimlet",
+    "name": "Vodka Gimlet",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Vodka",
+      "Fresh Lime Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz"
+    ],
+    "history": "A classic Vodka cocktail developed as part of traditional bar culture.",
+    "description": "A balanced vodka-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Shake all ingredients with ice. Strain into chilled coupe. Garnish with lime wheel.",
+    "mood": "Energised"
+  },
+  {
+    "id": "lemon-drop",
+    "name": "Lemon Drop",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Signature"
+    ],
+    "ingredients": [
+      "Vodka",
+      "Cointreau",
+      "Fresh Lemon Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "0.25 oz"
+    ],
+    "history": "A classic Vodka cocktail developed as part of traditional bar culture.",
+    "description": "A balanced vodka-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Shake all ingredients with ice. Strain into sugar-rimmed coupe. Garnish with lemon peel.",
+    "mood": "Party"
+  },
+  {
+    "id": "vesper-blanc-style",
+    "name": "Vesper (Blanc Style)",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Vodka",
+      "Dolin Vermouth"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "15 ml",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.5 oz",
+      "0.25 oz"
+    ],
+    "history": "A classic Gin cocktail developed as part of traditional bar culture.",
+    "description": "A balanced gin-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Stir all ingredients with ice until very cold. Strain into chilled martini glass. Garnish with lemon twist.",
+    "mood": "Bold"
+  },
+  {
+    "id": "tequila-martini",
+    "name": "Tequila Martini",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Citrus"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Dolin Vermouth"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz"
+    ],
+    "history": "A classic Tequila cocktail developed as part of traditional bar culture.",
+    "description": "A balanced tequila-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Stir with ice 30 sec. Strain into chilled coupe or martini glass. Garnish with lime twist.",
+    "mood": "Bold"
+  },
+  {
+    "id": "blanc-manhattan-tequila",
+    "name": "Blanc Manhattan (Tequila)",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Citrus"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Dolin Vermouth",
+      "Angostura Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "2 dashes"
+    ],
+    "history": "A classic Tequila cocktail developed as part of traditional bar culture.",
+    "description": "A balanced tequila-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Stir all ingredients with ice. Strain into coupe. Garnish with lime or lemon peel.",
+    "mood": "Curious"
+  },
+  {
+    "id": "godmother",
+    "name": "Godmother",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Vodka",
+      "Disaronno Amaretto"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz"
+    ],
+    "history": "A classic Vodka cocktail developed as part of traditional bar culture.",
+    "description": "A balanced vodka-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Build ingredients over ice in rocks glass. Stir gently. Garnish with lemon peel.",
+    "mood": "Cozy"
+  },
+  {
+    "id": "amaretto-old-fashioned",
+    "name": "Amaretto Old Fashioned",
+    "baseSpirit": "Amaretto",
+    "tags": [
+      "Nutty",
+      "Sweet"
+    ],
+    "ingredients": [
+      "Disaronno Amaretto",
+      "Angostura Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "2 dashes"
+    ],
+    "history": "A classic Amaretto cocktail developed as part of traditional bar culture.",
+    "description": "A balanced amaretto-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Add bitters and amaretto to rocks glass with ice. Stir gently. Express lemon peel over glass.",
+    "mood": "Curious"
+  },
+  {
+    "id": "pomegranate-spritz",
+    "name": "Pomegranate Spritz",
+    "baseSpirit": "Prosecco",
+    "tags": [
+      "Refreshing",
+      "Aperitif"
+    ],
+    "ingredients": [
+      "Prosecco",
+      "Pomegranate Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "90 ml",
+      "45 ml",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "3 oz",
+      "1.5 oz",
+      "0.25 oz"
+    ],
+    "history": "A classic Prosecco cocktail developed as part of traditional bar culture.",
+    "description": "A balanced prosecco-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Fill wine glass with ice. Add juice and syrup. Top with Prosecco. Light stir. Garnish with lime wheel.",
+    "mood": "Chill"
+  },
+  {
+    "id": "gin-pomegranate-collins-soda-free",
+    "name": "Gin & Pomegranate Collins (Soda-free)",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Pomegranate Juice",
+      "Lemon Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "45 ml",
+      "15 ml",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1.5 oz",
+      "0.5 oz",
+      "0.25 oz"
+    ],
+    "history": "A classic Gin cocktail developed as part of traditional bar culture.",
+    "description": "A balanced gin-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Shake all ingredients with ice. Strain into tall glass over ice. Garnish with lemon wheel.",
+    "mood": "Energised"
+  },
+  {
+    "id": "scotch-amaretto-sour",
+    "name": "Scotch & Amaretto Sour",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Whisky",
+      "Spirit-Forward"
+    ],
+    "ingredients": [
+      "Glenfiddich 12",
+      "Disaronno Amaretto",
+      "Lemon Juice"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml",
+      "22.5 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz",
+      "0.75 oz"
+    ],
+    "history": "A classic Scotch cocktail developed as part of traditional bar culture.",
+    "description": "A balanced scotch-based cocktail made with simple, well-rounded ingredients.",
+    "recipe": "Shake with ice. Strain into rocks glass over ice. Garnish with lemon peel.",
+    "mood": "Cozy"
+  },
+  {
+    "id": "negroni",
+    "name": "Negroni",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Italian Classic",
+      "Aperitif"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Campari",
+      "Dolin Vermouth",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "30 ml",
+      "30 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "1 oz",
+      "1 oz",
+      "2 dashes"
+    ],
+    "history": "Created in Florence, Italy in 1919 when Count Camillo Negroni asked his bartender to strengthen his Americano by swapping soda for gin. An instant classic that has become one of the world's most ordered cocktails.",
+    "description": "The iconic bittersweet trinity — equal parts gin, Campari, and vermouth. Empress 1908's floral botanicals bloom against Campari's herbal bitterness. Note: Traditional recipe uses sweet red vermouth; Dolin Dry/Blanc makes it lighter and more aromatic.",
+    "recipe": "Add all ingredients to a mixing glass with ice. Stir for 30 seconds until well chilled. Strain into a rocks glass over a large ice cube. Express an orange peel over the drink and use as garnish.",
+    "mood": "Bold"
+  },
+  {
+    "id": "americano",
+    "name": "Americano",
+    "baseSpirit": "Campari",
+    "tags": [
+      "Italian Classic",
+      "Aperitif"
+    ],
+    "ingredients": [
+      "Campari",
+      "Dolin Vermouth",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "30 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "1 oz",
+      "Top"
+    ],
+    "history": "Created in the 1860s by Gaspare Campari at his Caffè Camparino in Milan. The predecessor to the Negroni — Count Negroni famously asked for gin to replace the soda. A low-ABV Italian aperitivo staple.",
+    "description": "Light, bubbly, and gently bitter — Campari's herbal bite softened by vermouth and lifted by soda. The perfect pre-dinner drink. Note: Traditional recipe uses sweet red vermouth; Dolin Dry/Blanc makes it drier and more floral.",
+    "recipe": "Fill a highball glass with ice. Add Campari and vermouth. Top with chilled soda. Stir gently once. Garnish with an orange slice.",
+    "mood": "Chill"
+  },
+  {
+    "id": "dark-rum-manhattan",
+    "name": "Dark Rum Manhattan",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Classic"
+    ],
+    "ingredients": [
+      "Dark Rum",
+      "Dolin Vermouth",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "2 dashes"
+    ],
+    "history": "Rum-vermouth cocktails predate Prohibition and were common in port cities where rum was more accessible than whiskey, making this a natural Caribbean adaptation of the Manhattan.",
+    "description": "A rich, spirit-forward cocktail showcasing aged rum’s molasses depth softened by herbal vermouth and warming bitters.",
+    "recipe": "Add all ingredients to a mixing glass with ice. Stir for 30 seconds until well chilled. Strain into a chilled coupe or martini glass. Garnish with expressed lime peel.",
+    "mood": "Cozy"
+  },
+  {
+    "id": "kingston-highball",
+    "name": "Kingston Highball",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Refreshing",
+      "Highball"
+    ],
+    "ingredients": [
+      "Dark Rum",
+      "Fresh Lime Juice",
+      "Simple Syrup",
+      "Ginger Beer"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml",
+      "7.5 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz",
+      "0.25 oz",
+      "Top"
+    ],
+    "history": "Rum-ginger combinations are staples in Caribbean drinking culture, prized for their balance of spice and refreshment.",
+    "description": "A lively, refreshing highball with spicy ginger, bright citrus, and rich aged rum backbone.",
+    "recipe": "Build rum, lime, and syrup in a highball glass over ice. Top with ginger beer. Give one gentle stir. Garnish with lime wedge.",
+    "mood": "Party"
+  },
+  {
+    "id": "rum-pomegranate-spritz",
+    "name": "Rum Pomegranate Spritz",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Sparkling",
+      "Aperitif"
+    ],
+    "ingredients": [
+      "Dark Rum",
+      "Pomegranate Juice",
+      "Demerara Sugar Syrup",
+      "Prosecco",
+      "Soda (optional)"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "30 ml",
+      "7.5 ml",
+      "90 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "1 oz",
+      "0.25 oz",
+      "3 oz",
+      "Top"
+    ],
+    "history": "Spritz-style cocktails have their roots in Europe but have been widely adapted with different base spirits in contemporary home and craft bars.",
+    "description": "A light, elegant spritz combining dark rum’s depth with bright fruit and sparkling wine.",
+    "recipe": "Add rum, juice, and syrup to a wine glass with ice. Top with Prosecco (and a splash of soda if desired). Gently stir. Garnish with lime wheel",
+    "mood": "Chill"
+  },
+  {
+    "id": "blossom-of-love",
+    "name": "Blossom of Love",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Signature"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Dolin Vermouth",
+      "Fresh Lime Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "15 ml",
+      "7.5 ml",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "0.5 oz",
+      "0.25 oz",
+      "0.25 oz"
+    ],
+    "history": "Inspired by the classic martini and modern floral cocktails, this variation was adapted to create a softer, visually striking Valentine-themed drink using color-changing gin.",
+    "description": "A smooth, floral martini with a gentle citrus lift and a blush pink hue, offering a balanced, slightly sweet, and elegant sipping experience",
+    "recipe": "Chill a coupe or martini glass with ice water. Add Empress gin, Dolin Dry, lime juice, and simple syrup to a mixing glass with ice. Stir for 30 seconds until well chilled. Strain into the chilled glass. Watch the Empress gin bloom into a soft blush pink. Garnish with an edible rose petal or a lemon twist.",
+    "mood": "Romantic"
+  },
+  {
+    "id": "rose-empress-fizz",
+    "name": "Rose Empress Fizz",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Signature"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Rooh Afza",
+      "Fresh Lemon Juice",
+      "Prosecco"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "15 ml",
+      "15 ml",
+      "Top with 60-90 ml"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "0.5 oz",
+      "0.5 oz",
+      "Top with 2-3 oz"
+    ],
+    "history": "A home-bar original created to showcase the striking color shift of Empress 1908 Gin against Rooh Afza - the iconic rose-cardamom-kewra syrup from South Asia - lifted with citrus and Prosecco. A fusion of British gin tradition and subcontinental flavour.",
+    "description": "A floral, blush-toned fizz where rose and cooling botanicals from Rooh Afza soften the juniper of Empress gin, brightened with fresh lemon and finished with lively Prosecco bubbles. Elegant, aromatic, and romantic.",
+    "recipe": "Shake gin + Rooh Afza + lemon with ice → strain into wine glass → top with chilled Prosecco.",
+    "mood": "Romantic"
+  },
+  {
+    "id": "mojito",
+    "name": "Mojito",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Classic",
+      "Refreshing"
+    ],
+    "ingredients": [
+      "Dark Rum",
+      "Fresh Lime Juice",
+      "Simple Syrup",
+      "Mint",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml",
+      "Handful",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "Handful",
+      "Top"
+    ],
+    "history": "Born in Havana, Cuba in the 16th century, the mojito was reputedly a favourite of Ernest Hemingway at La Bodeguita del Medio.",
+    "description": "Cuba's most iconic cocktail - bright lime, fresh mint, and aged rum lifted by a long soda top. Effortlessly refreshing.",
+    "recipe": "Muddle mint leaves with lime juice and syrup in a highball glass. Fill with crushed ice. Pour rum over ice. Top with soda. Stir gently from the bottom. Garnish with a mint sprig and lime wheel.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "dark-rum-daiquiri",
+    "name": "Dark Rum Daiquiri",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Classic",
+      "Citrus"
+    ],
+    "ingredients": [
+      "Dark Rum",
+      "Fresh Lime Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz"
+    ],
+    "history": "The daiquiri originated in the iron-mining town of Daiquirí, Cuba in the early 1900s, popularised by American engineers and later by Ernest Hemingway.",
+    "description": "Three ingredients, perfectly balanced - aged rum's molasses richness brightened with fresh lime and a whisper of sweetness.",
+    "recipe": "Add all ingredients to a shaker with ice. Shake hard for 12 seconds. Double strain into a chilled coupe. Garnish with a lime wheel.",
+    "mood": "Chill"
+  },
+  {
+    "id": "rum-old-fashioned",
+    "name": "Rum Old Fashioned",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Spirit-Forward",
+      "Classic"
+    ],
+    "ingredients": [
+      "Dark Rum",
+      "Demerara Sugar Syrup",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "7.5 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.25 oz",
+      "2 dashes"
+    ],
+    "history": "A rum riff on the 1880s Old Fashioned, popular in Caribbean bars where aged rum is as revered as whiskey in the American South.",
+    "description": "Slow, rich, and complex - molasses-forward rum dressed with caramel syrup and warming bitters over a single large cube.",
+    "recipe": "Add syrup and bitters to a rocks glass. Add rum. Fill with a large ice cube. Stir 20 rotations to combine and chill. Express an orange peel over the glass and drop in.",
+    "mood": "Cosy"
+  },
+  {
+    "id": "tom-collins",
+    "name": "Tom Collins",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Classic",
+      "Highball"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "Top"
+    ],
+    "history": "Named after an 1870s New York prank - the 'Tom Collins hoax' - where people were told a man named Tom Collins was speaking badly about them. The cocktail emerged as the joke spread.",
+    "description": "A tall, refreshing classic - gin, citrus, and sugar topped with soda. The Empress gin adds a stunning indigo colour.",
+    "recipe": "Combine gin, lemon juice, and syrup in a shaker with ice. Shake 10 seconds. Strain into a tall Collins glass over ice. Top with soda. Gently stir. Garnish with a lemon slice.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "gin-fizz",
+    "name": "Gin Fizz",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Classic",
+      "Effervescent"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "Top"
+    ],
+    "history": "The Fizz family of cocktails dates to the 1870s, popularised in Jerry Thomas's bartender guides. The gin fizz is one of the simplest and most enduring.",
+    "description": "Lighter and more citrus-forward than a Collins - shaken to a silky froth, then lifted with a short soda top.",
+    "recipe": "Add gin, lemon juice, and syrup to a shaker with ice. Shake vigorously for 15 seconds. Strain into a chilled highball glass with no ice. Top with a small splash of soda. Garnish with a lemon wheel.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "empress-tonic",
+    "name": "Empress & Tonic",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Refreshing",
+      "Simple"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Tonic",
+      "Fresh Lime Juice"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "Top",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "Top",
+      "0.25 oz"
+    ],
+    "history": "Gin & tonic was popularised by British colonial officers in 19th century India who mixed quinine (tonic) with gin to make their anti-malarial medicine more palatable.",
+    "description": "Empress 1908 turns a magical lavender-indigo as it meets tonic - visually stunning and effortlessly elegant.",
+    "recipe": "Fill a large wine glass or balloon glass with ice. Add lime juice. Pour gin over ice. Slowly top with chilled tonic water to preserve bubbles. Garnish with a lime wheel and a sprig of lavender if available.",
+    "mood": "Chill"
+  },
+  {
+    "id": "scotch-highball",
+    "name": "Scotch Highball",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Classic",
+      "Simple"
+    ],
+    "ingredients": [
+      "Monkey Shoulder Scotch",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "Top"
+    ],
+    "history": "The highball became the cocktail format of choice in Japan in the 1950s, but Scotch & soda has been a British pub staple since the Victorian era.",
+    "description": "The simplest way to enjoy Monkey Shoulder - soda opens up the malt and honey notes without masking them.",
+    "recipe": "Fill a highball glass with ice. Pour Scotch over ice. Slowly top with chilled soda to preserve carbonation. Stir once gently. Garnish with a lemon twist.",
+    "mood": "Chill"
+  },
+  {
+    "id": "scotch-manhattan",
+    "name": "Scotch Manhattan",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Signature",
+      "Spirit-Forward"
+    ],
+    "ingredients": [
+      "Monkey Shoulder Scotch",
+      "Dolin Vermouth",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "2 dashes"
+    ],
+    "history": "The Manhattan emerged in New York in the 1880s. This Scotch variation - sometimes called a Rob Roy's cousin - brings honeyed malt in place of rye's spice.",
+    "description": "Silky and spirit-forward, with Monkey Shoulder's malt depth balanced by herbal vermouth and bitters.",
+    "recipe": "Add all ingredients to a mixing glass with ice. Stir for 30 seconds until well chilled and diluted. Strain into a chilled coupe. Garnish with a lemon or orange twist.",
+    "mood": "Bold"
+  },
+  {
+    "id": "irish-whiskey-sour",
+    "name": "Irish Whiskey Sour",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Classic",
+      "Citrus"
+    ],
+    "ingredients": [
+      "Red Breast 12 Irish Whiskey",
+      "Fresh Lemon Juice",
+      "Demerara Sugar Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz"
+    ],
+    "history": "Whiskey sours have been enjoyed since the 1860s. Irish whiskey's natural sweetness and light pot still character makes it a particularly harmonious base.",
+    "description": "Softer and rounder than its Scotch cousin - Red Breast's fruit-forward character sings with citrus and rich demerara.",
+    "recipe": "Add all ingredients to a shaker with ice. Shake vigorously for 15 seconds. Strain into a rocks glass over ice. Garnish with a lemon wheel. Optional: a dash of Angostura on top.",
+    "mood": "Cosy"
+  },
+  {
+    "id": "irish-old-fashioned",
+    "name": "Irish Old Fashioned",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Signature",
+      "Spirit-Forward"
+    ],
+    "ingredients": [
+      "Red Breast 12 Irish Whiskey",
+      "Demerara Sugar Syrup",
+      "Angostura Aromatic Bitters",
+      "Angostura Cocoa Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "7.5 ml",
+      "1 dash",
+      "1 dash"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.25 oz",
+      "1 dash",
+      "1 dash"
+    ],
+    "history": "Red Breast 12 is one of Ireland's finest single pot still whiskeys. Paired with the depth of demerara and the warmth of bitters, this is a contemplative evening drink.",
+    "description": "Lush, warming, and complex - Red Breast's orchard fruit and spice elevated by caramel syrup and a hint of chocolate.",
+    "recipe": "Combine syrup and both bitters in a mixing glass. Add whiskey and a large handful of ice. Stir 30 rotations. Strain over a large ice cube in a rocks glass. Express an orange peel over the glass.",
+    "mood": "Cosy"
+  },
+  {
+    "id": "cosmopolitan",
+    "name": "Cosmopolitan",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Signature",
+      "Fruity"
+    ],
+    "ingredients": [
+      "Vodka",
+      "Cointreau",
+      "Pomegranate Juice",
+      "Fresh Lime Juice"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml",
+      "30 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz",
+      "1 oz",
+      "0.5 oz"
+    ],
+    "history": "Popularised in the late 1980s New York bar scene and immortalised by Sex and the City, the Cosmopolitan became the defining cocktail of the 1990s.",
+    "description": "A blush-pink classic - citrus vodka, Cointreau, and tart pomegranate with a bright lime finish. Elegant and dangerously drinkable.",
+    "recipe": "Add all ingredients to a shaker filled with ice. Shake hard for 12 seconds. Double strain into a chilled martini glass. Garnish with a flamed or twisted lime peel.",
+    "mood": "Party"
+  },
+  {
+    "id": "vodka-collins",
+    "name": "Vodka Collins",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Classic",
+      "Highball"
+    ],
+    "ingredients": [
+      "Vodka",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "Top"
+    ],
+    "history": "The Collins template - spirit, citrus, sugar, soda - works beautifully with vodka, creating a crisp, neutral canvas that lets the citrus shine.",
+    "description": "Clean, crisp, and endlessly refreshing. The vodka Collins lets lemon and soda do the talking.",
+    "recipe": "Shake vodka, lemon, and syrup with ice. Strain into a tall glass over ice. Top with soda. Stir gently. Garnish with a lemon slice.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "moscow-mule",
+    "name": "Moscow Mule",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Classic",
+      "Highball"
+    ],
+    "ingredients": [
+      "Vodka",
+      "Fresh Lime Juice",
+      "Ginger Beer"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "Top"
+    ],
+    "history": "Invented in 1941 in Hollywood by John Martin (Smirnoff) and Jack Morgan (Cock 'n' Bull ginger beer) to sell two slow-moving products. The copper mug became iconic.",
+    "description": "Sharp, spicy ginger beer meeting clean vodka and bright lime over crushed ice - a crowd-pleaser that never goes out of style.",
+    "recipe": "Fill a copper mug or highball glass with crushed ice. Add lime juice and vodka. Top with chilled ginger beer. Stir gently. Garnish with a lime wheel and mint sprig.",
+    "mood": "Party"
+  },
+  {
+    "id": "tequila-mule",
+    "name": "Tequila Mule",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Citrus",
+      "Highball"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Fresh Lime Juice",
+      "Ginger Beer"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "Top"
+    ],
+    "history": "A Mexican-inspired twist on the Moscow Mule, replacing vodka with tequila. The añejo's aged complexity adds a smoky, caramel depth the original can't match.",
+    "description": "Ginger's heat meets tequila's agave soul with bright lime - bolder and earthier than the original Mule.",
+    "recipe": "Fill a copper mug or highball glass with crushed ice. Add lime juice and tequila. Top with ginger beer. Stir once. Garnish with a lime wheel.",
+    "mood": "Bold"
+  },
+  {
+    "id": "scottish-mule",
+    "name": "Scottish Mule",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Highball",
+      "Spirit-Forward"
+    ],
+    "ingredients": [
+      "Monkey Shoulder Scotch",
+      "Fresh Lime Juice",
+      "Ginger Beer",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml",
+      "Top",
+      "1 dash"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz",
+      "Top",
+      "1 dash"
+    ],
+    "history": "Scotland meets Moscow - a bold riff that plays Monkey Shoulder's honeyed vanilla and malt against the punch of ginger beer and citrus.",
+    "description": "Earthy, spiced, and warming - ginger amplifies the whisky's natural spice while lime cuts through its depth.",
+    "recipe": "Build lime juice and Scotch over ice in a highball glass. Top with ginger beer. Add a dash of bitters. Stir gently. Garnish with a lime wedge.",
+    "mood": "Bold"
+  },
+  {
+    "id": "pomegranate-margarita",
+    "name": "Pomegranate Margarita",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Citrus",
+      "Fruity",
+      "Signature"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Cointreau",
+      "Fresh Lime Juice",
+      "Pomegranate Juice"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "22.5 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "0.75 oz"
+    ],
+    "history": "A modern riff on the classic margarita, the pomegranate variation became popular in the 2000s as exotic fruit juices entered mainstream cocktail culture.",
+    "description": "Deep ruby-red and vibrant - classic margarita character with a jewel-toned, antioxidant-rich twist.",
+    "recipe": "Rim a rocks glass with salt. Add all ingredients to a shaker with ice. Shake vigorously 12 seconds. Strain into the prepared glass over fresh ice. Garnish with a lime wheel.",
+    "mood": "Party"
+  },
+  {
+    "id": "clover-club-pomegranate",
+    "name": "Clover Club (Pomegranate)",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Fruity",
+      "Classic"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Pomegranate Juice"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "0.5 oz"
+    ],
+    "history": "The Clover Club pre-dates Prohibition, created for a Philadelphia gentlemen's club of the same name. This version swaps raspberries for pomegranate - equally tart, more striking.",
+    "description": "Silky and pink, with floral gin lifting tart lemon and pomegranate into something genuinely beautiful.",
+    "recipe": "Combine all ingredients in a shaker without ice. Dry shake 10 seconds. Add ice and shake hard 15 seconds. Double strain into a chilled coupe. Garnish with a lemon twist.",
+    "mood": "Romantic"
+  },
+  {
+    "id": "tequila-collins",
+    "name": "Tequila Collins",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Citrus",
+      "Highball"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "Top"
+    ],
+    "history": "The Collins template applied to tequila creates a surprisingly harmonious long drink - the agave character adds a herbaceous, earthy layer not found in the gin or vodka versions.",
+    "description": "A tall, sunlit drink - aged tequila's warmth stretched with citrus and soda into something surprisingly delicate.",
+    "recipe": "Shake tequila, lemon, and syrup with ice. Strain into a tall glass over ice. Top with soda. Stir gently. Garnish with a lemon slice.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "rum-sour",
+    "name": "Rum Sour",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Classic",
+      "Citrus"
+    ],
+    "ingredients": [
+      "Dark Rum",
+      "Fresh Lemon Juice",
+      "Demerara Sugar Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz"
+    ],
+    "history": "Sours are one of the oldest cocktail families, dating to the 1850s. Dark rum's molasses depth and natural sweetness make it a particularly well-suited base.",
+    "description": "Rich and rounded - the rum's caramel notes play beautifully against bright lemon and the depth of demerara.",
+    "recipe": "Add all ingredients to a shaker with ice. Shake vigorously 15 seconds. Strain into a rocks glass over ice. Garnish with a lemon wheel and a dash of bitters on top.",
+    "mood": "Cosy"
+  },
+  {
+    "id": "mojito-royale",
+    "name": "Mojito Royale",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Signature",
+      "Sparkling"
+    ],
+    "ingredients": [
+      "Dark Rum",
+      "Fresh Lime Juice",
+      "Simple Syrup",
+      "Mint",
+      "Prosecco"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "15 ml",
+      "15 ml",
+      "Handful",
+      "Top"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.5 oz",
+      "0.5 oz",
+      "Handful",
+      "Top"
+    ],
+    "history": "A champagne-elevated take on the Cuban Mojito - the prosecco lifts the cocktail from beach bar to dinner party in one elegant pour.",
+    "description": "A sophisticated, celebratory mojito - same rum, mint, and lime soul, crowned with sparkling prosecco.",
+    "recipe": "Muddle mint with lime juice and syrup in a wine glass. Fill with crushed ice. Add rum. Top with chilled Prosecco. Stir gently. Garnish with a mint crown and lime wheel.",
+    "mood": "Party"
+  },
+  {
+    "id": "scotch-julep",
+    "name": "Scotch Julep",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Signature",
+      "Spirit-Forward"
+    ],
+    "ingredients": [
+      "Monkey Shoulder Scotch",
+      "Demerara Sugar Syrup",
+      "Mint"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml",
+      "Handful"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz",
+      "Handful"
+    ],
+    "history": "The Mint Julep is the official cocktail of the Kentucky Derby, made with bourbon. Swapping Monkey Shoulder creates a smoky, honeyed Scottish cousin equally worthy of a warm evening.",
+    "description": "Crushed ice, heady fresh mint, and the golden warmth of Monkey Shoulder - contemplative, aromatic, and deeply satisfying.",
+    "recipe": "Gently muddle mint with syrup in a julep cup or rocks glass. Fill with crushed ice. Pour Scotch over ice. Stir briefly to combine. Pack with more crushed ice. Garnish generously with a mint bouquet. Dust with powdered sugar if desired.",
+    "mood": "Cosy"
+  },
+  {
+    "id": "rum-fizz",
+    "name": "Rum Fizz",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Refreshing",
+      "Effervescent"
+    ],
+    "ingredients": [
+      "Dark Rum",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "Top"
+    ],
+    "history": "The Fizz format - shaken spirit, citrus, sugar, and soda - works beautifully with dark rum, creating a tropical-leaning drink with a long effervescent finish.",
+    "description": "Bright and bubbly - rum's molasses depth lifted by lemon and soda into a light, effervescent crowd-pleaser.",
+    "recipe": "Shake rum, lemon, and syrup hard with ice. Strain into a chilled highball glass with no ice. Top with soda to create a frothy top. Garnish with a lemon slice.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "pomegranate-gin-sour",
+    "name": "Pomegranate Gin Sour",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Fruity",
+      "Signature"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Pomegranate Juice",
+      "Fresh Lemon Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "30 ml",
+      "22.5 ml",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "1 oz",
+      "0.75 oz",
+      "0.25 oz"
+    ],
+    "history": "A modern creation that plays Empress 1908's butterfly pea flower botanicals against tart pomegranate - the colours swirl together dramatically in the glass.",
+    "description": "Jewel-toned and arresting - floral gin, tart pomegranate, and citrus in a perfectly balanced sour.",
+    "recipe": "Add all ingredients to a shaker with ice. Shake vigorously 15 seconds. Double strain into a chilled coupe. The Empress gin and pomegranate will create a deep rose hue. Garnish with a lemon twist.",
+    "mood": "Romantic"
+  },
+  {
+    "id": "bittersweet-scotch",
+    "name": "Bittersweet Scotch",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Spirit-Forward",
+      "Signature"
+    ],
+    "ingredients": [
+      "Glenfiddich 12 Scotch",
+      "Dolin Vermouth",
+      "Angostura Cocoa Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz",
+      "2 dashes"
+    ],
+    "history": "A contemporary creation inspired by the Scotch Dry Martini - using Glenfiddich's fruity, light character alongside a touch of blanc vermouth and chocolate bitters.",
+    "description": "Delicately bitter and silky - Glenfiddich's pear and vanilla meet herbal vermouth with a lingering chocolate finish.",
+    "recipe": "Add all ingredients to a mixing glass with ice. Stir 30 seconds until very cold. Strain into a chilled coupe. Express a lemon peel over the drink and discard. Garnish with orange peel.",
+    "mood": "Curious"
+  },
+  {
+    "id": "tequila-fizz",
+    "name": "Tequila Fizz",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Citrus",
+      "Refreshing"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Fresh Lime Juice",
+      "Simple Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "Top"
+    ],
+    "history": "A bright, effervescent take on tequila that lets the aged agave breathe through the bubbles. Popular in Mexico City's modern cocktail bars.",
+    "description": "The margarita's refreshing cousin - shaken tequila and lime topped with soda for a lighter, longer drink.",
+    "recipe": "Shake tequila, lime, and syrup hard with ice. Strain into a chilled highball glass without ice. Add soda gently to preserve fizz. Garnish with a lime wheel.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "whiskey-collins",
+    "name": "Whiskey Collins",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Classic",
+      "Highball"
+    ],
+    "ingredients": [
+      "Red Breast 12 Irish Whiskey",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "Top"
+    ],
+    "history": "Applying the Collins template to Irish whiskey creates a long drink of unusual elegance - Red Breast's pot still character adds a creamy, orchard-fruit depth.",
+    "description": "A gentle giant - Red Breast's complex fruit and spice stretched into a long, summery Collins.",
+    "recipe": "Shake whiskey, lemon, and syrup with ice. Strain into a tall glass over ice. Top with soda. Stir gently. Garnish with a lemon slice and mint if desired.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "rum-cooler",
+    "name": "Rum Cooler",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Refreshing",
+      "Simple"
+    ],
+    "ingredients": [
+      "Dark Rum",
+      "Fresh Lime Juice",
+      "Demerara Sugar Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml",
+      "7.5 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz",
+      "0.25 oz",
+      "Top"
+    ],
+    "history": "Simple rum-lime-soda combinations have been enjoyed across the Caribbean for centuries - the original rum cooler predates the mojito and is arguably more honest.",
+    "description": "Stripped back and honest - rum, lime, a breath of demerara, and soda. No frills, full flavour.",
+    "recipe": "Build rum, lime, and syrup in a highball glass over ice. Stir to combine. Top with soda. Garnish with a lime wedge.",
+    "mood": "Chill"
+  },
+  {
+    "id": "naked-famous-home-bar-edit",
+    "name": "Naked & Famous (Home Bar Edit)",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Spirit-Forward",
+      "Bold"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Cointreau",
+      "Fresh Lime Juice",
+      "Angostura Cocoa Bitters"
+    ],
+    "measurementsMl": [
+      "22.5 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "0.75 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "2 dashes"
+    ],
+    "history": "Inspired by Sam Ross's 2011 Naked & Famous (which uses Aperol and mezcal), this version works with what's behind your bar - bittersweet cocoa bitters stand in for Aperol's orange-bitter character.",
+    "description": "Equal-parts and perfectly balanced - tequila, orange liqueur, citrus, and a bittersweet cocoa finish.",
+    "recipe": "Add all ingredients to a shaker with ice. Shake hard 12 seconds. Double strain into a chilled coupe. No garnish needed - the drink speaks for itself.",
+    "mood": "Curious"
+  },
+  {
+    "id": "rum-punch",
+    "name": "Rum Punch",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Signature",
+      "Fruity",
+      "Party"
+    ],
+    "ingredients": [
+      "Dark Rum",
+      "Fresh Lime Juice",
+      "Orange Juice",
+      "Pomegranate Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml",
+      "60 ml",
+      "30 ml",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz",
+      "2 oz",
+      "1 oz",
+      "0.25 oz"
+    ],
+    "history": "Caribbean rum punch follows the ancient 'one of sour, two of sweet, three of strong, four of weak' formula - a recipe documented as far back as 1694 in Barbados.",
+    "description": "Vivid, tropical, and celebratory - dark rum's depth carrying layers of citrus and fruit in every sip.",
+    "recipe": "Combine all ingredients in a shaker with ice. Shake 10 seconds. Strain into a tall glass over ice. Garnish with a lime wheel and mint sprig. Optional: float a little dark rum on top.",
+    "mood": "Party"
+  },
+  {
+    "id": "negroni-bianco",
+    "name": "Negroni Bianco",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Italian Classic",
+      "Aperitif"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Dolin Vermouth",
+      "Angostura Aromatic Bitters",
+      "Angostura Cocoa Bitters"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "30 ml",
+      "1 dash",
+      "1 dash"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "1 oz",
+      "1 dash",
+      "1 dash"
+    ],
+    "history": "A white Negroni variation using blanc vermouth instead of Campari and sweet vermouth - a lighter, more floral interpretation that originated in Bordeaux in the early 2000s.",
+    "description": "Paler and more delicate than the original - Empress gin's floral botanicals bloom through the vermouth with a bitter whisper from both bitters.",
+    "recipe": "Add all ingredients to a mixing glass with ice. Stir 30 seconds. Strain into a rocks glass over a large ice cube. Express a lemon peel over the glass and use as garnish.",
+    "mood": "Curious"
+  },
+  {
+    "id": "amaretto-spritz",
+    "name": "Amaretto Spritz",
+    "baseSpirit": "Amaretto",
+    "tags": [
+      "Nutty",
+      "Sparkling"
+    ],
+    "ingredients": [
+      "Disaronno Amaretto",
+      "Prosecco",
+      "Fresh Lemon Juice"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "Top",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "Top",
+      "0.25 oz"
+    ],
+    "history": "Aperol Spritz's nutty, marzipan-forward cousin - using Disaronno in place of Aperol creates a sweeter, more warming spritz ideal for cooler evenings.",
+    "description": "Sparkling, nutty, and gently sweet - Disaronno's almond warmth lifted by Prosecco bubbles and a squeeze of lemon.",
+    "recipe": "Add ice to a large wine glass. Pour amaretto and lemon juice over ice. Top slowly with chilled Prosecco. Stir once gently. Garnish with a lemon slice.",
+    "mood": "Chill"
+  },
+  {
+    "id": "lime-daisy-tequila",
+    "name": "Lime Daisy (Tequila)",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Citrus",
+      "Signature"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Cointreau",
+      "Fresh Lime Juice",
+      "Simple Syrup",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "7.5 ml",
+      "Splash"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "0.25 oz",
+      "Splash"
+    ],
+    "history": "The Daisy - spirit, citrus, orange liqueur, topped with soda - predates the Margarita and may actually be its direct ancestor. 'Margarita' is Spanish for daisy.",
+    "description": "Essentially the missing link between a Margarita and a Collins - longer, lighter, and endlessly refreshing.",
+    "recipe": "Shake tequila, Cointreau, lime, and syrup with ice. Strain into a highball glass over ice. Add a splash of soda. Garnish with a lime wheel.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "scotch-sour-cocoa-twist",
+    "name": "Scotch Sour (Cocoa Twist)",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Spirit-Forward",
+      "Signature"
+    ],
+    "ingredients": [
+      "Glenfiddich 12 Scotch",
+      "Fresh Lemon Juice",
+      "Demerara Sugar Syrup",
+      "Angostura Cocoa Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "2 dashes"
+    ],
+    "history": "A riff on the classic Whisky Sour that uses Angostura Cocoa Bitters as both an aromatic and a flavour bridge between Glenfiddich's fruity character and the citrus.",
+    "description": "A whisky sour with a moody undercurrent - the cocoa bitters add a dry, bittersweet layer that makes the lemon pop.",
+    "recipe": "Add Scotch, lemon, and syrup to a shaker with ice. Shake hard 15 seconds. Strain into a rocks glass over ice. Float cocoa bitters on the surface. Garnish with a lemon wheel.",
+    "mood": "Cosy"
+  },
+  {
+    "id": "boulevardier",
+    "name": "Boulevardier",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Italian Classic",
+      "Spirit-Forward"
+    ],
+    "ingredients": [
+      "Monkey Shoulder Scotch",
+      "Campari",
+      "Dolin Vermouth"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "30 ml",
+      "30 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "1 oz",
+      "1 oz"
+    ],
+    "history": "Created in 1927 by Erskine Gwynne, an American writer living in Paris who ran a literary magazine called 'Boulevardier'. A whisky-forward cousin of the Negroni that swaps gin for whiskey.",
+    "description": "A Negroni with backbone — Monkey Shoulder's honeyed malt adds a warming, spiced depth to Campari's bitter edge. Note: Classic spec uses bourbon + sweet vermouth; this Scotch + Dolin Dry version is softer and more floral.",
+    "recipe": "Add all ingredients to a mixing glass with ice. Stir for 30 seconds until well chilled. Strain into a rocks glass over a large ice cube. Express an orange peel over the drink and garnish.",
+    "mood": "Cozy"
+  },
+  {
+    "id": "old-pal",
+    "name": "Old Pal",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Spirit-Forward",
+      "Classic"
+    ],
+    "ingredients": [
+      "Monkey Shoulder Scotch",
+      "Campari",
+      "Dolin Vermouth"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "30 ml",
+      "30 ml"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "1 oz",
+      "1 oz"
+    ],
+    "history": "Documented in Harry McElhone's 1922 'Harry's ABC of Mixing Cocktails' at Harry's New York Bar in Paris. The drier, more bracing sibling of the Boulevardier — equal parts whisky, Campari, and DRY vermouth.",
+    "description": "Bracing and dry — unlike the Boulevardier, this one is built for Dolin Dry. Campari's bitterness meets whisky's warmth with a crisp, herbal finish. Perfect use of your Dolin Dry/Blanc.",
+    "recipe": "Add all ingredients to a mixing glass with ice. Stir 30 seconds until well chilled. Strain into a chilled coupe. Garnish with a lemon twist.",
+    "mood": "Bold"
+  },
+  {
+    "id": "campari-spritz",
+    "name": "Campari Spritz",
+    "baseSpirit": "Campari",
+    "tags": [
+      "Italian Classic",
+      "Aperitif",
+      "Sparkling"
+    ],
+    "ingredients": [
+      "Campari",
+      "Prosecco",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "90 ml",
+      "Splash"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "3 oz",
+      "Splash"
+    ],
+    "history": "The original Italian spritz, predating the ubiquitous Aperol Spritz. The classic 3-2-1 format (3 parts Prosecco, 2 parts Campari, 1 splash soda) has been enjoyed across Italy since the early 1900s.",
+    "description": "Brighter, more bitter, and more complex than an Aperol Spritz — Campari's herbal punch cuts through the Prosecco's sweetness for the ultimate Italian aperitivo.",
+    "recipe": "Fill a large wine glass with ice. Add Campari. Top with chilled Prosecco. Finish with a splash of soda. Stir once gently. Garnish with an orange slice.",
+    "mood": "Chill"
+  },
+  {
+    "id": "negroni-sbagliato",
+    "name": "Negroni Sbagliato",
+    "baseSpirit": "Campari",
+    "tags": [
+      "Italian Classic",
+      "Aperitif",
+      "Sparkling"
+    ],
+    "ingredients": [
+      "Campari",
+      "Dolin Vermouth",
+      "Prosecco"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "30 ml",
+      "60 ml"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "1 oz",
+      "2 oz"
+    ],
+    "history": "Created by accident in Milan's Bar Basso in the 1970s when bartender Mirko Stocchetto reached for Prosecco instead of gin. 'Sbagliato' means 'mistaken' in Italian — a mistake that became a classic.",
+    "description": "A lighter, effervescent Negroni — Prosecco's bubbles open up Campari's bitterness into something elegant and sessionable. Traditional recipe uses sweet vermouth; Dolin Dry makes it more floral.",
+    "recipe": "Add Campari and vermouth to a rocks glass with a large ice cube. Top with chilled Prosecco. Stir gently once. Garnish with an orange slice or half-wheel.",
+    "mood": "Chill"
+  },
+  {
+    "id": "garibaldi",
+    "name": "Garibaldi",
+    "baseSpirit": "Campari",
+    "tags": [
+      "Italian Classic",
+      "Aperitif",
+      "Refreshing"
+    ],
+    "ingredients": [
+      "Campari",
+      "Orange Juice"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "120 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "4 oz"
+    ],
+    "history": "Named after Giuseppe Garibaldi, the Italian general who unified the country. The drink symbolises the union of northern Italy (Campari, from Milan) and southern Italy (oranges, from Sicily). Bar Dante in NYC elevated it with 'fluffy' whipped orange juice.",
+    "description": "Deceptively simple — just two ingredients, but when the orange juice is fresh and frothy, the result is magic. Campari's bitter edge tamed by bright citrus.",
+    "recipe": "Fill a highball glass with ice. Add Campari. Top with fresh, vigorously-shaken orange juice (shake OJ alone in a shaker 30 sec for frothiness). Garnish with an orange slice.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "jasmine",
+    "name": "Jasmine",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Citrus",
+      "Modern Classic"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Campari",
+      "Cointreau",
+      "Fresh Lemon Juice"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "7.5 ml",
+      "7.5 ml",
+      "22.5 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.25 oz",
+      "0.25 oz",
+      "0.75 oz"
+    ],
+    "history": "Created in the early 1990s by bartender Paul Harrington in Emeryville, California. A modern classic disguised as a pink cocktail — the small amount of Campari transforms the colour and adds complexity.",
+    "description": "Looks like a Cosmopolitan, drinks like a Negroni meets a White Lady. A stunning balance of bitter, sweet, and citrus — pink, elegant, and deceptively complex.",
+    "recipe": "Add all ingredients to a shaker with ice. Shake hard for 12 seconds. Double strain into a chilled coupe. Garnish with a lemon twist.",
+    "mood": "Curious"
+  },
+  {
+    "id": "rosita",
+    "name": "Rosita",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Spirit-Forward",
+      "Signature"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Campari",
+      "Dolin Vermouth",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "2 dashes"
+    ],
+    "history": "Documented by Gary Regan in the 1991 'Bartender's Bible' — a tequila-based Negroni variation that showcases how beautifully aged agave works with Campari's bitter herbs.",
+    "description": "The smoky, earthy tequila cousin of the Negroni. Añejo's caramel and oak layers weave through Campari's bitterness with herbal vermouth and warming bitters.",
+    "recipe": "Add all ingredients to a mixing glass with ice. Stir 30 seconds until well chilled. Strain into a rocks glass over a large ice cube. Garnish with a grapefruit or orange twist.",
+    "mood": "Bold"
+  },
+  {
+    "id": "campari-sour",
+    "name": "Campari Sour",
+    "baseSpirit": "Campari",
+    "tags": [
+      "Citrus",
+      "Aperitif"
+    ],
+    "ingredients": [
+      "Campari",
+      "Fresh Lemon Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz"
+    ],
+    "history": "A simple, modern Italian creation that treats Campari as the base spirit of a classic sour. Low-ABV but packed with flavour — perfect for those who love the Negroni but want something lighter and brighter.",
+    "description": "Ruby red, tart, and refreshing — Campari's herbal bitterness balanced perfectly by bright lemon and a kiss of sweetness.",
+    "recipe": "Add all ingredients to a shaker with ice. Shake hard 12 seconds. Strain into a rocks glass over fresh ice. Garnish with an orange slice or lemon wheel.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "dark-n-stormy",
+    "name": "Dark 'n Stormy",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Highball",
+      "Refreshing"
+    ],
+    "ingredients": [
+      "Dark Rum",
+      "Fresh Lime Juice",
+      "Ginger Beer"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz",
+      "Top"
+    ],
+    "history": "The national drink of Bermuda, created when British Royal Navy sailors mixed their local Gosling's Black Seal rum with ginger beer. The name comes from a sailor who said the drink was 'the colour of a cloud only a fool or a dead man would sail under'.",
+    "description": "A stormy, spicy, unapologetically rum-forward highball. Dark rum's molasses depth meets the bite of ginger beer with a lime squeeze to balance.",
+    "recipe": "Fill a highball glass with ice. Add lime juice. Pour dark rum over ice. Top with ginger beer. Do NOT stir — let the rum swirl down for the stormy effect. Garnish with a lime wedge.",
+    "mood": "Bold"
+  },
+  {
+    "id": "gin-buck",
+    "name": "Gin Buck",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Highball",
+      "Refreshing"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Fresh Lemon Juice",
+      "Ginger Beer"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz",
+      "Top"
+    ],
+    "history": "The 'Buck' family of cocktails — spirit + citrus + ginger beer — dates to the early 1900s. The Gin Buck (sometimes called a London Buck) predates the Moscow Mule and is arguably its direct ancestor.",
+    "description": "A long, spicy refresher — Empress gin's floral character lifted by the sharp kick of ginger and a bright lemon squeeze. Lighter and more aromatic than a Mule.",
+    "recipe": "Fill a highball glass with ice. Add gin and lemon juice. Top with chilled ginger beer. Stir gently once. Garnish with a lemon wedge.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "hot-toddy",
+    "name": "Hot Toddy",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Hot Drink",
+      "Cozy"
+    ],
+    "ingredients": [
+      "Red Breast 12 Irish Whiskey",
+      "Demerara Sugar Syrup",
+      "Fresh Lemon Juice",
+      "Hot Water"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "15 ml",
+      "15 ml",
+      "120 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.5 oz",
+      "0.5 oz",
+      "4 oz"
+    ],
+    "history": "Hot Toddies have been served in Scotland and Ireland since at least the 1780s as both a social drink and a cold remedy. The name likely comes from 'toddy', a fermented palm-sap drink from India brought back by British soldiers.",
+    "description": "The ultimate cold-weather cocktail — Red Breast's orchard-fruit warmth amplified by hot water, with lemon to cut through and demerara to round out. Traditional cold cure, traditional soul warmer.",
+    "recipe": "Warm a heatproof mug with hot water, then empty. Add whiskey, demerara syrup, and lemon juice. Top with hot (not boiling) water. Stir once. Garnish with a lemon wheel studded with cloves and a cinnamon stick if available.",
+    "mood": "Cozy"
+  },
+  {
+    "id": "mamie-taylor",
+    "name": "Mamie Taylor",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Highball",
+      "Refreshing"
+    ],
+    "ingredients": [
+      "Monkey Shoulder Scotch",
+      "Fresh Lime Juice",
+      "Ginger Beer"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "Top"
+    ],
+    "history": "Named for American opera singer Mamie Taylor, invented in 1899 on a hot summer day in Rochester, NY when she asked for 'something tall and refreshing' and the bartender improvised with Scotch, lime, and ginger beer. Ran of the day's hottest drinks before the Moscow Mule eclipsed it.",
+    "description": "Scotch's forgotten highball — smoky, honeyed malt lengthened with fresh lime and a lively ginger kick. Elegant, balanced, and dangerously easy to drink.",
+    "recipe": "Fill a highball glass with ice. Add Scotch and lime juice. Top with chilled ginger beer. Stir gently. Garnish with a lime wedge and a sprig of mint if available.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "hugo-spritz",
+    "name": "Hugo Spritz",
+    "baseSpirit": "Prosecco",
+    "tags": [
+      "Italian Classic",
+      "Aperitif",
+      "Sparkling"
+    ],
+    "ingredients": [
+      "St-Germain",
+      "Prosecco",
+      "Fresh Lime Juice",
+      "Mint",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "90 ml",
+      "7.5 ml",
+      "Handful",
+      "Splash"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "3 oz",
+      "0.25 oz",
+      "Handful",
+      "Splash"
+    ],
+    "history": "Created in 2005 by bartender Roland Gruber in Naturno, in the Italian Alps' South Tyrol region. Originally made with elderflower syrup, St-Germain became the preferred ingredient. Now ubiquitous across Northern Italy as the lighter, floral cousin to the Aperol Spritz.",
+    "description": "Light, floral, and gloriously refreshing — elderflower's honeyed notes lifted by Prosecco bubbles and fresh mint. Lower in alcohol and far more delicate than an Aperol Spritz.",
+    "recipe": "Gently slap a handful of mint between your palms to release the oils. Add to a large wine glass with ice. Add St-Germain and lime juice. Top with chilled Prosecco. Finish with a splash of soda. Stir gently once. Garnish with a fresh mint sprig and a lime wheel.",
+    "mood": "Chill"
+  },
+  {
+    "id": "saint-germain-cocktail",
+    "name": "Saint-Germain Cocktail",
+    "baseSpirit": "Prosecco",
+    "tags": [
+      "Aperitif",
+      "Sparkling",
+      "Signature"
+    ],
+    "ingredients": [
+      "St-Germain",
+      "Prosecco",
+      "Soda",
+      "Fresh Lemon Juice"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "60 ml",
+      "Splash",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "2 oz",
+      "Splash",
+      "0.25 oz"
+    ],
+    "history": "The signature cocktail printed on the back of every St-Germain bottle — created by the brand itself when the liqueur launched in 2007. A simple template that introduced elderflower liqueur to a generation of drinkers.",
+    "description": "Elegant and effervescent — equal-parts sparkling wine and elderflower, dressed with a whisper of lemon. The cocktail that put St-Germain on the map.",
+    "recipe": "Fill a tall collins glass or flute with ice. Add St-Germain and lemon juice. Top with chilled Prosecco. Finish with a splash of soda. Stir gently. Garnish with a long lemon twist.",
+    "mood": "Romantic"
+  },
+  {
+    "id": "elderflower-martini",
+    "name": "Elderflower Martini",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Signature",
+      "Floral"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "St-Germain",
+      "Fresh Lemon Juice"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz"
+    ],
+    "history": "A modern classic that emerged in mid-2000s cocktail bars as St-Germain swept through the craft cocktail scene. The Empress 1908 + elderflower pairing has become a signature for botanical-forward bars.",
+    "description": "Floral, citrus-bright, and stunning — Empress gin's lavender hue meets elderflower's honeyed sweetness. The lemon cuts through to keep it balanced and bracing.",
+    "recipe": "Add all ingredients to a shaker with ice. Shake hard 12 seconds. Double strain into a chilled coupe or martini glass. Garnish with a lemon twist or an edible flower.",
+    "mood": "Romantic"
+  },
+  {
+    "id": "elderflower-collins",
+    "name": "Elderflower Collins",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Highball",
+      "Refreshing",
+      "Floral"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "St-Germain",
+      "Fresh Lemon Juice",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "Top"
+    ],
+    "history": "A modern riff on the Tom Collins, swapping simple syrup for St-Germain. The combination of gin, citrus, and elderflower has become one of the most popular long-drink templates in contemporary bars.",
+    "description": "A long, floral, garden-fresh refresher — gin's botanicals dance with elderflower honey, brightened by lemon and lifted by soda.",
+    "recipe": "Add gin, St-Germain, and lemon juice to a shaker with ice. Shake 10 seconds. Strain into a tall Collins glass over ice. Top with chilled soda. Stir gently. Garnish with a lemon wheel and a sprig of mint or an edible flower.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "empress-elderflower-spritz",
+    "name": "Empress Elderflower Spritz",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Signature",
+      "Sparkling",
+      "Floral"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "St-Germain",
+      "Fresh Lime Juice",
+      "Prosecco",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "22.5 ml",
+      "7.5 ml",
+      "90 ml",
+      "Splash"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "0.75 oz",
+      "0.25 oz",
+      "3 oz",
+      "Splash"
+    ],
+    "history": "A modern home-bar creation that puts two showstopper ingredients in the same glass — Empress 1908's colour-shift and St-Germain's floral sweetness. The result is visually stunning and aromatically complex.",
+    "description": "A magenta spritz with serious botanical depth — Empress gin shifts to a soft pink against the lemon-tinted base, while elderflower adds floral honey notes against the crisp Prosecco.",
+    "recipe": "Fill a large wine glass with ice. Add gin, St-Germain, and lime juice. Top with chilled Prosecco and finish with a splash of soda. Stir gently. Garnish with a lime wheel and a sprig of mint.",
+    "mood": "Romantic"
+  },
+  {
+    "id": "elderflower-margarita",
+    "name": "Elderflower Margarita",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Citrus",
+      "Signature",
+      "Floral"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "St-Germain",
+      "Cointreau",
+      "Fresh Lime Juice"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml",
+      "15 ml",
+      "22.5 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "0.75 oz"
+    ],
+    "history": "A modern variation on the classic Margarita popularised in the 2010s. The St-Germain rounds out the sharp citrus with a delicate floral sweetness — a far gentler, more aromatic Margarita.",
+    "description": "A softer, more elegant Margarita — añejo tequila's caramel depth meets elderflower's floral honey, balanced by Cointreau and bright lime. Less aggressive, more romantic.",
+    "recipe": "Optional: rim a coupe with salt. Add all ingredients to a shaker with ice. Shake hard 12 seconds. Double strain into the prepared coupe or a rocks glass over fresh ice. Garnish with a lime wheel.",
+    "mood": "Romantic"
+  },
+  {
+    "id": "floradora",
+    "name": "Floradora",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Highball",
+      "Fruity"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "St-Germain",
+      "Fresh Lime Juice",
+      "Pomegranate Juice",
+      "Ginger Beer"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "15 ml",
+      "15 ml",
+      "22.5 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.5 oz",
+      "0.5 oz",
+      "0.75 oz",
+      "Top"
+    ],
+    "history": "Created at the Hotel Cecil in London in 1899 to celebrate the hit Broadway musical 'Floradora'. Traditionally made with raspberry syrup — this modern riff uses pomegranate and St-Germain for added depth and complexity.",
+    "description": "Pretty, pink, and spicy — gin and floral elderflower meet tart pomegranate and the ginger beer's kick. A vintage cocktail with a modern, floral upgrade.",
+    "recipe": "Add gin, St-Germain, lime juice, and pomegranate juice to a shaker with ice. Shake 10 seconds. Strain into a tall glass over ice. Top with chilled ginger beer. Stir gently. Garnish with a lime wedge and fresh pomegranate seeds if available.",
+    "mood": "Party"
+  },
+  {
+    "id": "elderflower-negroni",
+    "name": "Elderflower Negroni",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Italian Classic",
+      "Signature",
+      "Floral"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Campari",
+      "St-Germain",
+      "Dolin Vermouth"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "0.5 oz"
+    ],
+    "history": "A modern twist on the classic Negroni that softens Campari's bitterness with elderflower's honeyed sweetness. Has become a popular variation in contemporary cocktail bars as a 'gateway Negroni' for those new to amaro.",
+    "description": "A floral, friendlier Negroni — St-Germain rounds Campari's bitter edges into something balanced and aromatic. Empress gin's botanicals complete the floral chorus.",
+    "recipe": "Add all ingredients to a mixing glass with ice. Stir 30 seconds until well chilled. Strain into a rocks glass over a large ice cube. Express an orange peel and garnish.",
+    "mood": "Curious"
+  },
+  {
+    "id": "elderflower-whisky-sour",
+    "name": "Elderflower Whisky Sour",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Citrus",
+      "Signature"
+    ],
+    "ingredients": [
+      "Red Breast 12 Irish Whiskey",
+      "St-Germain",
+      "Fresh Lemon Juice",
+      "Demerara Sugar Syrup"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "0.25 oz"
+    ],
+    "history": "A modern whisky sour variation that emerged in the 2010s — St-Germain replaces or supplements the simple syrup, adding floral complexity to Red Breast's natural orchard-fruit character.",
+    "description": "A whisky sour with romance — Red Breast's creamy pot-still fruit meets elderflower honey and bright lemon, with demerara adding warmth. Sophisticated and easy-drinking.",
+    "recipe": "Add all ingredients to a shaker with ice. Shake hard 15 seconds. Strain into a rocks glass over fresh ice. Garnish with a lemon wheel and a dash of Angostura on top.",
+    "mood": "Cozy"
+  },
+  {
+    "id": "vodka-elderflower-fizz",
+    "name": "Vodka Elderflower Fizz",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Highball",
+      "Refreshing",
+      "Floral"
+    ],
+    "ingredients": [
+      "Vodka",
+      "St-Germain",
+      "Fresh Lemon Juice",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "22.5 ml",
+      "15 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "Top"
+    ],
+    "history": "Part of the wave of clean, modern vodka highballs that emerged with St-Germain's popularity in the late 2000s. Designed to let elderflower shine without competing botanicals from gin.",
+    "description": "Crisp, clean, and floral — vodka's neutrality lets St-Germain's honeyed elderflower take centre stage, with citrus and soda for refreshment.",
+    "recipe": "Add vodka, St-Germain, and lemon juice to a shaker with ice. Shake 10 seconds. Strain into a tall glass over ice. Top with soda. Stir gently. Garnish with a lemon twist or an edible flower.",
+    "mood": "Fresh"
+  }
+]

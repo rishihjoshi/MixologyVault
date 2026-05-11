@@ -1,0 +1,218 @@
+[
+  {
+    "id": "spirits-tequila-anejo",
+    "category": "Spirits",
+    "name": "Tequila Anejo",
+    "brand": "Kirkland (Costco)",
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "spirits-indigo-gin",
+    "category": "Spirits",
+    "name": "Indigo Gin",
+    "brand": "Empress 1908",
+    "status": "have",
+    "notes": "Butterfly pea flower gin"
+  },
+  {
+    "id": "spirits-single-malt-scotch-whisky",
+    "category": "Spirits",
+    "name": "Single Malt Scotch Whisky",
+    "brand": "Glenfiddich 12 Year",
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "spirits-irish-single-malt-wishkey",
+    "category": "Spirits",
+    "name": "Irish Single Malt Wishkey",
+    "brand": "Red Breast 12 year",
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "spirits-blended-malt-scotch-whisky",
+    "category": "Spirits",
+    "name": "Blended Malt Scotch Whisky",
+    "brand": "Monkey Shoulder",
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "spirits-american-vodka",
+    "category": "Spirits",
+    "name": "American Vodka",
+    "brand": "Kirkland (Costco)",
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "spirits-rum",
+    "category": "Spirits",
+    "name": "Rum",
+    "brand": "Kirkland (Costco) 12 years Dark Rum",
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "liqueurs-vermouth",
+    "category": "Liqueurs",
+    "name": "Vermouth",
+    "brand": "Dolin",
+    "status": "have",
+    "notes": "Dry/Blanc style"
+  },
+  {
+    "id": "liqueurs-orange-liqueur",
+    "category": "Liqueurs",
+    "name": "Orange Liqueur",
+    "brand": "Cointreau",
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "liqueurs-amaretto",
+    "category": "Liqueurs",
+    "name": "Amaretto",
+    "brand": "Disaronno Originale",
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "liqueurs-bitter-aperitif",
+    "category": "Liqueurs",
+    "name": "Bitter Aperitif",
+    "brand": "Campari",
+    "status": "have",
+    "notes": "Italian red bitter liqueur — for Negronis, Boulevardiers, Americano, Spritz"
+  },
+  {
+    "id": "liqueurs-elderflower-liqueur",
+    "category": "Liqueurs",
+    "name": "Elderflower Liqueur",
+    "brand": "St-Germain",
+    "status": "have",
+    "notes": "French elderflower liqueur — floral, honeyed, pairs beautifully with gin, prosecco, citrus"
+  },
+  {
+    "id": "bitters-aromatic-bitters",
+    "category": "Bitters",
+    "name": "Aromatic Bitters",
+    "brand": "Angostura",
+    "status": "have",
+    "notes": "Classic cocktail bitters"
+  },
+  {
+    "id": "bitters-cocoa-bitters",
+    "category": "Bitters",
+    "name": "Cocoa Bitters",
+    "brand": "Angostura",
+    "status": "have",
+    "notes": "Chocolate-forward bitters"
+  },
+  {
+    "id": "bitters-anise-bitters",
+    "category": "Bitters",
+    "name": "Anise Bitters",
+    "brand": "Peychaud's",
+    "status": "can-get",
+    "notes": "Anise-forward bitters"
+  },
+  {
+    "id": "juices-pomegranate-juice",
+    "category": "Juices",
+    "name": "Pomegranate Juice",
+    "brand": null,
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "juices-fresh-lime-juice",
+    "category": "Juices",
+    "name": "Fresh Lime Juice",
+    "brand": null,
+    "status": "have",
+    "notes": "Freshly squeezed"
+  },
+  {
+    "id": "juices-fresh-lemon-juice",
+    "category": "Juices",
+    "name": "Fresh Lemon Juice",
+    "brand": null,
+    "status": "have",
+    "notes": "Freshly squeezed"
+  },
+  {
+    "id": "juices-orange-juice",
+    "category": "Juices",
+    "name": "Orange Juice",
+    "brand": null,
+    "status": "can-get",
+    "notes": null
+  },
+  {
+    "id": "syrups-simple-syrup",
+    "category": "Syrups",
+    "name": "Simple Syrup",
+    "brand": null,
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "syrups-demerara-sugar-syrup",
+    "category": "Syrups",
+    "name": "Demerara Sugar Syrup",
+    "brand": null,
+    "status": "have",
+    "notes": "Richer deeper sweetness"
+  },
+  {
+    "id": "garnishes-limes",
+    "category": "Garnishes",
+    "name": "Limes",
+    "brand": null,
+    "status": "have",
+    "notes": "Fresh (visible in bar)"
+  },
+  {
+    "id": "garnishes-mint",
+    "category": "Garnishes",
+    "name": "Mint",
+    "brand": null,
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "wine-prosecco",
+    "category": "Wine",
+    "name": "Prosecco",
+    "brand": null,
+    "status": "have",
+    "notes": "Sparkling wine"
+  },
+  {
+    "id": "top-up-soda",
+    "category": "Top Up",
+    "name": "Soda",
+    "brand": null,
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "top-up-tonic",
+    "category": "Top Up",
+    "name": "Tonic",
+    "brand": null,
+    "status": "have",
+    "notes": null
+  },
+  {
+    "id": "top-up-ginger-beer",
+    "category": "Top Up",
+    "name": "Ginger Beer",
+    "brand": null,
+    "status": "can-get",
+    "notes": null
+  }
+]
