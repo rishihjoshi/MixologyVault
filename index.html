@@ -1,310 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="
-  default-src 'self';
-  script-src 'self' 'unsafe-inline';
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-  font-src https://fonts.gstatic.com;
-  connect-src https://docs.google.com https://api.anthropic.com;
-  img-src 'self' data: blob:;
-  object-src 'none';
-  frame-ancestors 'none';
-">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#090909">
-<meta name="referrer" content="no-referrer">
-<meta http-equiv="X-Frame-Options" content="DENY">
-<title>Mixology Vault</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MixologyVault">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="Your personal home bar companion">
+  <title>MixologyVault</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="app">
-  <div id="scroll-area">
 
-    <!-- ══ HOME ══ -->
-    <div class="screen active" id="screen-home">
-      <div id="hero">
-        <div id="hero-greet">Good evening</div>
-        <div class="hero-brand-mark" onclick="triggerVaultUnlock()">
-          <svg class="vault-icon" id="vault-hero-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="vi-gold" x1="5" y1="5" x2="75" y2="75" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#ffc95e"/>
-                <stop offset="50%" stop-color="#f0a830"/>
-                <stop offset="100%" stop-color="#c8850a"/>
-              </linearGradient>
-              <filter id="vi-glow" x="-35%" y="-35%" width="170%" height="170%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1"/>
-                <feGaussianBlur in="SourceGraphic" stdDeviation="4.5" result="b2"/>
-                <feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-              <filter id="vi-halo" x="-70%" y="-70%" width="240%" height="240%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="7"/>
-              </filter>
-            </defs>
-            <!-- Soft ambient halo -->
-            <circle cx="40" cy="40" r="33" stroke="#c8850a" stroke-width="10" opacity="0.1" filter="url(#vi-halo)"/>
-            <!-- Main vault ring -->
-            <circle cx="40" cy="40" r="33" stroke="url(#vi-gold)" stroke-width="2.5" filter="url(#vi-glow)"/>
-            <!-- Inner ring accent -->
-            <circle cx="40" cy="40" r="27.5" stroke="#f0a830" stroke-width="0.7" opacity="0.3"/>
-            <!-- Top bolt (12 o'clock — the vault handle) -->
-            <circle cx="40" cy="7" r="2.8" fill="#c8850a" stroke="#ffc95e" stroke-width="0.7" filter="url(#vi-glow)"/>
-            <!-- Rivets around the ring (skip hinge zone 245°–300°) -->
-            <circle cx="61.2" cy="14.7" r="1.7" fill="#c8850a" opacity="0.85"/>
-            <circle cx="72.5" cy="34.3" r="1.7" fill="#c8850a" opacity="0.85"/>
-            <circle cx="68.6" cy="56.5" r="1.7" fill="#c8850a" opacity="0.85"/>
-            <circle cx="53.9" cy="69.9" r="1.7" fill="#c8850a" opacity="0.85"/>
-            <circle cx="40"   cy="73"   r="1.7" fill="#c8850a" opacity="0.85"/>
-            <circle cx="26.1" cy="69.9" r="1.7" fill="#c8850a" opacity="0.85"/>
-            <circle cx="13.0" cy="58.9" r="1.7" fill="#c8850a" opacity="0.85"/>
-            <circle cx="21.1" cy="13.0" r="1.7" fill="#c8850a" opacity="0.85"/>
-            <!-- Upper hinge (left side ~288°) -->
-            <rect x="2" y="24" width="10" height="9" rx="2.5" fill="#6b4f0c" stroke="#c8850a" stroke-width="0.8"/>
-            <line x1="7" y1="25.5" x2="7" y2="31.5" stroke="#ffc95e" stroke-width="0.7" opacity="0.65" stroke-linecap="round"/>
-            <!-- Lower hinge (left side ~252°) -->
-            <rect x="2" y="47" width="10" height="9" rx="2.5" fill="#6b4f0c" stroke="#c8850a" stroke-width="0.8"/>
-            <line x1="7" y1="48.5" x2="7" y2="54.5" stroke="#ffc95e" stroke-width="0.7" opacity="0.65" stroke-linecap="round"/>
-            <!-- Martini glass — glow underlayer -->
-            <path d="M26 22 L54 22 L40 50 Z" stroke="#f0a830" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" opacity="0.15" filter="url(#vi-halo)"/>
-            <!-- Martini glass — crisp amber lines -->
-            <path d="M26 22 L54 22 L40 50 Z" stroke="url(#vi-gold)" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round" filter="url(#vi-glow)"/>
-            <line x1="40" y1="50" x2="40" y2="58" stroke="url(#vi-gold)" stroke-width="2.1" stroke-linecap="round" filter="url(#vi-glow)"/>
-            <line x1="33" y1="58" x2="47" y2="58" stroke="url(#vi-gold)" stroke-width="2.1" stroke-linecap="round" filter="url(#vi-glow)"/>
-            <!-- Olive (filled, glowing) -->
-            <circle cx="43.5" cy="31.5" r="2.8" fill="#c8850a" stroke="#ffc95e" stroke-width="0.8" filter="url(#vi-glow)"/>
-            <!-- Pick stick + tip -->
-            <line x1="43.5" y1="31.5" x2="48" y2="24.5" stroke="#ffc95e" stroke-width="1.1" stroke-linecap="round"/>
-            <circle cx="48" cy="24.5" r="1.2" fill="#ffc95e"/>
-          </svg>
-        </div>
-        <h1>Mixology<br><em>Vault</em></h1>
-        <p id="hero-sub">Your personal cocktail vault, powered by what's in your bar.</p>
-        <div class="stats-row">
-          <div class="stat-pill"><div class="stat-num" id="count-ingredients">–</div><div class="stat-lbl">Ingredients</div></div>
-          <div class="stat-pill"><div class="stat-num" id="count-cocktails">–</div><div class="stat-lbl">Cocktails</div></div>
-          <div class="stat-pill"><div class="stat-num" id="count-favourites">0</div><div class="stat-lbl">Favourites</div></div>
-        </div>
-      </div>
-
-      <button id="home-cta" onclick="switchScreen('decide',null)">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-        What should I drink right now?
-      </button>
-
-      <div class="section">
-        <div class="section-hd">
-          <div class="section-title">Tonight's Pick</div>
-          <button class="section-action" onclick="renderHome()">Shuffle ✦</button>
-        </div>
-        <div id="featured-card"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading…</div></div>
-      </div>
-
-      <div class="section">
-        <div class="section-hd"><div class="section-title">Signature Cocktails</div></div>
-        <div id="home-signatures"><div class="loader"><div class="dots"><span></span><span></span><span></span></div></div></div>
-      </div>
-    </div>
-
-    <!-- ══ MY VAULT ══ -->
-    <div class="screen" id="screen-bar">
-      <div class="page-header">
-        <h1>My <em>Vault</em></h1>
-        <p>Tap any ingredient to toggle availability</p>
-      </div>
-      <div class="bar-filter-row">
-        <button class="bar-filter-btn active" data-bar-filter="all">All <span class="bf-badge" id="bf-count-all">–</span></button>
-        <button class="bar-filter-btn" data-bar-filter="available">✅ Available <span class="bf-badge" id="bf-count-available">–</span></button>
-        <button class="bar-filter-btn" data-bar-filter="need">🛒 Need <span class="bf-badge" id="bf-count-need">–</span></button>
-      </div>
-      <div class="section" style="margin-top:16px">
-        <div id="bar-sections"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading vault…</div></div>
-      </div>
-    </div>
-
-    <!-- ══ COCKTAILS ══ -->
-    <div class="screen" id="screen-cocktails">
-      <div class="page-header"><h1>Cocktails</h1><p>Filter by base spirit — tap any card for full recipe</p></div>
-      <div class="search-wrap">
-        <input class="search-input" type="search" id="cocktail-search" placeholder="Search cocktails…" autocomplete="off">
-      </div>
-      <div class="filter-row" id="filter-row"></div>
-      <div class="cocktail-count" id="cocktail-count"></div>
-      <div id="cocktail-list" style="padding:4px 16px 0">
-        <div class="loader"><div class="dots"><span></span><span></span><span></span></div></div>
-      </div>
-    </div>
-
-    <!-- ══ DECIDE ══ -->
-    <div class="screen" id="screen-decide">
-      <div class="page-header"><h1>What should I<br><em>drink?</em></h1><p>Tell me your mood and I'll pick the perfect drink.</p></div>
-
-      <div style="padding:14px 16px 0">
-        <div class="decide-label">Mood</div>
-        <div class="mood-grid" id="mood-grid">
-          <button class="mood-btn" data-mood="Celebratory"><span class="m-em">🥳</span><span class="m-lbl">Party</span></button>
-          <button class="mood-btn" data-mood="Relaxed"><span class="m-em">😌</span><span class="m-lbl">Chill</span></button>
-          <button class="mood-btn" data-mood="Adventurous"><span class="m-em">🤩</span><span class="m-lbl">Bold</span></button>
-          <button class="mood-btn" data-mood="Romantic"><span class="m-em">💫</span><span class="m-lbl">Romantic</span></button>
-          <button class="mood-btn" data-mood="Cosy"><span class="m-em">🍂</span><span class="m-lbl">Cosy</span></button>
-          <button class="mood-btn" data-mood="Refreshed"><span class="m-em">🌊</span><span class="m-lbl">Fresh</span></button>
-          <button class="mood-btn" data-mood="Energised"><span class="m-em">⚡</span><span class="m-lbl">Energised</span></button>
-          <button class="mood-btn" data-mood="Curious"><span class="m-em">🧐</span><span class="m-lbl">Curious</span></button>
-        </div>
-      </div>
-
-      <div style="padding:16px 16px 0">
-        <div class="decide-label">Spirit</div>
-        <div class="spirit-btns" id="decide-spirits">
-          <button class="spirit-btn" data-spirit="any">Any</button>
-          <button class="spirit-btn" data-spirit="gin">Gin</button>
-          <button class="spirit-btn" data-spirit="whisky">Whisky</button>
-          <button class="spirit-btn" data-spirit="tequila">Tequila</button>
-          <button class="spirit-btn" data-spirit="rum">Rum</button>
-          <button class="spirit-btn" data-spirit="vodka">Vodka</button>
-        </div>
-      </div>
-
-      <div style="padding:16px 16px 0">
-        <div class="decide-label">Sweetness</div>
-        <div class="slider-row">
-          <span style="font-size:12px;color:var(--muted)">Dry</span>
-          <input class="decide-slider" type="range" min="1" max="3" value="2" id="sweet-slider" step="1">
-          <span class="slider-val" id="sweet-val">Medium</span>
-        </div>
-      </div>
-
-      <div style="padding:16px 16px 0">
-        <div class="decide-label">Time of Day</div>
-        <div class="tod-grid" id="tod-grid">
-          <button class="tod-btn" data-tod="Morning"><span class="t-em">🌅</span><span class="t-lbl">Morning</span></button>
-          <button class="tod-btn" data-tod="Afternoon"><span class="t-em">☀️</span><span class="t-lbl">Afternoon</span></button>
-          <button class="tod-btn on" data-tod="Evening"><span class="t-em">🌆</span><span class="t-lbl">Evening</span></button>
-          <button class="tod-btn" data-tod="Late night"><span class="t-em">🌙</span><span class="t-lbl">Late Night</span></button>
-        </div>
-      </div>
-
-      <button id="gen-btn" onclick="generateDrinks()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="20" height="20">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-        </svg>
-        Generate My Drinks
-      </button>
-
-      <div id="results-area">
-        <div class="section-title" style="margin:16px 16px 12px">Your picks</div>
-        <div id="results-list" style="padding:0 16px"></div>
-      </div>
-    </div>
-
-    <!-- ══ AI MIXOLOGIST ══ -->
-    <div class="screen" id="screen-ai">
-      <div class="page-header"><h1>AI <em>Mixologist</em></h1><p>Tell me what you're in the mood for</p></div>
-      <div id="apikey-banner">
-        <p>Enter your Anthropic API key to activate the AI Mixologist. Your key is stored locally on this device only.</p>
-        <input type="password" id="apikey-input" placeholder="sk-ant-…" style="font-size:16px" autocomplete="off" autocorrect="off" spellcheck="false">
-        <button class="save-key-btn" onclick="saveApiKey()">Save Key &amp; Start Chatting</button>
-      </div>
-      <div class="suggest-chips">
-        <div class="suggest-chip" onclick="quickPrompt(this)">What can I make tonight?</div>
-        <div class="suggest-chip" onclick="quickPrompt(this)">Something with Empress gin</div>
-        <div class="suggest-chip" onclick="quickPrompt(this)">A smoky Scotch cocktail</div>
-        <div class="suggest-chip" onclick="quickPrompt(this)">Impress my wife tonight</div>
-        <div class="suggest-chip" onclick="quickPrompt(this)">Tequila, not too sweet</div>
-        <div class="suggest-chip" onclick="quickPrompt(this)">Surprise me!</div>
-      </div>
-      <div id="chat-messages">
-        <div class="msg ai">
-          <strong>Mixologist</strong>
-          Welcome to your Vault! I know your bar — Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo and more. Tell me your mood and I'll craft something perfect.
-        </div>
-      </div>
-      <div class="chat-bar">
-        <textarea id="chat-input" rows="1" placeholder="Ask your mixologist…" oninput="autoResize(this)" onkeydown="chatKeydown(event)" style="font-size:16px" autocomplete="off" spellcheck="false"></textarea>
-        <button class="send-btn" id="send-btn" onclick="sendChat()">
-          <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
-        </button>
-      </div>
-    </div>
-
-  </div><!-- /scroll-area -->
-
-  <!-- ══ BOTTOM NAV ══ -->
-  <nav id="nav">
-    <button class="nav-btn active" id="nb-home" onclick="switchScreen('home',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
-      <span>Home</span>
-    </button>
-    <button class="nav-btn" id="nb-bar" onclick="switchScreen('bar',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M12 2L22 12L12 22L2 12Z" stroke-linejoin="round"/>
-        <path d="M9 10L12 16L15 10Z" stroke-linejoin="round" stroke-linecap="round"/>
-        <line x1="12" y1="16" x2="12" y2="18.5" stroke-linecap="round"/>
-      </svg>
-      <span>My Vault</span>
-    </button>
-    <button id="nav-decide" onclick="switchScreen('decide',null)">
-      <div id="nav-decide-inner">
-        <svg viewBox="0 0 24 24"><path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10zm0-18a8 8 0 100 16A8 8 0 0012 4zm1 11v2h-2v-2h2zm0-8v6h-2V7h2z"/></svg>
-      </div>
-      <span>Decide</span>
-    </button>
-    <button class="nav-btn" id="nb-cocktails" onclick="switchScreen('cocktails',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 3l4 8 4-8M5 8h14l-2 10H7L5 8zM12 18v3M9 21h6"/></svg>
-      <span>Cocktails</span>
-    </button>
-    <button class="nav-btn" id="nb-ai" onclick="switchScreen('ai',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-      <span>AI Mix</span>
-    </button>
-  </nav>
-
-</div><!-- /app -->
-
-<!-- ══ COCKTAIL MODAL (outside #app so it's not clipped by overflow:hidden) ══ -->
-<div id="modal-overlay" onclick="closeModal(event)">
-  <div id="modal">
-    <div class="modal-handle"></div>
-    <button class="modal-close" onclick="closeModal(null)">✕</button>
-    <div class="modal-header">
-      <div class="modal-tag" id="modal-tag"></div>
-      <div class="modal-name" id="modal-name"></div>
-      <div class="modal-base">
-        <span class="modal-base-label">Base spirit:&nbsp;</span>
-        <span class="modal-base-value" id="modal-base"></span>
-      </div>
-    </div>
-    <div class="unit-toggle">
-      <button class="unit-btn on" id="unit-oz" onclick="setUnit('oz')">oz</button>
-      <button class="unit-btn" id="unit-ml" onclick="setUnit('ml')">ml</button>
-    </div>
-    <div class="modal-section">
-      <div class="modal-section-label">Ingredients</div>
-      <table class="ing-table" id="modal-ingredients"></table>
-    </div>
-    <div class="modal-section" id="desc-wrap">
-      <div class="modal-section-label">Description</div>
-      <div class="modal-text" id="modal-description"></div>
-    </div>
-    <div class="modal-section" id="hist-wrap">
-      <div class="modal-section-label">History</div>
-      <div class="modal-history" id="modal-history"></div>
-    </div>
-    <div class="modal-section">
-      <div class="modal-section-label">Recipe</div>
-      <ol class="step-list" id="modal-steps"></ol>
+  <div id="loading-screen" aria-live="polite" aria-label="Loading">
+    <div class="spinner">
+      <span></span><span></span><span></span>
     </div>
   </div>
-</div>
 
-<script src="app.js"></script>
+  <div id="error-screen" hidden>
+    <div class="error-icon">🍸</div>
+    <p>Couldn't load bar data. Check your connection.</p>
+    <button id="retry-btn" class="btn-primary">Try Again</button>
+  </div>
+
+  <div id="app" hidden>
+    <div id="scroll-area"></div>
+    <nav id="bottom-nav" aria-label="Main navigation">
+      <button class="nav-btn active" data-screen="home" aria-label="Home">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+          <polyline points="9,22 9,12 15,12 15,22"/>
+        </svg>
+        <span class="nav-label">Home</span>
+      </button>
+      <button class="nav-btn" data-screen="cocktails" aria-label="Cocktails">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M8 22h8M12 11v11M3 3l7 8h4l7-8"/>
+        </svg>
+        <span class="nav-label">Cocktails</span>
+      </button>
+      <button class="nav-btn" data-screen="mocktails" aria-label="Mocktails">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M12 22V12M3 7h18L17 3H7z"/><path d="M12 12C8 12 4 9 4 7"/>
+        </svg>
+        <span class="nav-label">Mocktails</span>
+      </button>
+      <button class="nav-btn" data-screen="decide" aria-label="Decide">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="4"/>
+          <circle cx="8" cy="8" r="1.5" fill="currentColor" stroke="none"/>
+          <circle cx="16" cy="8" r="1.5" fill="currentColor" stroke="none"/>
+          <circle cx="8" cy="16" r="1.5" fill="currentColor" stroke="none"/>
+          <circle cx="16" cy="16" r="1.5" fill="currentColor" stroke="none"/>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+        </svg>
+        <span class="nav-label">Decide</span>
+      </button>
+      <button class="nav-btn" data-screen="mybar" aria-label="My Bar">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="2" y="7" width="20" height="14" rx="2"/>
+          <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+          <line x1="12" y1="12" x2="12" y2="16"/>
+          <line x1="10" y1="14" x2="14" y2="14"/>
+        </svg>
+        <span class="nav-label">My Bar</span>
+      </button>
+    </nav>
+  </div>
+
+  <div id="modal-overlay" role="dialog" aria-modal="true" aria-label="Drink details">
+    <div class="modal-sheet">
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
