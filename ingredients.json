@@ -152,6 +152,14 @@
     "notes": null
   },
   {
+    "id": "roof-afza",
+    "category": "Syrups",
+    "name": "Rooh Afza",
+    "brand": "Rooh Afza",
+    "status": "have",
+    "notes": "Rose petal Syrup"
+  },
+  {
     "id": "syrups-simple-syrup",
     "category": "Syrups",
     "name": "Simple Syrup",
