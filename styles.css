@@ -80,7 +80,7 @@ a { color: inherit; text-decoration: none; }
 #app {
   display: flex;
   flex-direction: column;
-  height: var(--app-h);
+  height: 100%;
   overflow: hidden;
   background: var(--bg);
 }
@@ -89,7 +89,7 @@ a { color: inherit; text-decoration: none; }
 
 #scroll-area {
   flex: 1;
-  height: calc(var(--app-h) - var(--nav-h) - var(--safe-b) - var(--safe-t));
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -501,7 +501,14 @@ a { color: inherit; text-decoration: none; }
   padding: 16px 8px;
   text-align: center;
   border-right: 1px solid var(--border);
+  background: none;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  cursor: pointer;
+  transition: background 0.15s;
 }
+.stat-item:active { background: var(--gold-glow); }
 .stat-item:last-child { border-right: none; }
 
 .stat-num {
