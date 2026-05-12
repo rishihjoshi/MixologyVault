@@ -336,22 +336,22 @@ function buildHomeScreen(el) {
       <div class="home-subtitle">The Home Bar</div>
     </div>
     <div class="home-stats">
-      <div class="stat-item">
+      <button class="stat-item" data-nav="mybar">
         <div class="stat-num">${allIngredients.length}</div>
         <div class="stat-lbl">Ingredients</div>
-      </div>
-      <div class="stat-item">
+      </button>
+      <button class="stat-item" data-nav="cocktails">
         <div class="stat-num">${allCocktails.length}</div>
         <div class="stat-lbl">Cocktails</div>
-      </div>
-      <div class="stat-item">
+      </button>
+      <button class="stat-item" data-nav="mocktails">
         <div class="stat-num">${allMocktails.length}</div>
         <div class="stat-lbl">Mocktails</div>
-      </div>
-      <div class="stat-item">
+      </button>
+      <button class="stat-item" data-nav="cocktails">
         <div class="stat-num">${favourites.size}</div>
         <div class="stat-lbl">Favourites</div>
-      </div>
+      </button>
     </div>
     ${pick ? `
     <div class="home-section">
@@ -376,6 +376,11 @@ function buildHomeScreen(el) {
 
   wireCardArea(el);
   observeImages(el);
+
+  el.querySelector('.home-stats').addEventListener('click', e => {
+    const btn = e.target.closest('[data-nav]');
+    if (btn) switchScreen(btn.dataset.nav);
+  });
 
   const shuffleBtn = el.querySelector('#shuffle-pick');
   if (shuffleBtn) {
@@ -698,7 +703,7 @@ function buildMyBarScreen(el) {
 
   el.innerHTML = `
     <div class="screen-header">
-      <div class="page-title">My Bar</div>
+      <div class="page-title">My Vault</div>
     </div>
     <div class="mybar-content">${groups}</div>
   `;
