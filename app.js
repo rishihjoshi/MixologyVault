@@ -528,7 +528,7 @@ function quickPrompt(el) {
 function addMessage(role, text) {
   const el = document.createElement('div');
   el.className = `msg ${role}`;
-  el.innerHTML = role === 'ai' ? `<strong>Mixologist</strong>${text}` : esc(text);
+  el.innerHTML = role === 'ai' ? `<strong>Mixologist</strong>${safeMarkup(text)}` : esc(text);
   document.getElementById('chat-messages').appendChild(el);
   el.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }
