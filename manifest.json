@@ -1,0 +1,46 @@
+{
+  "id": "./",
+  "scope": "./",
+  "lang": "en",
+  "name": "Mixology Vault",
+  "short_name": "MixVault",
+  "description": "Your personal cocktail vault, powered by what's in your bar.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "display_override": ["standalone"],
+  "background_color": "#090909",
+  "theme_color": "#090909",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "categories": ["food", "lifestyle"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "new-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "What should I drink?",
+      "short_name": "Decide",
+      "description": "Jump straight to the drink picker",
+      "url": "./index.html#decide",
+      "icons": [{ "src": "icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "AI Mixologist",
+      "short_name": "AI Mix",
+      "description": "Chat with your AI mixologist",
+      "url": "./index.html#ai",
+      "icons": [{ "src": "icon.svg", "sizes": "any" }]
+    }
+  ]
+}
