@@ -7,7 +7,7 @@
   script-src 'self' 'unsafe-inline';
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   font-src https://fonts.gstatic.com;
-  connect-src https://docs.google.com https://api.anthropic.com;
+  connect-src 'self' https://api.anthropic.com;
   img-src 'self' data: blob:;
   object-src 'none';
   frame-ancestors 'none';
@@ -94,8 +94,8 @@
         <h1>Mixology<br><em>Vault</em></h1>
         <p id="hero-sub">Your personal cocktail vault, powered by what's in your bar.</p>
         <div class="stats-row">
-          <div class="stat-pill"><div class="stat-num" id="count-ingredients">–</div><div class="stat-lbl">Ingredients</div></div>
-          <div class="stat-pill"><div class="stat-num" id="count-cocktails">–</div><div class="stat-lbl">Cocktails</div></div>
+          <div class="stat-pill stat-pill--link" onclick="switchScreen('bar', document.getElementById('nb-bar'))"><div class="stat-num" id="count-ingredients">–</div><div class="stat-lbl">Ingredients</div></div>
+          <div class="stat-pill stat-pill--link" onclick="switchScreen('cocktails', document.getElementById('nb-cocktails'))"><div class="stat-num" id="count-cocktails">–</div><div class="stat-lbl">Cocktails</div></div>
           <div class="stat-pill"><div class="stat-num" id="count-favourites">0</div><div class="stat-lbl">Favourites</div></div>
         </div>
       </div>
