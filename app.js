@@ -498,6 +498,20 @@ function generateDrinks() {
   ra.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+// ── AI HELPERS ────────────────────────────────────────────
+async function fetchWithRetry(fn, maxRetries = 2) {
+  for (let i = 0; i <= maxRetries; i++) {
+    try { return await fn(); }
+    catch (err) {
+      if (err.status === 429 && i < maxRetries) {
+        await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
+        continue;
+      }
+      throw err;
+    }
+  }
+}
+
 // ── AI MIXOLOGIST ─────────────────────────────────────────
 function checkApiKey() {
   const key = localStorage.getItem('anthropic_key');
@@ -565,23 +579,26 @@ async function sendChat() {
   const systemPrompt = `You are an expert AI mixologist for "Mixology Vault", a personal home bar app. Available ingredients: ${haveItems || 'Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo, Monkey Shoulder, Cointreau, Angostura Bitters, Prosecco'}. Cocktails in the vault: ${allCocktails.map(c => c.name).join(', ')}. Be warm, specific, and confident. Give full recipes with measurements. Keep responses concise and elegant.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 800,
-        system: systemPrompt,
-        messages: chatHistory,
-      })
+    const data = await fetchWithRetry(async () => {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': key,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 800,
+          system: systemPrompt,
+          messages: chatHistory,
+        })
+      });
+      const json = await res.json();
+      if (json.error) { const e = new Error(json.error.message || 'API error'); e.status = res.status; throw e; }
+      return json;
     });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error.message || 'API error');
     const reply = data.content?.[0]?.text || 'Sorry, something went wrong. Try again.';
     chatHistory.push({ role: 'assistant', content: reply });
     loadEl.innerHTML = `<strong>Mixologist</strong>${safeMarkup(reply)}`;
@@ -652,8 +669,25 @@ async function init() {
   renderCocktails('all', '');
 }
 
+// ── PWA INSTALL PROMPT (Android A2HS) ────────────────────
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  window._installPrompt = e;
+});
+
+// ── FRAGMENT SHORTCUTS (manifest shortcuts deep-link) ────
+function handleFragmentShortcut() {
+  const hash = window.location.hash;
+  if (hash === '#decide') {
+    switchScreen('decide', document.getElementById('nav-decide'));
+  } else if (hash === '#ai') {
+    switchScreen('ai', document.getElementById('nb-ai'));
+  }
+  if (hash) window.history.replaceState(null, '', './index.html');
+}
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', () => init().then(handleFragmentShortcut));
 } else {
-  init();
+  init().then(handleFragmentShortcut);
 }
