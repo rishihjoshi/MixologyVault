@@ -330,6 +330,8 @@ body {
 .stat-pill { background: var(--card); border: 0.5px solid var(--border2); border-radius: var(--r); padding: 10px 12px; flex: 1; text-align: center; }
 .stat-num  { font-family: var(--font-d); font-size: 22px; color: var(--amber-l); font-weight: 600; }
 .stat-lbl  { font-size: 10px; color: var(--muted); margin-top: 1px; letter-spacing: .05em; text-transform: uppercase; }
+.stat-pill--link { cursor: pointer; transition: border-color .18s, transform .14s; }
+.stat-pill--link:active { transform: scale(.95); border-color: var(--amber); }
 
 #home-cta {
   margin: 14px 16px 0;

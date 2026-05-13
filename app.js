@@ -5,7 +5,7 @@
 'use strict';
 
 // ── CONFIG ──────────────────────────────────────────────
-const SHEET_ID = '12_04glNgaHvxNXlybudwtI6uHHdnZtMJlbV_9wjFoXM';
+const DATA_BASE = './'; // path prefix for JSON data files
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -31,9 +31,9 @@ let ingredientOverrides = {};
     if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
       const safe = Object.create(null); // no prototype — immune to pollution
       for (const [k, v] of Object.entries(parsed)) {
-        const numKey = parseInt(k, 10);
-        if (Number.isFinite(numKey) && numKey >= 0 && (v === 'have' || v === 'need')) {
-          safe[numKey] = v;
+        // Accept string slug keys only — guards against prototype pollution
+        if (typeof k === 'string' && k.length > 0 && k.length <= 120 && /^[\w-]+$/.test(k) && (v === 'have' || v === 'need')) {
+          safe[k] = v;
         }
       }
       ingredientOverrides = safe;
@@ -72,70 +72,48 @@ const SPIRIT_FILTERS = [
   { key: 'other',   label: 'Other',   icon: '✨' },
 ];
 
-// ── GOOGLE SHEET FETCH ───────────────────────────────────
-async function fetchSheet(sheetName) {
-  // &headers=1 tells the gviz API that row 1 is a header row.
-  // Google will exclude it from table.rows — table.rows[0] is then
-  // the first real data row (e.g. 'Classic Margarita' / first ingredient).
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${encodeURIComponent(sheetName)}`;
+// ── LOCAL JSON LOADERS ───────────────────────────────────
+async function loadIngredients() {
   try {
-    const res  = await fetch(url);
-    const text = await res.text();
-    // Slice JSONP wrapper safely: find first '(' and last ')'
-    const start = text.indexOf('(');
-    const end   = text.lastIndexOf(')');
-    if (start === -1 || end === -1 || end <= start) throw new Error('Unexpected sheet response format');
-    const json = JSON.parse(text.slice(start + 1, end));
-    return json.table;
+    const res  = await fetch(DATA_BASE + 'ingredients.json');
+    const data = await res.json();
+    return data.map(ing => ({
+      id:      ing.id,
+      category: ing.category,
+      item:    ing.name,                        // normalise to 'item' for rest of app
+      brand:   ing.brand  || '',
+      status:  ing.status,
+      notes:   ing.notes  || '',
+      have:    ing.status === 'have',
+      canGet:  ing.status === 'can-get',
+    }));
   } catch (e) {
-    console.warn(`Sheet fetch failed for "${sheetName}":`, e.message);
-    return null;
+    console.warn('Failed to load ingredients.json:', e.message);
+    return [];
   }
 }
 
-function cellVal(c) {
-  if (!c) return '';
-  return (c.v !== null && c.v !== undefined) ? String(c.v).trim() : '';
-}
-
-// ── PARSE INGREDIENTS ────────────────────────────────────
-function parseIngredients(table) {
-  if (!table || !table.rows) return [];
-  return table.rows.map((row, i) => {
-    const c = row.c || [];
-    const cat  = cellVal(c[0]);
-    const item = cellVal(c[1]);
-    if (!cat || !item) return null;
-    const status = cellVal(c[3]);
-    return { id: i, category: cat, item, brand: cellVal(c[2]), status, notes: cellVal(c[4]), have: status.includes('Have'), canGet: status.includes('Can') };
-  }).filter(Boolean);
-}
-
-// ── PARSE COCKTAILS ──────────────────────────────────────
-// Sheet columns: Name | Base Spirit | Tag | Ingredients |
-//                Meas(ml) | Meas(oz) | Steps | History | Description
-function parseCocktails(table) {
-  if (!table || !table.rows) return [];
-  // With &headers=1 in the URL, table.rows[0] is already the first
-  // real data row — no manual header skipping needed here.
-  return table.rows.map((row, i) => {
-    const c    = row.c || [];
-    const name = cellVal(c[0]);
-    if (!name) return null;
-    return {
-      id: i,
-      name,
-      baseSpirit:  cellVal(c[1]),
-      tag:         cellVal(c[2]),
-      ingredients: cellVal(c[3]),
-      measML:      cellVal(c[4]),
-      measOz:      cellVal(c[5]),
-      steps:       cellVal(c[6]),
-      history:     cellVal(c[7]),
-      description: cellVal(c[8]),
-      spiritKey:   normaliseSpiritKey(cellVal(c[1])),
-    };
-  }).filter(Boolean);
+async function loadCocktails() {
+  try {
+    const res  = await fetch(DATA_BASE + 'cocktails.json');
+    const data = await res.json();
+    return data.map(c => ({
+      id:          c.id,
+      name:        c.name,
+      baseSpirit:  c.baseSpirit  || '',
+      tag:         (c.tags || []).join(', '),
+      ingredients: (c.ingredients     || []).join('\n'),
+      measML:      (c.measurementsMl  || []).join('\n'),
+      measOz:      (c.measurementsOz  || []).join('\n'),
+      steps:       c.recipe      || '',
+      history:     c.history     || '',
+      description: c.description || '',
+      spiritKey:   normaliseSpiritKey(c.baseSpirit),
+    }));
+  } catch (e) {
+    console.warn('Failed to load cocktails.json:', e.message);
+    return [];
+  }
 }
 
 function normaliseSpiritKey(b) {
@@ -184,11 +162,11 @@ function wireCardArea(el) {
     const favBtn = e.target.closest('.fav-btn');
     if (favBtn) {
       e.stopPropagation();
-      toggleFav(favBtn, parseInt(favBtn.dataset.id, 10));   // ← pass element, not event
+      toggleFav(favBtn, favBtn.dataset.id);   // ← pass element, not event
       return;
     }
     const card = e.target.closest('.drink-card');
-    if (card) openModal(parseInt(card.dataset.id, 10));
+    if (card) openModal(card.dataset.id);
   });
 }
 
@@ -281,7 +259,7 @@ function renderBar() {
   // Wire pill toggle
   container.querySelectorAll('.pill[data-ing-id]').forEach(pill => {
     pill.addEventListener('click', () => {
-      const id  = parseInt(pill.dataset.ingId, 10);
+      const id  = pill.dataset.ingId;
       const ing = allIngredients.find(x => x.id === id);
       if (!ing) return;
       ingredientOverrides[id] = getIngStatus(ing) === 'have' ? 'need' : 'have';
@@ -655,14 +633,11 @@ async function init() {
   wireCardArea(document.getElementById('cocktail-list'));
   wireCardArea(document.getElementById('results-list'));
 
-  // Fetch sheets in parallel
-  const [ingTable, cktTable] = await Promise.all([
-    fetchSheet('Ingredients'),
-    fetchSheet('Cocktails'),
+  // Load local JSON files in parallel
+  [allIngredients, allCocktails] = await Promise.all([
+    loadIngredients(),
+    loadCocktails(),
   ]);
-
-  allIngredients = parseIngredients(ingTable);
-  allCocktails   = parseCocktails(cktTable);
 
   renderHome();
   renderBar();
