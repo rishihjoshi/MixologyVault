@@ -1,11 +1,11 @@
-const CACHE_NAME = 'mixvault-v1'; // Bump on every static asset change
+const CACHE_NAME = 'mixvault-v2'; // Bump on every static asset change
 const STATIC_ASSETS = [
   './index.html',
   './app.js',
   './styles.css',
   './manifest.json',
-  './icon.svg',
-  './new-icon.svg',
+  './AppIcon.png',
+  './HeroImage.png',
   './cocktails.json',
   './ingredients.json',
   './mocktails.json',
@@ -36,22 +36,6 @@ self.addEventListener('fetch', e => {
 
   // Never intercept Anthropic API calls — always live
   if (url.hostname === 'api.anthropic.com') return;
-
-  // Google Sheets data: network-first, fall back to cache
-  if (url.hostname === 'docs.google.com') {
-    e.respondWith(
-      fetch(request)
-        .then(res => {
-          if (res.ok) {
-            const clone = res.clone();
-            caches.open(CACHE_NAME).then(c => c.put(request, clone));
-          }
-          return res;
-        })
-        .catch(() => caches.match(request))
-    );
-    return;
-  }
 
   // CDN fonts: network-first with cache fallback
   if (url.hostname !== self.location.hostname) {
