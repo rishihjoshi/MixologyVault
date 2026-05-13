@@ -15,15 +15,15 @@
   "categories": ["food", "lifestyle"],
   "icons": [
     {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "AppIcon.png",
+      "sizes": "1087x1087",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "new-icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "AppIcon.png",
+      "sizes": "1087x1087",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ],
@@ -33,14 +33,14 @@
       "short_name": "Decide",
       "description": "Jump straight to the drink picker",
       "url": "./index.html#decide",
-      "icons": [{ "src": "icon.svg", "sizes": "any" }]
+      "icons": [{ "src": "AppIcon.png", "sizes": "1087x1087" }]
     },
     {
       "name": "AI Mixologist",
       "short_name": "AI Mix",
       "description": "Chat with your AI mixologist",
       "url": "./index.html#ai",
-      "icons": [{ "src": "icon.svg", "sizes": "any" }]
+      "icons": [{ "src": "AppIcon.png", "sizes": "1087x1087" }]
     }
   ]
 }

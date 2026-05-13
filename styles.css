@@ -254,25 +254,23 @@ body {
 #hero {
   position: relative;
   overflow: hidden;
-  padding: calc(var(--safe-t) + 18px) 20px 18px;
-  background: var(--surface);
+  padding: calc(var(--safe-t) + 18px) 20px 22px;
+  background:
+    linear-gradient(180deg,
+      rgba(9,9,9,0.42) 0%,
+      rgba(9,9,9,0.72) 55%,
+      rgba(9,9,9,0.96) 100%
+    ),
+    url('./HeroImage.png') center top / cover no-repeat;
 }
+/* Amber glow accent over the hero image */
 #hero::before {
   content: '';
   position: absolute;
-  top: -80px; right: -60px;
-  width: 280px; height: 280px;
+  top: -60px; right: -40px;
+  width: 260px; height: 260px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(200,133,10,.18) 0%, transparent 68%);
-  pointer-events: none;
-}
-#hero::after {
-  content: '';
-  position: absolute;
-  bottom: -40px; left: -40px;
-  width: 200px; height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(200,133,10,.07) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(200,133,10,.22) 0%, transparent 68%);
   pointer-events: none;
 }
 
@@ -286,9 +284,11 @@ body {
 
 /* ── Vault Icon — animated neon pulse ── */
 .vault-icon {
-  width: 64px;
-  height: 64px;
+  width: 88px;
+  height: 88px;
   display: block;
+  border-radius: 50%;
+  object-fit: cover;
   transform-origin: center center;
   animation: vault-pulse 3.5s ease-in-out infinite;
   transition: transform 0.12s ease;
