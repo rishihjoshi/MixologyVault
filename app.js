@@ -1,985 +1,659 @@
+/* ═══════════════════════════════════════════════════════
+   MIXOLOGY VAULT — app.js
+   Tabs: Ingredients (5 cols) | Cocktails (9 cols)
+═══════════════════════════════════════════════════════ */
 'use strict';
 
-// ─── Storage Keys ─────────────────────────────────────────────────────────────
-const KEYS = {
-  ING_OVERRIDES: 'hb_ing_overrides',
-  FAVOURITES:    'hb_favourites',
-  UNIT:          'hb_unit',
+// ── CONFIG ──────────────────────────────────────────────
+const SHEET_ID = '12_04glNgaHvxNXlybudwtI6uHHdnZtMJlbV_9wjFoXM';
+
+// ── STATE ────────────────────────────────────────────────
+let allIngredients    = [];
+let allCocktails      = [];
+let favourites        = new Set();
+let activeFilter      = 'all';
+let activeUnit        = 'oz';
+let activeModalId     = null;
+let chatHistory       = [];
+let barActiveFilter   = 'all';
+
+// ── INGREDIENT OVERRIDES ─────────────────────────────────
+// { [ingId]: 'have' | 'need' } — persisted to localStorage
+let ingredientOverrides = {};
+
+(function loadOverrides() {
+  try {
+    const s = localStorage.getItem('mv_ing_overrides');
+    if (!s) return;
+    const parsed = JSON.parse(s);
+    // Validate: only accept plain objects with 'have'/'need' values
+    // Rejects prototype pollution attempts (__proto__, constructor, etc.)
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      const safe = Object.create(null); // no prototype — immune to pollution
+      for (const [k, v] of Object.entries(parsed)) {
+        const numKey = parseInt(k, 10);
+        if (Number.isFinite(numKey) && numKey >= 0 && (v === 'have' || v === 'need')) {
+          safe[numKey] = v;
+        }
+      }
+      ingredientOverrides = safe;
+    }
+  } catch (e) {}
+})();
+
+function saveOverrides() {
+  try { localStorage.setItem('mv_ing_overrides', JSON.stringify(ingredientOverrides)); } catch (e) {}
+}
+
+function getIngStatus(ing) {
+  if (ingredientOverrides[ing.id] !== undefined) return ingredientOverrides[ing.id];
+  return ing.have ? 'have' : 'need';
+}
+
+// ── CATEGORY META ────────────────────────────────────────
+const CAT_META = {
+  'spirits':   { icon: '🥃', label: 'Spirits',   cls: 'cat-spirits'   },
+  'liqueurs':  { icon: '🍶', label: 'Liqueurs',  cls: 'cat-liqueurs'  },
+  'bitters':   { icon: '🌿', label: 'Bitters',   cls: 'cat-bitters'   },
+  'juices':    { icon: '🍊', label: 'Juices',    cls: 'cat-juices'    },
+  'syrups':    { icon: '🍯', label: 'Syrups',    cls: 'cat-syrups'    },
+  'garnishes': { icon: '🌱', label: 'Garnishes', cls: 'cat-garnishes' },
+  'wine':      { icon: '🍷', label: 'Wine',      cls: 'cat-wine'      },
+  'top up':    { icon: '💧', label: 'Top Up',    cls: 'cat-topup'     },
 };
 
-// ─── State ────────────────────────────────────────────────────────────────────
-let allIngredients   = [];
-let allCocktails     = [];
-let allMocktails     = [];
-let favourites       = new Set();
-let activeScreen     = 'home';
-let activeFilter     = 'all';
-let activeMocktailFilter = 'all';
-let activeUnit       = localStorage.getItem(KEYS.UNIT) || 'oz';
-let activeModalId    = null;
-let activeModalType  = null;
-let scrollPositions  = {};
-let decidePool       = 'cocktails';
-let decideMood       = null;
-let decideSpirit     = 'any';
-let todaysPick       = null;
-const screenCache    = {};
+const SPIRIT_FILTERS = [
+  { key: 'all',     label: 'All',     icon: '🍸' },
+  { key: 'gin',     label: 'Gin',     icon: '🌸' },
+  { key: 'whisky',  label: 'Whisky',  icon: '🥃' },
+  { key: 'tequila', label: 'Tequila', icon: '🌵' },
+  { key: 'rum',     label: 'Rum',     icon: '🏝️' },
+  { key: 'vodka',   label: 'Vodka',   icon: '🫙' },
+  { key: 'other',   label: 'Other',   icon: '✨' },
+];
 
-// ─── Utility ──────────────────────────────────────────────────────────────────
-function esc(str) {
-  return String(str ?? '')
-    .replace(/&/g,  '&amp;')
-    .replace(/</g,  '&lt;')
-    .replace(/>/g,  '&gt;')
-    .replace(/"/g,  '&quot;')
-    .replace(/'/g,  '&#x27;')
-    .replace(/\//g, '&#x2F;');
-}
-
-function safeJsonParse(str, fallback) {
+// ── GOOGLE SHEET FETCH ───────────────────────────────────
+async function fetchSheet(sheetName) {
+  // &headers=1 tells the gviz API that row 1 is a header row.
+  // Google will exclude it from table.rows — table.rows[0] is then
+  // the first real data row (e.g. 'Classic Margarita' / first ingredient).
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${encodeURIComponent(sheetName)}`;
   try {
-    const parsed = JSON.parse(str);
-    return parsed !== null ? parsed : fallback;
-  } catch {
-    return fallback;
+    const res  = await fetch(url);
+    const text = await res.text();
+    // Slice JSONP wrapper safely: find first '(' and last ')'
+    const start = text.indexOf('(');
+    const end   = text.lastIndexOf(')');
+    if (start === -1 || end === -1 || end <= start) throw new Error('Unexpected sheet response format');
+    const json = JSON.parse(text.slice(start + 1, end));
+    return json.table;
+  } catch (e) {
+    console.warn(`Sheet fetch failed for "${sheetName}":`, e.message);
+    return null;
   }
 }
 
-function sanitiseIngredientOverrides(raw, ingredients) {
-  if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) return {};
-  const validIds    = new Set(ingredients.map(i => i.id));
-  const validValues = new Set(['have', 'can-get']);
-  const clean = {};
-  for (const [k, v] of Object.entries(raw)) {
-    if (validIds.has(k) && validValues.has(v)) clean[k] = v;
-  }
-  return clean;
+function cellVal(c) {
+  if (!c) return '';
+  return (c.v !== null && c.v !== undefined) ? String(c.v).trim() : '';
 }
 
-function sanitiseFavourites(raw, cocktails, mocktails) {
-  if (!Array.isArray(raw)) return [];
-  const validIds = new Set([...cocktails, ...mocktails].map(d => d.id));
-  return raw.filter(id => typeof id === 'string' && validIds.has(id));
+// ── PARSE INGREDIENTS ────────────────────────────────────
+function parseIngredients(table) {
+  if (!table || !table.rows) return [];
+  return table.rows.map((row, i) => {
+    const c = row.c || [];
+    const cat  = cellVal(c[0]);
+    const item = cellVal(c[1]);
+    if (!cat || !item) return null;
+    const status = cellVal(c[3]);
+    return { id: i, category: cat, item, brand: cellVal(c[2]), status, notes: cellVal(c[4]), have: status.includes('Have'), canGet: status.includes('Can') };
+  }).filter(Boolean);
 }
 
-// ─── Data Helpers ─────────────────────────────────────────────────────────────
-function normaliseMood(m) {
-  if (!m) return 'Chill';
-  return m.trim() === 'Cozy' ? 'Cosy' : m.trim();
+// ── PARSE COCKTAILS ──────────────────────────────────────
+// Sheet columns: Name | Base Spirit | Tag | Ingredients |
+//                Meas(ml) | Meas(oz) | Steps | History | Description
+function parseCocktails(table) {
+  if (!table || !table.rows) return [];
+  // With &headers=1 in the URL, table.rows[0] is already the first
+  // real data row — no manual header skipping needed here.
+  return table.rows.map((row, i) => {
+    const c    = row.c || [];
+    const name = cellVal(c[0]);
+    if (!name) return null;
+    return {
+      id: i,
+      name,
+      baseSpirit:  cellVal(c[1]),
+      tag:         cellVal(c[2]),
+      ingredients: cellVal(c[3]),
+      measML:      cellVal(c[4]),
+      measOz:      cellVal(c[5]),
+      steps:       cellVal(c[6]),
+      history:     cellVal(c[7]),
+      description: cellVal(c[8]),
+      spiritKey:   normaliseSpiritKey(cellVal(c[1])),
+    };
+  }).filter(Boolean);
 }
 
-function resolveIngredient(name, ingredients) {
-  const n = name.toLowerCase().trim();
-  if (!n) return null;
-  return ingredients.find(ing => {
-    const iName  = ing.name.toLowerCase();
-    const iBrand = (ing.brand || '').toLowerCase();
-    return iName === n || (iBrand && iBrand === n) ||
-           iName.includes(n) || n.includes(iName) ||
-           (iBrand && iBrand.includes(n)) || (iBrand && n.includes(iBrand));
-  }) ?? null;
-}
-
-function getEffectiveStatus(ingredient) {
-  const overrides = safeJsonParse(localStorage.getItem(KEYS.ING_OVERRIDES), {});
-  return overrides[ingredient.id] ?? ingredient.status;
-}
-
-function setIngredientStatus(id, newStatus) {
-  const overrides = safeJsonParse(localStorage.getItem(KEYS.ING_OVERRIDES), {});
-  overrides[id] = newStatus;
-  safeSetItem(KEYS.ING_OVERRIDES, JSON.stringify(overrides));
-  window.dispatchEvent(new CustomEvent('ingredientStatusChanged'));
-}
-
-function computeAvailability(drink, ingredients) {
-  const missing = drink.ingredients
-    .map(name => resolveIngredient(name, ingredients))
-    .filter(ing => ing !== null && getEffectiveStatus(ing) === 'can-get')
-    .map(ing => ing.name);
-  return {
-    state: missing.length === 0 ? 'ready'
-         : missing.length === 1 ? 'almost'
-         : 'needs-work',
-    missingIngredients: missing,
-  };
-}
-
-function getSpiritKey(drink) {
-  const s = (drink.baseSpirit || '').toLowerCase();
-  if (!s) return 'other';
-  if (s.includes('gin'))                           return 'gin';
-  if (s.includes('whisky') || s.includes('whiskey')) return 'whisky';
-  if (s.includes('tequila'))                       return 'tequila';
-  if (s.includes('rum'))                           return 'rum';
-  if (s.includes('vodka'))                         return 'vodka';
-  if (s.includes('campari'))                       return 'campari';
-  if (s.includes('prosecco'))                      return 'prosecco';
-  if (s.includes('amaretto'))                      return 'amaretto';
+function normaliseSpiritKey(b) {
+  if (!b) return 'other';
+  b = b.toLowerCase();
+  if (b.includes('gin'))     return 'gin';
+  if (b.includes('whisky') || b.includes('whiskey') || b.includes('scotch') || b.includes('bourbon') || b.includes('malt') || b.includes('irish')) return 'whisky';
+  if (b.includes('tequila') || b.includes('mezcal')) return 'tequila';
+  if (b.includes('rum'))   return 'rum';
+  if (b.includes('vodka')) return 'vodka';
   return 'other';
 }
 
-function enrichDrink(drink, ingredients) {
-  const avail    = computeAvailability(drink, ingredients);
-  const spiritKey = getSpiritKey(drink);
-  return {
-    ...drink,
-    mood:               normaliseMood(drink.mood),
-    availabilityState:  avail.state,
-    missingIngredients: avail.missingIngredients,
-    spiritKey,
-  };
-}
-
-function recomputeAllAvailability() {
-  allCocktails = allCocktails.map(d => {
-    const avail = computeAvailability(d, allIngredients);
-    return { ...d, availabilityState: avail.state, missingIngredients: avail.missingIngredients };
-  });
-  allMocktails = allMocktails.map(d => {
-    const avail = computeAvailability(d, allIngredients);
-    return { ...d, availabilityState: avail.state, missingIngredients: avail.missingIngredients };
-  });
-}
-
-// ─── Sort ─────────────────────────────────────────────────────────────────────
-function sortDrinks(drinks) {
-  const stateOrder = { ready: 0, almost: 1, 'needs-work': 2 };
-  return [...drinks].sort((a, b) => {
-    const aFav = favourites.has(a.id) ? 0 : 1;
-    const bFav = favourites.has(b.id) ? 0 : 1;
-    if (aFav !== bFav) return aFav - bFav;
-    const aS = stateOrder[a.availabilityState] ?? 2;
-    const bS = stateOrder[b.availabilityState] ?? 2;
-    if (aS !== bS) return aS - bS;
-    return a.name.localeCompare(b.name);
-  });
-}
-
-// ─── Favourites ───────────────────────────────────────────────────────────────
-function safeSetItem(key, value) {
-  try { localStorage.setItem(key, value); } catch { /* QuotaExceededError — silent fail */ }
-}
-
-function saveFavourites(set) {
-  safeSetItem(KEYS.FAVOURITES, JSON.stringify([...set]));
-}
-
-function toggleFav(id, type) {
-  if (favourites.has(id)) {
-    favourites.delete(id);
-  } else {
-    favourites.add(id);
-  }
-  saveFavourites(favourites);
-
-  // Update all fav buttons for this drink in the current DOM
-  document.querySelectorAll(`.fav-btn[data-id="${CSS.escape(id)}"]`).forEach(btn => {
-    btn.textContent = favourites.has(id) ? '❤️' : '🤍';
-    btn.setAttribute('aria-pressed', String(favourites.has(id)));
-  });
-
-  // Invalidate screen caches so next visit re-renders with updated sort
-  delete screenCache['cocktails'];
-  delete screenCache['mocktails'];
-  delete screenCache['home'];
-}
-
-// ─── Badge ────────────────────────────────────────────────────────────────────
-function badgeText(drink) {
-  if (drink.availabilityState === 'ready')  return 'Ready';
-  if (drink.availabilityState === 'almost') return 'Need 1';
-  return 'Need ' + drink.missingIngredients.length;
-}
-
-// ─── Lazy Image Loading ───────────────────────────────────────────────────────
-let imgObserver;
-
-function initImageObserver() {
-  imgObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const img = entry.target;
-      const src = img.dataset.src;
-      if (!src) return;
-
-      img.src = src;
-      img.onload = () => {
-        img.classList.add('loaded');
-        const placeholder = img.nextElementSibling;
-        if (placeholder && placeholder.classList.contains('card-img-placeholder')) {
-          placeholder.style.opacity = '0';
-        }
-      };
-      img.onerror = () => {
-        img.remove();
-      };
-      imgObserver.unobserve(img);
-    });
-  }, { rootMargin: '100px' });
-}
-
-function observeImages(container) {
-  if (!imgObserver) initImageObserver();
-  container.querySelectorAll('img[data-src]').forEach(img => imgObserver.observe(img));
-}
-
-// ─── Animation ────────────────────────────────────────────────────────────────
-function animateCardsIn(cards) {
-  cards.forEach((card, i) => {
-    requestAnimationFrame(() => {
-      setTimeout(() => card.classList.add('visible'), i * 80);
-    });
-  });
-}
-
-// ─── Filter Helpers ───────────────────────────────────────────────────────────
-function matchesSpiritFilter(drink, filter) {
-  if (filter === 'all') return true;
-  const key = drink.spiritKey;
-  if (filter === 'other') return !['gin','whisky','tequila','rum','vodka'].includes(key);
-  return key === filter;
-}
-
-function matchesTagFilter(drink, filter) {
-  if (filter === 'all') return true;
-  return (drink.tags || []).some(t => t.toLowerCase() === filter.toLowerCase());
-}
-
-// ─── Card HTML ────────────────────────────────────────────────────────────────
-function cardHTML(drink, type) {
-  const isFav   = favourites.has(drink.id);
-  const eyebrow = drink.baseSpirit || drink.baseIngredient || '';
-  return `<div class="drink-card" data-id="${esc(drink.id)}" data-type="${esc(type)}" data-spirit="${esc(drink.spiritKey)}">
-    <div class="card-img-wrap">
-      <img class="card-img" data-src="./icons/${esc(drink.id)}.png" src="" alt="${esc(drink.name)}" loading="lazy">
-      <div class="card-img-placeholder"></div>
-    </div>
-    <div class="card-body">
-      <div class="card-eyebrow">${esc(eyebrow)}</div>
-      <div class="card-name">${esc(drink.name)}</div>
-      <div class="card-desc">${esc(drink.description || '')}</div>
-      <div class="card-footer">
-        <div class="card-badge badge-${esc(drink.availabilityState)}">${esc(badgeText(drink))}</div>
-        <button class="fav-btn" data-id="${esc(drink.id)}" data-type="${esc(type)}"
-                aria-label="Favourite ${esc(drink.name)}" aria-pressed="${isFav}">
-          ${isFav ? '❤️' : '🤍'}
-        </button>
-      </div>
+// ── CARD HTML ─────────────────────────────────────────────
+function cardHTML(c, extraClass) {
+  const isFav = favourites.has(c.id);
+  return `<div class="drink-card ${extraClass || ''}" data-id="${c.id}">
+    <button class="fav-btn ${isFav ? 'on' : ''}" data-id="${c.id}" aria-label="Favourite">${isFav ? '❤️' : '🤍'}</button>
+    <div class="dc-name">${esc(c.name)}</div>
+    ${c.baseSpirit  ? `<div class="dc-eyebrow">${esc(c.baseSpirit)}</div>` : ''}
+    ${c.description ? `<div class="dc-desc">${esc(c.description)}</div>`  : ''}
+    <div class="dc-tags">
+      ${c.baseSpirit ? `<span class="dc-base">${esc(c.baseSpirit)}</span>` : ''}
+      ${c.tag        ? `<span class="tag">${esc(c.tag)}</span>`           : ''}
     </div>
   </div>`;
 }
 
-function appendCards(container, drinks, type) {
-  const frag = document.createDocumentFragment();
-  drinks.forEach(d => {
-    const wrap = document.createElement('div');
-    wrap.innerHTML = cardHTML(d, type);
-    frag.appendChild(wrap.firstElementChild);
-  });
-  container.innerHTML = '';
-  container.appendChild(frag);
-  observeImages(container);
-  animateCardsIn([...container.children]);
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function wireCardArea(container) {
-  container.addEventListener('click', e => {
+// safeMarkup: for AI replies — escape all HTML, then allow line breaks only.
+// Never call .replace(newline, '<br>') on raw API text without escaping first.
+function safeMarkup(s) {
+  return esc(s).replace(/\n/g, '<br>');
+}
+
+// ── CARD CLICK DELEGATION ─────────────────────────────────
+// FIX: containers are wired ONCE in init().
+// FIX: pass the favBtn element directly — NOT the event object.
+//      Using e.currentTarget in a delegated handler gives the
+//      CONTAINER element, not the fav button, corrupting innerHTML.
+function wireCardArea(el) {
+  el.addEventListener('click', e => {
     const favBtn = e.target.closest('.fav-btn');
     if (favBtn) {
       e.stopPropagation();
-      toggleFav(favBtn.dataset.id, favBtn.dataset.type);
+      toggleFav(favBtn, parseInt(favBtn.dataset.id, 10));   // ← pass element, not event
       return;
     }
     const card = e.target.closest('.drink-card');
-    if (card) openModal(card.dataset.id, card.dataset.type);
+    if (card) openModal(parseInt(card.dataset.id, 10));
   });
 }
 
-// ─── Screen Builder Dispatch ──────────────────────────────────────────────────
-function buildScreen(id) {
-  const el = document.createElement('div');
-  el.className = 'screen';
-  el.id = 'screen-' + id;
-  if (id === 'home')      buildHomeScreen(el);
-  if (id === 'cocktails') buildCocktailsScreen(el);
-  if (id === 'mocktails') buildMocktailsScreen(el);
-  if (id === 'decide')    buildDecideScreen(el);
-  if (id === 'mybar')     buildMyBarScreen(el);
-  return el;
-}
-
-// ─── Home Screen ──────────────────────────────────────────────────────────────
-function getGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return 'Good morning';
-  if (h < 17) return 'Good afternoon';
-  return 'Good evening';
-}
-
-function pickTonight() {
-  const ready  = allCocktails.filter(d => d.availabilityState === 'ready');
-  const almost = allCocktails.filter(d => d.availabilityState === 'almost');
-  const pool   = ready.length ? ready : almost.length ? almost : allCocktails;
-  return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
-}
-
-function buildHomeScreen(el) {
-  if (!todaysPick) todaysPick = pickTonight();
-  const pick       = todaysPick;
-  const signatures = sortDrinks(allCocktails.filter(d => (d.tags || []).includes('Signature')));
-
-  el.innerHTML = `
-    <div class="home-hero">
-      <div class="home-greet">${esc(getGreeting())}</div>
-      <div class="home-title">MixologyVault</div>
-      <div class="home-subtitle">The Home Bar</div>
-    </div>
-    <div class="home-stats">
-      <button class="stat-item" data-nav="mybar">
-        <div class="stat-num">${allIngredients.length}</div>
-        <div class="stat-lbl">Ingredients</div>
-      </button>
-      <button class="stat-item" data-nav="cocktails">
-        <div class="stat-num">${allCocktails.length}</div>
-        <div class="stat-lbl">Cocktails</div>
-      </button>
-      <button class="stat-item" data-nav="mocktails">
-        <div class="stat-num">${allMocktails.length}</div>
-        <div class="stat-lbl">Mocktails</div>
-      </button>
-      <button class="stat-item" data-nav="cocktails">
-        <div class="stat-num">${favourites.size}</div>
-        <div class="stat-lbl">Favourites</div>
-      </button>
-    </div>
-    ${pick ? `
-    <div class="home-section">
-      <div class="section-header">
-        <div class="section-title">Tonight&#x27;s Pick</div>
-        <button class="shuffle-btn" id="shuffle-pick" aria-label="Shuffle tonight&#x27;s pick">&#x21BA; Shuffle</button>
-      </div>
-      <div class="tonight-card" id="tonight-card">${tonightCardHTML(pick)}</div>
-    </div>` : ''}
-    <div class="home-section">
-      <div class="section-header">
-        <div class="section-title">Signature Cocktails</div>
-      </div>
-      <div class="sig-scroll" id="sig-scroll">
-        ${signatures.map(d => sigCardHTML(d)).join('')}
-      </div>
-    </div>
-    <div class="home-cta">
-      <button class="btn-primary" id="decide-cta">What should I drink?</button>
-    </div>
-  `;
-
-  wireCardArea(el);
-  observeImages(el);
-
-  el.querySelector('.home-stats').addEventListener('click', e => {
-    const btn = e.target.closest('[data-nav]');
-    if (btn) switchScreen(btn.dataset.nav);
-  });
-
-  const shuffleBtn = el.querySelector('#shuffle-pick');
-  if (shuffleBtn) {
-    shuffleBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      todaysPick = pickTonight();
-      const tc = el.querySelector('#tonight-card');
-      if (tc && todaysPick) {
-        tc.innerHTML = tonightCardHTML(todaysPick);
-        observeImages(tc);
-      }
-    });
+// ── RENDER HOME ───────────────────────────────────────────
+function renderHome() {
+  // Featured pick
+  if (allCocktails.length > 0) {
+    const pick = allCocktails[Math.floor(Math.random() * allCocktails.length)];
+    document.getElementById('featured-card').innerHTML = cardHTML(pick, 'hero-size featured');
   }
 
-  el.querySelector('#decide-cta').addEventListener('click', () => switchScreen('decide'));
+  // Signature cocktails
+  const sigs  = allCocktails.filter(c => (c.tag || '').toLowerCase().includes('signature'));
+  const sigEl = document.getElementById('home-signatures');
+  sigEl.innerHTML = sigs.length > 0
+    ? sigs.slice(0, 3).map(c => cardHTML(c, 'featured')).join('')
+    : '<div class="empty"><div class="ei">✨</div>Tag cocktails "Signature" in your Google Sheet</div>';
+
+  // Stats
+  document.getElementById('count-ingredients').textContent = allIngredients.length;
+  document.getElementById('count-cocktails').textContent   = allCocktails.length;
+  document.getElementById('count-favourites').textContent  = favourites.size;
 }
 
-function tonightCardHTML(drink) {
-  if (!drink) return '';
-  const isFav = favourites.has(drink.id);
-  return `<div class="tonight-inner drink-card" data-id="${esc(drink.id)}" data-type="cocktail" data-spirit="${esc(drink.spiritKey)}">
-    <div class="tonight-img-wrap">
-      <img class="card-img" data-src="./icons/${esc(drink.id)}.png" src="" alt="${esc(drink.name)}" loading="lazy">
-      <div class="card-img-placeholder"></div>
-    </div>
-    <div class="tonight-info">
-      <div class="card-eyebrow">${esc(drink.baseSpirit || '')}</div>
-      <div class="tonight-name">${esc(drink.name)}</div>
-      <div class="tonight-desc">${esc(drink.description || '')}</div>
-      <div class="tonight-footer">
-        <div class="card-badge badge-${esc(drink.availabilityState)}">${esc(badgeText(drink))}</div>
-        <button class="fav-btn" data-id="${esc(drink.id)}" data-type="cocktail"
-                aria-label="Favourite ${esc(drink.name)}" aria-pressed="${isFav}">
-          ${isFav ? '❤️' : '🤍'}
-        </button>
-      </div>
-    </div>
-  </div>`;
-}
+// ── RENDER MY VAULT ───────────────────────────────────────
+function renderBar() {
+  const container = document.getElementById('bar-sections');
+  if (!container) return;
 
-function sigCardHTML(d) {
-  const isFav = favourites.has(d.id);
-  return `<div class="sig-card drink-card" data-id="${esc(d.id)}" data-type="cocktail" data-spirit="${esc(d.spiritKey)}">
-    <div class="card-img-wrap">
-      <img class="card-img" data-src="./icons/${esc(d.id)}.png" src="" alt="${esc(d.name)}" loading="lazy">
-      <div class="card-img-placeholder"></div>
-    </div>
-    <div class="card-body">
-      <div class="card-name">${esc(d.name)}</div>
-      <div class="card-footer">
-        <div class="card-badge badge-${esc(d.availabilityState)}">${esc(badgeText(d))}</div>
-        <button class="fav-btn" data-id="${esc(d.id)}" data-type="cocktail"
-                aria-label="Favourite ${esc(d.name)}" aria-pressed="${isFav}">
-          ${isFav ? '❤️' : '🤍'}
-        </button>
-      </div>
-    </div>
-  </div>`;
-}
+  // Badge counts (always off full list, ignoring active filter)
+  const total     = allIngredients.length;
+  const available = allIngredients.filter(i => getIngStatus(i) === 'have').length;
+  const need      = allIngredients.filter(i => getIngStatus(i) === 'need').length;
+  const elAll   = document.getElementById('bf-count-all');
+  const elAvail = document.getElementById('bf-count-available');
+  const elNeed  = document.getElementById('bf-count-need');
+  if (elAll)   elAll.textContent   = total;
+  if (elAvail) elAvail.textContent = available;
+  if (elNeed)  elNeed.textContent  = need;
 
-// ─── Cocktails Screen ─────────────────────────────────────────────────────────
-function buildCocktailsScreen(el) {
-  const spirits      = ['all','gin','whisky','tequila','rum','vodka','other'];
-  const spiritLabels = { all:'All', gin:'Gin', whisky:'Whisky', tequila:'Tequila', rum:'Rum', vodka:'Vodka', other:'Other' };
+  // Filter
+  let filtered = allIngredients;
+  if (barActiveFilter === 'available') filtered = allIngredients.filter(i => getIngStatus(i) === 'have');
+  else if (barActiveFilter === 'need') filtered = allIngredients.filter(i => getIngStatus(i) === 'need');
 
-  el.innerHTML = `
-    <div class="screen-header">
-      <div class="page-title">Cocktails</div>
-      <div class="search-wrap">
-        <input type="search" id="cocktail-search" class="search-input"
-               placeholder="Search cocktails…" aria-label="Search cocktails"
-               autocomplete="off" spellcheck="false">
-      </div>
-    </div>
-    <div class="filter-row" id="spirit-filter-row" role="group" aria-label="Filter by spirit">
-      ${spirits.map(s => `<button class="filter-chip${s === activeFilter ? ' active' : ''}" data-filter="${s}">${esc(spiritLabels[s])}</button>`).join('')}
-    </div>
-    <div class="card-grid" id="cocktail-grid"></div>
-  `;
-
-  const grid        = el.querySelector('#cocktail-grid');
-  const searchInput = el.querySelector('#cocktail-search');
-  const filterRow   = el.querySelector('#spirit-filter-row');
-
-  function renderList(filter, query) {
-    let drinks = allCocktails.filter(d => matchesSpiritFilter(d, filter));
-    const q    = (query || '').trim().toLowerCase();
-    if (q) {
-      drinks = drinks.filter(d =>
-        d.name.toLowerCase().includes(q) || (d.description || '').toLowerCase().includes(q)
-      );
-    }
-    drinks = sortDrinks(drinks);
-
-    if (!drinks.length) {
-      grid.innerHTML = `<div class="empty-state">
-        <p>No cocktails match &#x201C;<strong>${esc(query || filter)}</strong>&#x201D;</p>
-        <button class="btn-outline clear-filter-btn">Clear filter</button>
-      </div>`;
-      grid.querySelector('.clear-filter-btn').addEventListener('click', () => {
-        activeFilter = 'all';
-        filterRow.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.filter === 'all'));
-        searchInput.value = '';
-        renderList('all', '');
-      });
-      return;
-    }
-    appendCards(grid, drinks, 'cocktail');
+  // Group by category
+  const groups = {};
+  for (const ing of filtered) {
+    const key = ing.category.toLowerCase();
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(ing);
   }
 
-  wireCardArea(grid);
+  const ORDER   = ['spirits','liqueurs','bitters','juices','syrups','garnishes','wine','top up'];
+  const allKeys = [...new Set([...ORDER, ...Object.keys(groups)])];
 
-  filterRow.addEventListener('click', e => {
-    const chip = e.target.closest('.filter-chip');
-    if (!chip) return;
-    activeFilter = chip.dataset.filter;
-    filterRow.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c === chip));
-    renderList(activeFilter, searchInput.value);
-  });
-
-  let searchTimer = null;
-  searchInput.addEventListener('input', e => {
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => renderList(activeFilter, e.target.value), 250);
-  });
-
-  renderList(activeFilter, '');
-}
-
-// ─── Mocktails Screen ─────────────────────────────────────────────────────────
-function buildMocktailsScreen(el) {
-  const tagSet = new Set();
-  allMocktails.forEach(d => (d.tags || []).forEach(t => tagSet.add(t)));
-  const tags = ['all', ...tagSet];
-
-  el.innerHTML = `
-    <div class="screen-header">
-      <div class="page-title">Mocktails</div>
-    </div>
-    <div class="filter-row" id="mocktail-filter-row" role="group" aria-label="Filter by tag">
-      ${tags.map(t => `<button class="filter-chip${t === activeMocktailFilter ? ' active' : ''}" data-filter="${esc(t)}">${esc(t === 'all' ? 'All' : t)}</button>`).join('')}
-    </div>
-    <div class="card-grid" id="mocktail-grid"></div>
-  `;
-
-  const grid      = el.querySelector('#mocktail-grid');
-  const filterRow = el.querySelector('#mocktail-filter-row');
-
-  function renderList(filter) {
-    const drinks = sortDrinks(allMocktails.filter(d => matchesTagFilter(d, filter)));
-
-    if (!drinks.length) {
-      grid.innerHTML = `<div class="empty-state">
-        <p>No mocktails match <strong>${esc(filter)}</strong></p>
-        <button class="btn-outline clear-filter-btn">Clear filter</button>
-      </div>`;
-      grid.querySelector('.clear-filter-btn').addEventListener('click', () => {
-        activeMocktailFilter = 'all';
-        filterRow.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.filter === 'all'));
-        renderList('all');
-      });
-      return;
-    }
-    appendCards(grid, drinks, 'mocktail');
-  }
-
-  wireCardArea(grid);
-
-  filterRow.addEventListener('click', e => {
-    const chip = e.target.closest('.filter-chip');
-    if (!chip) return;
-    activeMocktailFilter = chip.dataset.filter;
-    filterRow.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c === chip));
-    renderList(activeMocktailFilter);
-  });
-
-  renderList(activeMocktailFilter);
-}
-
-// ─── Decide Screen ────────────────────────────────────────────────────────────
-function buildDecideScreen(el) {
-  const moods        = ['Bold','Chill','Energised','Fresh','Party','Romantic','Cosy','Curious'];
-  const spiritKeys   = ['any','gin','whisky','tequila','rum','vodka','other'];
-  const spiritLabels = { any:'Any', gin:'Gin', whisky:'Whisky', tequila:'Tequila', rum:'Rum', vodka:'Vodka', other:'Other' };
-
-  el.innerHTML = `
-    <div class="screen-header">
-      <div class="page-title">Decide</div>
-    </div>
-    <div class="decide-section">
-      <div class="decide-label">Mood</div>
-      <div class="mood-grid" id="mood-grid">
-        ${moods.map(m => `<button class="mood-btn${decideMood === m ? ' active' : ''}" data-mood="${esc(m)}">${esc(m)}</button>`).join('')}
+  let html = '';
+  for (const key of allKeys) {
+    if (!groups[key]?.length) continue;
+    const meta  = CAT_META[key] || { icon: '📦', label: key, cls: 'cat-spirits' };
+    const items = groups[key];
+    html += `<div class="bar-category ${meta.cls}">
+      <div class="cat-header">
+        <div class="cat-icon">${meta.icon}</div>
+        <div class="cat-label">${meta.label}</div>
+        <div class="cat-count">${items.length} item${items.length !== 1 ? 's' : ''}</div>
       </div>
-    </div>
-    <div class="decide-section">
-      <div class="decide-label">Spirit</div>
-      <div class="filter-row" id="decide-spirit-row">
-        ${spiritKeys.map(s => `<button class="filter-chip${decideSpirit === s ? ' active' : ''}" data-spirit="${s}">${esc(spiritLabels[s])}</button>`).join('')}
+      <div class="pill-grid">
+        ${items.map(ing => {
+          const isHave = getIngStatus(ing) === 'have';
+          return `<button class="pill ${isHave ? 'have' : 'need-it'}" data-ing-id="${ing.id}"
+            aria-label="${esc(ing.item)}: ${isHave ? 'available' : 'needed'}">
+            <div class="pill-dot"></div>
+            <span class="pill-name">${esc(ing.item)}</span>
+            ${ing.brand ? `<span class="pill-brand">· ${esc(ing.brand)}</span>` : ''}
+            <span class="pill-chk">${isHave ? '✓' : '+'}</span>
+          </button>`;
+        }).join('')}
       </div>
-    </div>
-    <div class="decide-section">
-      <div class="decide-label">Pool</div>
-      <div class="pool-toggle" id="pool-toggle">
-        <button class="pool-btn${decidePool === 'cocktails' ? ' active' : ''}" data-pool="cocktails">Cocktails</button>
-        <button class="pool-btn${decidePool === 'mocktails' ? ' active' : ''}" data-pool="mocktails">Mocktails</button>
-        <button class="pool-btn${decidePool === 'both' ? ' active' : ''}" data-pool="both">Both</button>
-      </div>
-    </div>
-    <button class="btn-primary decide-go" id="decide-go">Find My Drink</button>
-    <div id="decide-results"></div>
-  `;
-
-  const moodGrid  = el.querySelector('#mood-grid');
-  const spiritRow = el.querySelector('#decide-spirit-row');
-  const poolToggle = el.querySelector('#pool-toggle');
-  const resultsEl = el.querySelector('#decide-results');
-
-  moodGrid.addEventListener('click', e => {
-    const btn = e.target.closest('.mood-btn');
-    if (!btn) return;
-    const m = btn.dataset.mood;
-    decideMood = decideMood === m ? null : m;
-    moodGrid.querySelectorAll('.mood-btn').forEach(b => b.classList.toggle('active', b.dataset.mood === decideMood));
-  });
-
-  spiritRow.addEventListener('click', e => {
-    const chip = e.target.closest('.filter-chip');
-    if (!chip) return;
-    decideSpirit = chip.dataset.spirit;
-    spiritRow.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c === chip));
-  });
-
-  poolToggle.addEventListener('click', e => {
-    const btn = e.target.closest('.pool-btn');
-    if (!btn) return;
-    decidePool = btn.dataset.pool;
-    poolToggle.querySelectorAll('.pool-btn').forEach(b => b.classList.toggle('active', b === btn));
-  });
-
-  el.querySelector('#decide-go').addEventListener('click', () => runDecide(resultsEl));
-
-  wireCardArea(el);
-}
-
-function runDecide(resultsEl) {
-  let pool = [];
-  if (decidePool === 'cocktails' || decidePool === 'both') pool = [...allCocktails];
-  if (decidePool === 'mocktails' || decidePool === 'both') pool = [...pool, ...allMocktails];
-
-  if (decideSpirit !== 'any') {
-    pool = pool.filter(d => {
-      if (decideSpirit === 'other') return !['gin','whisky','tequila','rum','vodka'].includes(d.spiritKey);
-      return d.spiritKey === decideSpirit;
-    });
-  }
-
-  if (!pool.length) {
-    resultsEl.innerHTML = `<div class="decide-empty">
-      <p>Nothing matches — try adjusting your preferences</p>
-      <button class="btn-outline" id="decide-reset">Reset</button>
     </div>`;
-    resultsEl.querySelector('#decide-reset').addEventListener('click', () => {
-      decideMood   = null;
-      decideSpirit = 'any';
-      decidePool   = 'cocktails';
-      delete screenCache['decide'];
-      switchScreen('decide');
-    });
+  }
+
+  if (!html) {
+    container.innerHTML = '<div class="empty"><div class="ei">📦</div>No ingredients match this filter.</div>';
     return;
   }
 
-  const stateScore  = { ready: 3, almost: 1, 'needs-work': 0 };
-  const picks = [...pool]
-    .map(d => {
-      let score = 0;
-      if (favourites.has(d.id)) score += 4;
-      score += stateScore[d.availabilityState] ?? 0;
-      if (decideMood && normaliseMood(d.mood) === decideMood) score += 2;
-      score += Math.random() * 0.99;
-      return { d, score };
-    })
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 3)
-    .map(s => s.d);
+  container.innerHTML = html;
 
-  const typeOf = d => d.baseIngredient !== undefined ? 'mocktail' : 'cocktail';
-  const wrap = document.createElement('div');
-  wrap.className = 'decide-results-grid';
-  picks.forEach(d => {
-    const div = document.createElement('div');
-    div.innerHTML = cardHTML(d, typeOf(d));
-    wrap.appendChild(div.firstElementChild);
-  });
-
-  resultsEl.innerHTML = '';
-  resultsEl.appendChild(wrap);
-  observeImages(wrap);
-  animateCardsIn([...wrap.children]);
-}
-
-// ─── My Bar Screen ────────────────────────────────────────────────────────────
-function buildMyBarScreen(el) {
-  const catOrder = ['Spirits','Liqueurs','Bitters','Juices','Syrups','Garnishes','Wine','Top Up'];
-  const catVars  = {
-    Spirits: '--cat-spirits', Liqueurs: '--cat-liqueurs', Bitters: '--cat-bitters',
-    Juices:  '--cat-juices',  Syrups: '--cat-syrups', Garnishes: '--cat-garnishes',
-    Wine:    '--cat-wine',   'Top Up': '--cat-topup',
-  };
-
-  const groups = catOrder.map(cat => {
-    const items = allIngredients.filter(i => i.category === cat);
-    if (!items.length) return '';
-    const varName = catVars[cat] || '--gold';
-    return `<div class="ing-category">
-      <div class="ing-cat-title" style="color:var(${varName})">${esc(cat)}</div>
-      <div class="ing-list">${items.map(ing => ingRowHTML(ing)).join('')}</div>
-    </div>`;
-  }).join('');
-
-  el.innerHTML = `
-    <div class="screen-header">
-      <div class="page-title">My Vault</div>
-    </div>
-    <div class="mybar-content">${groups}</div>
-  `;
-
-  el.addEventListener('click', e => {
-    const toggle = e.target.closest('.ing-toggle');
-    if (!toggle) return;
-    const id        = toggle.dataset.id;
-    const curStatus = toggle.dataset.status;
-    const newStatus = curStatus === 'have' ? 'can-get' : 'have';
-
-    setIngredientStatus(id, newStatus);
-
-    toggle.dataset.status = newStatus;
-    toggle.className      = 'ing-toggle status-' + newStatus;
-    toggle.textContent    = newStatus === 'have' ? 'Have' : 'Can Get';
-
-    const dot = toggle.closest('.ing-row')?.querySelector('.ing-status-dot');
-    if (dot) dot.dataset.status = newStatus;
-  });
-}
-
-function ingRowHTML(ing) {
-  const status = getEffectiveStatus(ing);
-  const label  = ing.brand || ing.name;
-  const sub    = ing.name + (ing.notes ? ' · ' + ing.notes : '');
-  return `<div class="ing-row">
-    <div class="ing-info">
-      <div class="ing-status-dot" data-status="${esc(status)}"></div>
-      <div class="ing-details">
-        <div class="ing-name">${esc(label)}</div>
-        <div class="ing-sub">${esc(sub)}</div>
-      </div>
-    </div>
-    <button class="ing-toggle status-${esc(status)}" data-id="${esc(ing.id)}" data-status="${esc(status)}"
-            aria-label="Toggle status for ${esc(ing.name)}">
-      ${status === 'have' ? 'Have' : 'Can Get'}
-    </button>
-  </div>`;
-}
-
-// ─── Navigation ───────────────────────────────────────────────────────────────
-function switchScreen(id) {
-  const scrollArea = document.getElementById('scroll-area');
-
-  if (activeScreen) {
-    scrollPositions[activeScreen] = scrollArea.scrollTop;
-    const cur = document.getElementById('screen-' + activeScreen);
-    if (cur) cur.remove();
-  }
-
-  activeScreen = id;
-
-  if (!screenCache[id]) {
-    screenCache[id] = buildScreen(id);
-  }
-
-  scrollArea.appendChild(screenCache[id]);
-  scrollArea.scrollTop = scrollPositions[id] || 0;
-  observeImages(screenCache[id]);
-
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.screen === id);
-  });
-}
-
-// ─── Modal ────────────────────────────────────────────────────────────────────
-function openModal(id, type) {
-  const drinks = type === 'mocktail' ? allMocktails : allCocktails;
-  const drink  = drinks.find(d => d.id === id);
-  if (!drink) return;
-
-  activeModalId   = id;
-  activeModalType = type;
-
-  const content = document.getElementById('modal-content');
-  content.innerHTML = buildModalContent(drink, type);
-
-  const overlay = document.getElementById('modal-overlay');
-  overlay.removeAttribute('hidden');
-  requestAnimationFrame(() => overlay.classList.add('open'));
-
-  history.pushState({ modal: true }, '', '#modal');
-
-  wireModalEvents(content, drink, type);
-  observeImages(overlay);
-}
-
-function closeModal() {
-  const overlay = document.getElementById('modal-overlay');
-  overlay.classList.remove('open');
-  overlay.addEventListener('transitionend', () => {
-    overlay.setAttribute('hidden', '');
-    document.getElementById('modal-content').innerHTML = '';
-  }, { once: true });
-  activeModalId   = null;
-  activeModalType = null;
-  if (location.hash === '#modal') history.back();
-}
-
-function buildModalContent(drink, type) {
-  const isFav    = favourites.has(drink.id);
-  const eyebrow  = drink.baseSpirit || drink.baseIngredient || '';
-  const measures = activeUnit === 'oz' ? (drink.measurementsOz || []) : (drink.measurementsMl || []);
-
-  const ingRows = (drink.ingredients || []).map((name, i) => {
-    const resolved = resolveIngredient(name, allIngredients);
-    const missing  = resolved ? getEffectiveStatus(resolved) === 'can-get' : false;
-    const measure  = measures[i] || '';
-    return `<div class="modal-ing-row${missing ? ' missing' : ''}">
-      <div class="modal-ing-dot${missing ? ' missing' : ''}"></div>
-      <div class="modal-ing-name">${esc(name)}</div>
-      <div class="modal-ing-measure">${esc(measure)}</div>
-      ${missing ? '<div class="modal-ing-cart">&#x1F6D2;</div>' : ''}
-    </div>`;
-  }).join('');
-
-  const recipeLine = esc(drink.recipe || '').replace(/\n/g, '<br>');
-
-  return `
-    <div class="modal-img-wrap" data-spirit="${esc(drink.spiritKey)}">
-      <img class="modal-img card-img" data-src="./icons/${esc(drink.id)}.png" src="" alt="${esc(drink.name)}" loading="lazy">
-      <div class="card-img-placeholder"></div>
-      <button class="modal-close" id="modal-close" aria-label="Close">&#x2715;</button>
-      <button class="modal-fav fav-btn" data-id="${esc(drink.id)}" data-type="${esc(type)}"
-              aria-label="Favourite ${esc(drink.name)}" aria-pressed="${isFav}">
-        ${isFav ? '❤️' : '🤍'}
-      </button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-eyebrow">${esc(eyebrow)}</div>
-      <h2 class="modal-title">${esc(drink.name)}</h2>
-      <div class="unit-toggle" id="unit-toggle">
-        <button class="unit-btn${activeUnit === 'oz' ? ' active' : ''}" data-unit="oz">oz</button>
-        <button class="unit-btn${activeUnit === 'ml' ? ' active' : ''}" data-unit="ml">ml</button>
-      </div>
-      <div class="modal-section-title">Ingredients</div>
-      <div class="modal-ingredients">${ingRows}</div>
-      <div class="modal-section-title">Recipe</div>
-      <div class="modal-recipe">${recipeLine}</div>
-      <details class="modal-accordion">
-        <summary class="modal-accordion-trigger">History &amp; Description</summary>
-        <div class="modal-accordion-body">
-          ${drink.history ? `<p>${esc(drink.history)}</p>` : ''}
-          ${drink.description ? `<p>${esc(drink.description)}</p>` : ''}
-        </div>
-      </details>
-    </div>
-  `;
-}
-
-function wireModalEvents(content, drink, type) {
-  content.querySelector('#modal-close').addEventListener('click', closeModal);
-
-  const favBtn = content.querySelector('.modal-fav');
-  if (favBtn) {
-    favBtn.addEventListener('click', () => toggleFav(drink.id, type));
-  }
-
-  const unitToggle = content.querySelector('#unit-toggle');
-  if (unitToggle) {
-    unitToggle.addEventListener('click', e => {
-      const btn = e.target.closest('.unit-btn');
-      if (!btn) return;
-      activeUnit = btn.dataset.unit;
-      safeSetItem(KEYS.UNIT, activeUnit);
-
-      const measures = activeUnit === 'oz' ? (drink.measurementsOz || []) : (drink.measurementsMl || []);
-      content.querySelectorAll('.modal-ing-measure').forEach((el, i) => {
-        el.textContent = measures[i] || '';
-      });
-      unitToggle.querySelectorAll('.unit-btn').forEach(b => b.classList.toggle('active', b.dataset.unit === activeUnit));
+  // Wire pill toggle
+  container.querySelectorAll('.pill[data-ing-id]').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const id  = parseInt(pill.dataset.ingId, 10);
+      const ing = allIngredients.find(x => x.id === id);
+      if (!ing) return;
+      ingredientOverrides[id] = getIngStatus(ing) === 'have' ? 'need' : 'have';
+      saveOverrides();
+      pill.style.transform = 'scale(0.93)';
+      setTimeout(() => { pill.style.transform = ''; renderBar(); }, 130);
     });
+  });
+}
+
+// ── RENDER COCKTAILS ──────────────────────────────────────
+function buildFilterChips() {
+  const row = document.getElementById('filter-row');
+  row.innerHTML = SPIRIT_FILTERS.map(f =>
+    `<button class="filter-chip ${f.key === 'all' ? 'active' : ''}" data-filter="${f.key}">
+      <span class="chip-icon">${f.icon}</span>${f.label}
+    </button>`).join('');
+
+  row.addEventListener('click', e => {
+    const chip = e.target.closest('.filter-chip');
+    if (!chip) return;
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeFilter = chip.dataset.filter;
+    renderCocktails(activeFilter, document.getElementById('cocktail-search').value);
+  });
+}
+
+function renderCocktails(filterKey, search) {
+  filterKey  = filterKey || 'all';
+  const q    = (search || '').toLowerCase();
+  let   list = allCocktails.filter(c => {
+    if (!q) return true;
+    return (c.name + ' ' + c.baseSpirit + ' ' + c.tag + ' ' + c.ingredients).toLowerCase().includes(q);
+  });
+  if (filterKey !== 'all') list = list.filter(c => c.spiritKey === filterKey);
+
+  document.getElementById('cocktail-count').textContent = `${list.length} cocktail${list.length !== 1 ? 's' : ''}`;
+
+  const el = document.getElementById('cocktail-list');
+  el.innerHTML = list.length === 0
+    ? '<div class="empty"><div class="ei">🍸</div>No cocktails found. Try a different filter.</div>'
+    : list.map(c => cardHTML(c)).join('');
+}
+
+// ── FAVOURITES ────────────────────────────────────────────
+// FIX: receives the button element directly (not the event).
+//      Passing the event and using e.currentTarget gives the
+//      delegated container, which would wipe all its innerHTML.
+function toggleFav(btn, id) {
+  if (favourites.has(id)) {
+    favourites.delete(id);
+    btn.textContent = '🤍';
+    btn.classList.remove('on');
+  } else {
+    favourites.add(id);
+    btn.textContent = '❤️';
+    btn.classList.add('on');
+    btn.style.transform = 'scale(1.4)';
+    setTimeout(() => { btn.style.transform = ''; }, 300);
+  }
+  document.getElementById('count-favourites').textContent = favourites.size;
+}
+
+// ── MODAL ─────────────────────────────────────────────────
+function openModal(id) {
+  const c = allCocktails.find(x => x.id === id);
+  if (!c) return;
+  activeModalId = id;
+
+  document.getElementById('modal-tag').textContent  = c.tag || '';
+  document.getElementById('modal-name').textContent = c.name;
+  document.getElementById('modal-base').textContent = c.baseSpirit || '—';
+
+  const descEl = document.getElementById('modal-description');
+  descEl.parentElement.style.display = c.description ? 'block' : 'none';
+  descEl.textContent = c.description || '';
+
+  const histEl = document.getElementById('modal-history');
+  histEl.parentElement.style.display = c.history ? 'block' : 'none';
+  histEl.textContent = c.history || '';
+
+  activeUnit = 'oz';
+  document.getElementById('unit-oz').classList.add('on');
+  document.getElementById('unit-ml').classList.remove('on');
+
+  renderModalIngredients(c);
+  renderModalSteps(c);
+
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function renderModalIngredients(c) {
+  const tbl       = document.getElementById('modal-ingredients');
+  const ingLines  = splitLines(c.ingredients);
+  const measLines = splitLines(activeUnit === 'ml' ? c.measML : c.measOz);
+
+  if (!ingLines.length) {
+    tbl.innerHTML = '<tr><td colspan="2" style="color:var(--muted);font-size:13px;padding:8px 0">See recipe steps below</td></tr>';
+    return;
+  }
+  tbl.innerHTML = ingLines.map((ing, i) => `<tr>
+    <td class="ing-meas">${esc(measLines[i] || '')}</td>
+    <td class="ing-name">${esc(ing)}</td>
+  </tr>`).join('');
+}
+
+function renderModalSteps(c) {
+  const ol = document.getElementById('modal-steps');
+  if (!c.steps) {
+    ol.innerHTML = '<li class="step-item"><div class="step-text" style="color:var(--muted)">No steps recorded.</div></li>';
+    return;
+  }
+  const steps = c.steps.split('\n').map(s => s.replace(/^\s*\d+[\.\)]\s*/, '').trim()).filter(Boolean);
+  if (!steps.length) {
+    ol.innerHTML = '<li class="step-item"><div class="step-text" style="color:var(--muted)">See ingredients above.</div></li>';
+    return;
+  }
+  ol.innerHTML = steps.map((s, i) => `<li class="step-item">
+    <div class="step-num">${i + 1}</div>
+    <div class="step-text">${esc(s)}</div>
+  </li>`).join('');
+}
+
+function splitLines(str) {
+  return str ? str.split('\n').map(s => s.trim()).filter(Boolean) : [];
+}
+
+function setUnit(u) {
+  activeUnit = u;
+  document.getElementById('unit-oz').classList.toggle('on', u === 'oz');
+  document.getElementById('unit-ml').classList.toggle('on', u === 'ml');
+  if (activeModalId !== null) {
+    const c = allCocktails.find(x => x.id === activeModalId);
+    if (c) renderModalIngredients(c);
   }
 }
 
-// ─── Ingredient Status Change Handler ────────────────────────────────────────
-window.addEventListener('ingredientStatusChanged', () => {
-  recomputeAllAvailability();
-
-  document.querySelectorAll('.drink-card').forEach(card => {
-    const id     = card.dataset.id;
-    const drType = card.dataset.type;
-    const drinks = drType === 'mocktail' ? allMocktails : allCocktails;
-    const drink  = drinks.find(d => d.id === id);
-    if (!drink) return;
-    const badge = card.querySelector('.card-badge');
-    if (badge) {
-      badge.className   = 'card-badge badge-' + drink.availabilityState;
-      badge.textContent = badgeText(drink);
-    }
-  });
-
-  delete screenCache['cocktails'];
-  delete screenCache['mocktails'];
-});
-
-// ─── App Height ───────────────────────────────────────────────────────────────
-function setAppHeight() {
-  document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px');
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modal-overlay') || !e.target) {
+    document.getElementById('modal-overlay').classList.remove('open');
+    activeModalId = null;
+  }
 }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
-async function init() {
-  const loadingEl = document.getElementById('loading-screen');
-  const errorEl   = document.getElementById('error-screen');
-  const appEl     = document.getElementById('app');
+// ── NAVIGATION ────────────────────────────────────────────
+const VALID_SCREENS = new Set(['home','bar','cocktails','decide','ai']);
+function switchScreen(id, btn) {
+  if (!VALID_SCREENS.has(id)) return; // reject unknown screen IDs
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const sc = document.getElementById('screen-' + id);
+  if (sc) sc.classList.add('active');
+  if (btn?.classList) btn.classList.add('active');
+  document.getElementById('scroll-area').scrollTop = 0;
+  if (id === 'ai') checkApiKey();
+}
 
-  loadingEl.removeAttribute('hidden');
-  errorEl.setAttribute('hidden', '');
-  appEl.setAttribute('hidden', '');
+// ── GREETING ──────────────────────────────────────────────
+function setGreeting() {
+  const h = new Date().getHours();
+  document.getElementById('hero-greet').textContent =
+    h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  const tod = h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : h < 22 ? 'Evening' : 'Late night';
+  document.querySelectorAll('.tod-btn').forEach(b => b.classList.toggle('on', b.dataset.tod === tod));
+}
+
+// ── DECIDE ────────────────────────────────────────────────
+function wireDecide() {
+  document.getElementById('mood-grid')?.addEventListener('click', e => {
+    const b = e.target.closest('.mood-btn'); if (!b) return;
+    document.querySelectorAll('.mood-btn').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+  });
+  document.getElementById('decide-spirits')?.addEventListener('click', e => {
+    const b = e.target.closest('.spirit-btn'); if (!b) return;
+    document.querySelectorAll('.spirit-btn').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+  });
+  document.getElementById('tod-grid')?.addEventListener('click', e => {
+    const b = e.target.closest('.tod-btn'); if (!b) return;
+    document.querySelectorAll('.tod-btn').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+  });
+  const slider = document.getElementById('sweet-slider');
+  const sMap   = { 1:'Dry / Bitter', 2:'Medium', 3:'Sweet' };
+  slider?.addEventListener('input', function() {
+    document.getElementById('sweet-val').textContent = sMap[this.value];
+  });
+}
+
+function generateDrinks() {
+  const btn = document.getElementById('gen-btn');
+  btn.classList.add('shaking');
+  setTimeout(() => btn.classList.remove('shaking'), 550);
+
+  const spirit = document.querySelector('.spirit-btn.on')?.dataset.spirit || 'any';
+  let pool = spirit !== 'any' ? allCocktails.filter(c => c.spiritKey === spirit) : [...allCocktails];
+  if (!pool.length) pool = [...allCocktails];
+  const picks = pool.sort(() => Math.random() - .5).slice(0, 3);
+
+  const ra = document.getElementById('results-area');
+  ra.style.display = 'block';
+  const rl = document.getElementById('results-list');
+  rl.innerHTML = '';
+  picks.forEach((c, i) => {
+    const wrap = document.createElement('div');
+    wrap.innerHTML = cardHTML(c, 'pour-in');
+    const card = wrap.firstElementChild;
+    if (!card) return;
+    card.style.animationDelay = `${i * 0.12}s`;
+    rl.appendChild(card);
+  });
+  ra.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── AI MIXOLOGIST ─────────────────────────────────────────
+function checkApiKey() {
+  const key = localStorage.getItem('anthropic_key');
+  document.getElementById('apikey-banner').style.display = key ? 'none' : 'block';
+}
+
+function saveApiKey() {
+  const val = document.getElementById('apikey-input').value.trim();
+  if (!val.startsWith('sk-')) { alert('Please enter a valid Anthropic API key (starts with sk-)'); return; }
+  localStorage.setItem('anthropic_key', val);
+  document.getElementById('apikey-banner').style.display = 'none';
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function chatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+}
+
+function quickPrompt(el) {
+  document.getElementById('chat-input').value = el.textContent.trim();
+  sendChat();
+}
+
+function addMessage(role, text) {
+  const el = document.createElement('div');
+  el.className = `msg ${role}`;
+  el.innerHTML = role === 'ai' ? `<strong>Mixologist</strong>${text}` : esc(text);
+  document.getElementById('chat-messages').appendChild(el);
+  el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text  = input.value.trim();
+  if (!text) return;
+
+  const key = localStorage.getItem('anthropic_key');
+  if (!key) { checkApiKey(); return; }
+
+  input.value = '';
+  input.style.height = 'auto';
+  addMessage('user', text);
+  chatHistory.push({ role: 'user', content: text });
+  // Keep last 20 messages to cap API cost + memory (10 exchanges)
+  if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+
+  const sendBtn = document.getElementById('send-btn');
+  sendBtn.disabled = true;
+
+  const loadEl = document.createElement('div');
+  loadEl.className = 'msg ai';
+  loadEl.innerHTML = `<strong>Mixologist</strong><div class="dots"><span></span><span></span><span></span></div>`;
+  document.getElementById('chat-messages').appendChild(loadEl);
+  loadEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+  const haveItems = allIngredients
+    .filter(i => getIngStatus(i) === 'have')
+    .map(i => `${i.item}${i.brand ? ' (' + i.brand + ')' : ''}`)
+    .join(', ');
+
+  const systemPrompt = `You are an expert AI mixologist for "Mixology Vault", a personal home bar app. Available ingredients: ${haveItems || 'Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo, Monkey Shoulder, Cointreau, Angostura Bitters, Prosecco'}. Cocktails in the vault: ${allCocktails.map(c => c.name).join(', ')}. Be warm, specific, and confident. Give full recipes with measurements. Keep responses concise and elegant.`;
 
   try {
-    const [cocktailsRaw, mocktailsRaw, ingredientsRaw] = await Promise.all([
-      fetch('./cocktails.json').then(r => { if (!r.ok) throw new Error('fetch'); return r.json(); }),
-      fetch('./mocktails.json').then(r => { if (!r.ok) throw new Error('fetch'); return r.json(); }),
-      fetch('./ingredients.json').then(r => { if (!r.ok) throw new Error('fetch'); return r.json(); }),
-    ]);
-
-    allIngredients = ingredientsRaw;
-
-    // Sanitise stored overrides against known IDs
-    const rawOverrides   = safeJsonParse(localStorage.getItem(KEYS.ING_OVERRIDES), {});
-    const cleanOverrides = sanitiseIngredientOverrides(rawOverrides, allIngredients);
-    safeSetItem(KEYS.ING_OVERRIDES, JSON.stringify(cleanOverrides));
-
-    allCocktails = cocktailsRaw.map(d => enrichDrink(d, allIngredients));
-    allMocktails = mocktailsRaw.map(d => enrichDrink(d, allIngredients));
-
-    // Sanitise and load favourites
-    const rawFavs   = safeJsonParse(localStorage.getItem(KEYS.FAVOURITES), []);
-    const cleanFavs = sanitiseFavourites(rawFavs, allCocktails, allMocktails);
-    favourites = new Set(cleanFavs);
-
-    loadingEl.setAttribute('hidden', '');
-    appEl.removeAttribute('hidden');
-
-    // Wire navigation
-    document.getElementById('bottom-nav').addEventListener('click', e => {
-      const btn = e.target.closest('.nav-btn');
-      if (btn && btn.dataset.screen) switchScreen(btn.dataset.screen);
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 800,
+        system: systemPrompt,
+        messages: chatHistory,
+      })
     });
-
-    // Android back / modal dismiss
-    window.addEventListener('popstate', () => {
-      if (activeModalId !== null) closeModal();
-    });
-
-    // Close modal on backdrop tap
-    document.getElementById('modal-overlay').addEventListener('click', e => {
-      if (e.target === e.currentTarget) closeModal();
-    });
-
-    setAppHeight();
-    window.addEventListener('resize',            setAppHeight, { passive: true });
-    window.addEventListener('orientationchange', () => setTimeout(setAppHeight, 300), { passive: true });
-
-    // Passive touch listeners
-    document.addEventListener('touchstart', () => {}, { passive: true });
-    document.addEventListener('touchmove',  () => {}, { passive: true });
-
-    initImageObserver();
-    switchScreen('home');
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
-    }
-
-  } catch {
-    loadingEl.setAttribute('hidden', '');
-    errorEl.removeAttribute('hidden');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message || 'API error');
+    const reply = data.content?.[0]?.text || 'Sorry, something went wrong. Try again.';
+    chatHistory.push({ role: 'assistant', content: reply });
+    loadEl.innerHTML = `<strong>Mixologist</strong>${safeMarkup(reply)}`;
+    loadEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  } catch (err) {
+    loadEl.innerHTML = `<strong>Mixologist</strong>Connection issue — ${esc(err.message || 'check your API key and try again')}.`;
   }
+  sendBtn.disabled = false;
 }
 
-// ─── Bootstrap ────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('retry-btn').addEventListener('click', init);
+// ── VAULT ICON — UNLOCK ANIMATION ────────────────────────
+function triggerVaultUnlock() {
+  const icon = document.getElementById('vault-hero-icon');
+  if (!icon) return;
+  // Remove class first (force reflow so animation restarts if clicked rapidly)
+  icon.classList.remove('unlocking');
+  void icon.offsetWidth;
+  icon.classList.add('unlocking');
+  // Clean up after animation completes
+  setTimeout(() => icon.classList.remove('unlocking'), 700);
+}
+
+// ── INIT ──────────────────────────────────────────────────
+async function init() {
+  setGreeting();
+  wireDecide();
+  buildFilterChips();
+
+  // Escape closes modal
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && activeModalId !== null) closeModal(null);
+  });
+
+  // Cocktail search
+  document.getElementById('cocktail-search')?.addEventListener('input', e => {
+    renderCocktails(activeFilter, e.target.value);
+  });
+
+  // Bar filter tabs
+  document.querySelectorAll('.bar-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.bar-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      barActiveFilter = btn.dataset.barFilter;
+      renderBar();
+    });
+  });
+
+  // FIX: Wire all card containers ONCE here, not inside render functions.
+  // Event delegation means the listener works for any dynamically inserted
+  // child cards without needing to re-attach on every re-render.
+  wireCardArea(document.getElementById('featured-card'));
+  wireCardArea(document.getElementById('home-signatures'));
+  wireCardArea(document.getElementById('cocktail-list'));
+  wireCardArea(document.getElementById('results-list'));
+
+  // Fetch sheets in parallel
+  const [ingTable, cktTable] = await Promise.all([
+    fetchSheet('Ingredients'),
+    fetchSheet('Cocktails'),
+  ]);
+
+  allIngredients = parseIngredients(ingTable);
+  allCocktails   = parseCocktails(cktTable);
+
+  renderHome();
+  renderBar();
+  renderCocktails('all', '');
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
   init();
-});
+}
