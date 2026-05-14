@@ -70,12 +70,15 @@ assert('data-screen on nav-home', html.includes('data-screen="home"'));
 assert('data-screen on nav-bar',  html.includes('data-screen="bar"'));
 assert('data-screen on nav-decide', html.includes('data-screen="decide"'));
 assert('data-screen on nav-cocktails', html.includes('data-screen="cocktails"'));
-assert('data-screen on nav-ai',   html.includes('data-screen="ai"'));
+assert('data-screen on nav-lab',  html.includes('data-screen="lab"'));
 assert('stat pills have data-screen', html.includes('stat-pill--link" data-screen='));
 assert('hero-brand-mark has id',  html.includes('id="hero-brand-mark"'));
 assert('modal-close-btn has id',  html.includes('id="modal-close-btn"'));
 assert('shuffle-btn has id',      html.includes('id="shuffle-btn"'));
-assert('save-key-btn has id',     html.includes('id="save-key-btn"'));
+assert('lab-cats div',            html.includes('id="lab-cats"'));
+assert('lab-chips-wrap div',      html.includes('id="lab-chips-wrap"'));
+assert('lab-results div',         html.includes('id="lab-results"'));
+assert('lab-clear-btn',           html.includes('id="lab-clear-btn"'));
 assert('single external script',  (html.match(/<script\s+src=/g) || []).length === 1);
 
 // ── app.js code checks ────────────────────────────────────────────────────
@@ -92,14 +95,23 @@ assert('VALID_SCREENS guard',          appjs.includes("VALID_SCREENS.has(id)"));
 assert('Object.create(null) for safe', appjs.includes('Object.create(null)'));
 assert('hero-brand-mark event wired',  appjs.includes("getElementById('hero-brand-mark')"));
 assert('shuffle-btn event wired',      appjs.includes("getElementById('shuffle-btn')"));
-assert('save-key-btn event wired',     appjs.includes("getElementById('save-key-btn')"));
 assert('modal-close-btn event wired',  appjs.includes("getElementById('modal-close-btn')"));
 assert('nav delegation wired',         appjs.includes("getElementById('nav')?.addEventListener('click'"));
 assert('stat pills wired',             appjs.includes("querySelectorAll('.stat-pill--link[data-screen]')"));
 assert('SW registration in init',      appjs.includes("serviceWorker.register('./sw.js')"));
-assert('chatHistory capped at 20',     appjs.includes('chatHistory.length > 20'));
-assert('fetchWithRetry for API',       appjs.includes('fetchWithRetry'));
-assert('anthropic-dangerous-direct-browser-access', appjs.includes('anthropic-dangerous-direct-browser-access'));
+// Vault Lab checks
+assert('VALID_SCREENS includes lab',   appjs.includes("'lab'"));
+assert('labSelectedIds state',         appjs.includes('labSelectedIds'));
+assert('labScoreCocktail defined',     appjs.includes('function labScoreCocktail'));
+assert('labBuildKeys defined',         appjs.includes('function labBuildKeys'));
+assert('buildLabCatTabs defined',      appjs.includes('function buildLabCatTabs'));
+assert('renderLabChips defined',       appjs.includes('function renderLabChips'));
+assert('renderLabResults defined',     appjs.includes('function renderLabResults'));
+assert('clearLabSelection defined',    appjs.includes('function clearLabSelection'));
+assert('lab-cats delegated',           appjs.includes("getElementById('lab-cats')"));
+assert('lab-chips-wrap delegated',     appjs.includes("getElementById('lab-chips-wrap')"));
+assert('lab-results delegated',        appjs.includes("getElementById('lab-results')"));
+assert('lab-clear-btn wired',          appjs.includes("getElementById('lab-clear-btn')"));
 
 // ── sw.js checks ──────────────────────────────────────────────────────────
 console.log('sw.js checks');

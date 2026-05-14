@@ -14,8 +14,11 @@ let favourites        = new Set();
 let activeFilter      = 'all';
 let activeUnit        = 'oz';
 let activeModalId     = null;
-let chatHistory       = [];
 let barActiveFilter   = 'all';
+
+// ── VAULT LAB STATE ──────────────────────────────────────
+let labSelectedIds  = new Set();  // ingredient IDs selected in Vault Lab
+let labActiveCat    = 'all';      // active category tab in Vault Lab
 
 // ── INGREDIENT OVERRIDES ─────────────────────────────────
 // { [ingId]: 'have' | 'need' } — persisted to localStorage
@@ -406,7 +409,7 @@ function closeModal(e) {
 }
 
 // ── NAVIGATION ────────────────────────────────────────────
-const VALID_SCREENS = new Set(['home','bar','cocktails','decide','ai']);
+const VALID_SCREENS = new Set(['home','bar','cocktails','decide','lab']);
 function switchScreen(id, btn) {
   if (!VALID_SCREENS.has(id)) return; // reject unknown screen IDs
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -415,7 +418,6 @@ function switchScreen(id, btn) {
   if (sc) sc.classList.add('active');
   if (btn?.classList) btn.classList.add('active');
   document.getElementById('scroll-area').scrollTop = 0;
-  if (id === 'ai') checkApiKey();
 }
 
 // ── GREETING ──────────────────────────────────────────────
@@ -476,115 +478,236 @@ function generateDrinks() {
   ra.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ── AI HELPERS ────────────────────────────────────────────
-async function fetchWithRetry(fn, maxRetries = 2) {
-  for (let i = 0; i <= maxRetries; i++) {
-    try { return await fn(); }
-    catch (err) {
-      if (err.status === 429 && i < maxRetries) {
-        await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
-        continue;
-      }
-      throw err;
+// ── VAULT LAB ─────────────────────────────────────────────
+// Maps ingredient category keys to display metadata for the Lab UI
+const LAB_CAT_META = {
+  'spirits':   { icon: '🥃', label: 'Spirits'  },
+  'liqueurs':  { icon: '🍶', label: 'Mixers'   },
+  'bitters':   { icon: '🌿', label: 'Bitters'  },
+  'juices':    { icon: '🍋', label: 'Citrus'   },
+  'syrups':    { icon: '🍯', label: 'Syrups'   },
+  'garnishes': { icon: '🌱', label: 'Garnish'  },
+  'wine':      { icon: '🍷', label: 'Wine'     },
+  'top up':    { icon: '💧', label: 'Top Up'   },
+};
+
+// Category display order
+const LAB_CAT_ORDER = ['spirits','liqueurs','bitters','juices','syrups','garnishes','wine','top up'];
+
+// Spirit-keyed gradient colours for the card accent strip
+const LAB_SPIRIT_GRAD = {
+  gin:     'linear-gradient(160deg, #7c3aed 0%, #a78bfa 100%)',
+  whisky:  'linear-gradient(160deg, #c8850a 0%, #f0a830 100%)',
+  tequila: 'linear-gradient(160deg, #16a34a 0%, #4ade80 100%)',
+  rum:     'linear-gradient(160deg, #9f1239 0%, #e11d48 100%)',
+  vodka:   'linear-gradient(160deg, #0284c7 0%, #38bdf8 100%)',
+  other:   'linear-gradient(160deg, #3f3f3f 0%, #6b6b6b 100%)',
+};
+
+// ── Fuzzy ingredient matching ─────────────────────────────
+// Builds an array of lowercase search keys for an ingredient from ingredients.json.
+// Strategy: full name + brand (year/parenthetical stripped) so that cocktail
+// ingredient lines like "Empress 1908 Gin", "Glenfiddich 12 Scotch", "Cointreau",
+// "Angostura Bitters" all resolve to the correct ingredients.json entry.
+function labBuildKeys(ing) {
+  const keys = [];
+  keys.push(ing.item.toLowerCase().trim());
+  if (ing.brand) {
+    const b = ing.brand
+      .replace(/\s*[\(\[].*/, '')                      // strip "(Costco)", "[Dry/Blanc]"
+      .replace(/\s+\d+\s*(years?|yr|year)\b.*/i, '')   // strip " 12 Year", " 12 years"
+      .trim().toLowerCase();
+    if (b.length >= 3) keys.push(b);
+  }
+  return keys;
+}
+
+// Returns true if a single cocktail ingredient line (e.g. "Angostura Bitters")
+// is satisfied by a given ingredient from ingredients.json.
+function labIngMatchesLine(ing, cocktailLine) {
+  const line = cocktailLine.toLowerCase().trim();
+  if (!line) return false;
+  // Bidirectional: "angostura bitters".includes("angostura") ✓
+  //                "american vodka".includes("vodka")        ✓ (key includes line)
+  return labBuildKeys(ing).some(k => line.includes(k) || k.includes(line));
+}
+
+// Scores a cocktail against a set of selected ingredient objects.
+// Returns { matched, total, score, detail } where detail is per-line hit info.
+function labScoreCocktail(cocktail, selectedIngs) {
+  const lines = splitLines(cocktail.ingredients);
+  if (!lines.length) return null;
+  let matched = 0;
+  const detail = lines.map(line => {
+    const hit = selectedIngs.some(ing => labIngMatchesLine(ing, line));
+    if (hit) matched++;
+    return { line, hit };
+  });
+  return { matched, total: lines.length, score: matched / lines.length, detail };
+}
+
+// ── Lab category tabs ─────────────────────────────────────
+function buildLabCatTabs() {
+  const el = document.getElementById('lab-cats');
+  if (!el) return;
+  // Only show categories that exist in the loaded ingredient set
+  const presentCats = LAB_CAT_ORDER.filter(cat =>
+    allIngredients.some(i => i.category.toLowerCase() === cat));
+  const tabs = ['all', ...presentCats];
+  el.innerHTML = tabs.map(cat => {
+    const meta = cat === 'all' ? { icon: '✦', label: 'All' } : (LAB_CAT_META[cat] || { icon: '●', label: cat });
+    return `<button class="lab-cat-btn ${cat === labActiveCat ? 'active' : ''}" data-lab-cat="${cat}">
+      <span class="lc-icon">${meta.icon}</span>${meta.label}
+    </button>`;
+  }).join('');
+}
+
+// ── Lab chip rendering ────────────────────────────────────
+function renderLabChips() {
+  const el = document.getElementById('lab-chips-wrap');
+  if (!el) return;
+  // Filter by active category
+  const ings = labActiveCat === 'all'
+    ? allIngredients
+    : allIngredients.filter(i => i.category.toLowerCase() === labActiveCat);
+
+  if (labActiveCat === 'all') {
+    // Group by category with headings
+    const groups = {};
+    for (const ing of ings) {
+      const key = ing.category.toLowerCase();
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(ing);
     }
+    const orderedKeys = [...new Set([...LAB_CAT_ORDER, ...Object.keys(groups)])];
+    let html = '';
+    for (const key of orderedKeys) {
+      if (!groups[key]?.length) continue;
+      const meta = LAB_CAT_META[key] || { icon: '●', label: key };
+      html += `<div class="lab-cat-group">
+        <div class="lab-group-hd">
+          <span class="lab-group-icon">${meta.icon}</span>
+          <span class="lab-group-label">${meta.label}</span>
+        </div>
+        <div class="lab-chip-row">${groups[key].map(labChipHTML).join('')}</div>
+      </div>`;
+    }
+    el.innerHTML = html;
+  } else {
+    el.innerHTML = `<div class="lab-chip-row" style="padding:0 16px 4px">${ings.map(labChipHTML).join('')}</div>`;
   }
 }
 
-// ── AI MIXOLOGIST ─────────────────────────────────────────
-function checkApiKey() {
-  const key = localStorage.getItem('anthropic_key');
-  document.getElementById('apikey-banner').style.display = key ? 'none' : 'block';
+function labChipHTML(ing) {
+  const sel = labSelectedIds.has(ing.id);
+  return `<button class="lab-chip${sel ? ' selected' : ''}" data-lab-id="${esc(ing.id)}">
+    ${sel ? '<span class="lchip-check">✓</span>' : ''}
+    <span class="lchip-name">${esc(ing.item)}</span>
+  </button>`;
 }
 
-function saveApiKey() {
-  const val = document.getElementById('apikey-input').value.trim();
-  if (!val.startsWith('sk-')) { alert('Please enter a valid Anthropic API key (starts with sk-)'); return; }
-  localStorage.setItem('anthropic_key', val);
-  document.getElementById('apikey-banner').style.display = 'none';
+// ── Lab action bar (shows selected count + clear) ─────────
+function updateLabActionBar() {
+  const bar = document.getElementById('lab-action-bar');
+  const cnt = document.getElementById('lab-sel-count');
+  if (!bar || !cnt) return;
+  const n = labSelectedIds.size;
+  bar.classList.toggle('visible', n > 0);
+  cnt.textContent = `${n} ingredient${n !== 1 ? 's' : ''} selected`;
 }
 
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-}
+// ── Lab results rendering ─────────────────────────────────
+function renderLabResults() {
+  const el = document.getElementById('lab-results');
+  if (!el) return;
 
-function chatKeydown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
-}
-
-function quickPrompt(el) {
-  document.getElementById('chat-input').value = el.textContent.trim();
-  sendChat();
-}
-
-function addMessage(role, text) {
-  const el = document.createElement('div');
-  el.className = `msg ${role}`;
-  el.innerHTML = role === 'ai' ? `<strong>Mixologist</strong>${safeMarkup(text)}` : esc(text);
-  document.getElementById('chat-messages').appendChild(el);
-  el.scrollIntoView({ behavior: 'smooth', block: 'end' });
-}
-
-async function sendChat() {
-  const input = document.getElementById('chat-input');
-  const text  = input.value.trim();
-  if (!text) return;
-
-  const key = localStorage.getItem('anthropic_key');
-  if (!key) { checkApiKey(); return; }
-
-  input.value = '';
-  input.style.height = 'auto';
-  addMessage('user', text);
-  chatHistory.push({ role: 'user', content: text });
-  // Keep last 20 messages to cap API cost + memory (10 exchanges)
-  if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
-
-  const sendBtn = document.getElementById('send-btn');
-  sendBtn.disabled = true;
-
-  const loadEl = document.createElement('div');
-  loadEl.className = 'msg ai';
-  loadEl.innerHTML = `<strong>Mixologist</strong><div class="dots"><span></span><span></span><span></span></div>`;
-  document.getElementById('chat-messages').appendChild(loadEl);
-  loadEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
-  const haveItems = allIngredients
-    .filter(i => getIngStatus(i) === 'have')
-    .map(i => `${i.item}${i.brand ? ' (' + i.brand + ')' : ''}`)
-    .join(', ');
-
-  const systemPrompt = `You are an expert AI mixologist for "Mixology Vault", a personal home bar app. Available ingredients: ${haveItems || 'Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo, Monkey Shoulder, Cointreau, Angostura Bitters, Prosecco'}. Cocktails in the vault: ${allCocktails.map(c => c.name).join(', ')}. Be warm, specific, and confident. Give full recipes with measurements. Keep responses concise and elegant.`;
-
-  try {
-    const data = await fetchWithRetry(async () => {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': key,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 800,
-          system: systemPrompt,
-          messages: chatHistory,
-        })
-      });
-      const json = await res.json();
-      if (json.error) { const e = new Error(json.error.message || 'API error'); e.status = res.status; throw e; }
-      return json;
-    });
-    const reply = data.content?.[0]?.text || 'Sorry, something went wrong. Try again.';
-    chatHistory.push({ role: 'assistant', content: reply });
-    loadEl.innerHTML = `<strong>Mixologist</strong>${safeMarkup(reply)}`;
-    loadEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  } catch (err) {
-    loadEl.innerHTML = `<strong>Mixologist</strong>Connection issue — ${esc(err.message || 'check your API key and try again')}.`;
+  if (labSelectedIds.size === 0) {
+    el.innerHTML = `<div class="lab-empty">
+      <div class="lab-empty-icon">🧪</div>
+      <div class="lab-empty-title">Your lab awaits</div>
+      <div class="lab-empty-sub">Select ingredients above to instantly discover every cocktail you can craft right now</div>
+    </div>`;
+    return;
   }
-  sendBtn.disabled = false;
+
+  const selectedIngs = allIngredients.filter(i => labSelectedIds.has(i.id));
+
+  // Score all cocktails, keep any with ≥1 match
+  const scored = allCocktails
+    .map(c => ({ c, r: labScoreCocktail(c, selectedIngs) }))
+    .filter(x => x.r && x.r.matched > 0)
+    .sort((a, b) => b.r.score - a.r.score || b.r.matched - a.r.matched);
+
+  if (scored.length === 0) {
+    el.innerHTML = `<div class="lab-empty">
+      <div class="lab-empty-icon">🥃</div>
+      <div class="lab-empty-title">No matches yet</div>
+      <div class="lab-empty-sub">Try adding more ingredients — even one extra can unlock a dozen cocktails</div>
+    </div>`;
+    return;
+  }
+
+  const perfect = scored.filter(x => x.r.score === 1);
+  const partial = scored.filter(x => x.r.score < 1);
+
+  let html = `<div class="lab-results-hd">
+    <span class="lab-results-count">${scored.length} cocktail${scored.length !== 1 ? 's' : ''} found</span>
+    ${perfect.length ? `<span class="lab-perfect-badge">${perfect.length} perfect match${perfect.length !== 1 ? 'es' : ''}</span>` : ''}
+  </div>`;
+
+  if (perfect.length) {
+    html += `<div class="lab-result-section">
+      <div class="lab-sec-label">✓ Can Make Now</div>
+      <div class="lab-card-list">${perfect.map(x => labCardHTML(x.c, x.r)).join('')}</div>
+    </div>`;
+  }
+  if (partial.length) {
+    html += `<div class="lab-result-section">
+      <div class="lab-sec-label">◑ Almost There</div>
+      <div class="lab-card-list">${partial.slice(0, 18).map(x => labCardHTML(x.c, x.r)).join('')}</div>
+    </div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+function labCardHTML(cocktail, result) {
+  const perfect = result.score === 1;
+  const grad    = LAB_SPIRIT_GRAD[cocktail.spiritKey] || LAB_SPIRIT_GRAD.other;
+  const diff    = result.total <= 2 ? 'Easy' : result.total <= 4 ? 'Medium' : 'Advanced';
+  const diffCls = result.total <= 2 ? 'diff-easy' : result.total <= 4 ? 'diff-medium' : 'diff-hard';
+  const pct     = Math.round(result.score * 100);
+  const missing = result.detail.filter(d => !d.hit).map(d => d.line);
+  const missingNote = !perfect && missing.length
+    ? `<div class="lab-card-missing">Need: ${esc(missing.slice(0,2).join(', '))}${missing.length > 2 ? '…' : ''}</div>`
+    : '';
+
+  return `<div class="lab-cocktail-card${perfect ? ' perfect' : ''}" data-id="${esc(cocktail.id)}">
+    <div class="lab-card-strip" style="background:${grad}"></div>
+    <div class="lab-card-body">
+      <div class="lab-card-top">
+        <div class="lab-card-name">${esc(cocktail.name)}</div>
+        <div class="lab-card-badge${perfect ? ' badge-perfect' : ' badge-partial'}">
+          ${perfect ? '✓' : `${result.matched}/${result.total}`}
+        </div>
+      </div>
+      ${cocktail.baseSpirit ? `<div class="lab-card-spirit">${esc(cocktail.baseSpirit)}</div>` : ''}
+      ${cocktail.description ? `<div class="lab-card-desc">${esc(cocktail.description)}</div>` : ''}
+      <div class="lab-card-footer">
+        <span class="lab-diff ${diffCls}">${diff}</span>
+        <div class="lab-match-bar"><div class="lab-match-fill" style="width:${pct}%"></div></div>
+        <span class="lab-match-pct">${pct}%</span>
+      </div>
+      ${missingNote}
+    </div>
+  </div>`;
+}
+
+function clearLabSelection() {
+  labSelectedIds.clear();
+  updateLabActionBar();
+  renderLabChips();
+  renderLabResults();
 }
 
 // ── VAULT ICON — UNLOCK ANIMATION ────────────────────────
@@ -632,22 +755,37 @@ async function init() {
   // Generate drinks (Decide screen)
   document.getElementById('gen-btn')?.addEventListener('click', generateDrinks);
 
-  // AI screen — save API key
-  document.getElementById('save-key-btn')?.addEventListener('click', saveApiKey);
-
-  // AI screen — quick prompt chips
-  document.querySelector('.suggest-chips')?.addEventListener('click', e => {
-    const chip = e.target.closest('.suggest-chip');
-    if (chip) quickPrompt(chip);
+  // ── Vault Lab ─────────────────────────────────────────────
+  // Category tab clicks — delegate on the tab row (wired once, always present in DOM)
+  document.getElementById('lab-cats')?.addEventListener('click', e => {
+    const btn = e.target.closest('.lab-cat-btn');
+    if (!btn) return;
+    labActiveCat = btn.dataset.labCat;
+    document.querySelectorAll('.lab-cat-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.labCat === labActiveCat));
+    renderLabChips();
   });
 
-  // AI screen — chat textarea auto-resize and Enter-to-send
-  const chatInput = document.getElementById('chat-input');
-  chatInput?.addEventListener('input', function() { autoResize(this); });
-  chatInput?.addEventListener('keydown', chatKeydown);
+  // Ingredient chip clicks — delegate on the chips container
+  document.getElementById('lab-chips-wrap')?.addEventListener('click', e => {
+    const chip = e.target.closest('.lab-chip[data-lab-id]');
+    if (!chip) return;
+    const id = chip.dataset.labId;
+    if (labSelectedIds.has(id)) labSelectedIds.delete(id);
+    else                         labSelectedIds.add(id);
+    updateLabActionBar();
+    renderLabChips();
+    renderLabResults();
+  });
 
-  // AI screen — send button
-  document.getElementById('send-btn')?.addEventListener('click', sendChat);
+  // Results card clicks — delegate on the results container
+  document.getElementById('lab-results')?.addEventListener('click', e => {
+    const card = e.target.closest('.lab-cocktail-card[data-id]');
+    if (card) openModal(card.dataset.id);
+  });
+
+  // Clear selection button
+  document.getElementById('lab-clear-btn')?.addEventListener('click', clearLabSelection);
 
   // Bottom nav — delegate all nav-button clicks via data-screen attribute
   document.getElementById('nav')?.addEventListener('click', e => {
@@ -699,6 +837,11 @@ async function init() {
   renderBar();
   renderCocktails('all', '');
 
+  // Vault Lab — build category tabs and render initial state (now data is loaded)
+  buildLabCatTabs();
+  renderLabChips();
+  renderLabResults();
+
   // Service Worker registration (moved here from inline script in HTML)
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW:', err));
@@ -716,8 +859,8 @@ function handleFragmentShortcut() {
   const hash = window.location.hash;
   if (hash === '#decide') {
     switchScreen('decide', document.getElementById('nav-decide'));
-  } else if (hash === '#ai') {
-    switchScreen('ai', document.getElementById('nb-ai'));
+  } else if (hash === '#lab') {
+    switchScreen('lab', document.getElementById('nb-lab'));
   }
   if (hash) window.history.replaceState(null, '', './index.html');
 }

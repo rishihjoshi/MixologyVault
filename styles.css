@@ -610,32 +610,321 @@ body {
 #results-area { padding: 0 16px; margin-top: 20px; display: none; }
 
 /* ══════════════════════════════════════════
-   AI MIXOLOGIST
+   VAULT LAB
 ══════════════════════════════════════════ */
-#chat-messages { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; min-height: 200px; }
-.msg           { max-width: 88%; padding: 13px 15px; border-radius: 18px; font-size: 14px; line-height: 1.58; font-weight: 300; animation: fadeUp .28s ease; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
-.msg.ai        { background: var(--card); border: 0.5px solid var(--border2); border-radius: 4px 18px 18px 18px; align-self: flex-start; }
-.msg.ai strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--amber-l); margin-bottom: 5px; font-weight: 600; }
-.msg.user      { background: var(--amber-glow); border: 0.5px solid var(--amber); border-radius: 18px 4px 18px 18px; align-self: flex-end; }
 
-.suggest-chips { display: flex; gap: 8px; flex-wrap: wrap; padding: 0 16px 12px; }
-.suggest-chip  { background: var(--card); border: 0.5px solid var(--border2); border-radius: 20px; padding: 8px 14px; font-size: 12px; color: var(--muted); cursor: pointer; min-height: 36px; display: flex; align-items: center; transition: border-color .2s, color .2s; }
-.suggest-chip:active { border-color: var(--amber); color: var(--amber-l); }
+/* Category filter tabs — sticky strip below page-header */
+.lab-cats {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+  border-bottom: 0.5px solid var(--border);
+}
+.lab-cats::-webkit-scrollbar { display: none; }
 
-.chat-bar          { padding: 10px 16px calc(10px + var(--safe-b)); background: rgba(10,10,10,.97); border-top: 0.5px solid var(--border); display: flex; gap: 10px; align-items: flex-end; }
-.chat-bar textarea { flex: 1; background: var(--card); border: 0.5px solid var(--border2); border-radius: var(--r); padding: 11px 14px; color: var(--text); font-family: var(--font-b); font-size: 16px; resize: none; outline: none; max-height: 110px; overflow-y: auto; line-height: 1.5; transition: border-color .2s; min-height: 44px; -webkit-appearance: none; }
-.chat-bar textarea:focus       { border-color: var(--amber); }
-.chat-bar textarea::placeholder{ color: var(--muted); }
-.send-btn          { width: 44px; height: 44px; background: var(--amber); border: none; border-radius: var(--r); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: transform .1s; -webkit-appearance: none; }
-.send-btn:active   { transform: scale(.9); }
-.send-btn:disabled { background: var(--muted2); cursor: not-allowed; }
-.send-btn svg      { width: 20px; height: 20px; fill: white; }
+.lab-cat-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--card);
+  border: 0.5px solid var(--border2);
+  border-radius: 22px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-b);
+  color: var(--muted);
+  white-space: nowrap;
+  cursor: pointer;
+  min-height: 38px;
+  transition: all .18s;
+  -webkit-appearance: none;
+}
+.lab-cat-btn .lc-icon   { font-size: 13px; line-height: 1; }
+.lab-cat-btn.active     { background: var(--amber-glow); border-color: var(--amber); color: var(--amber-l); }
+.lab-cat-btn:active     { transform: scale(.94); }
 
-#apikey-banner { margin: 12px 16px; background: rgba(200,133,10,.06); border: 0.5px solid var(--amber); border-radius: var(--r); padding: 16px; display: none; }
-#apikey-banner p     { font-size: 13px; line-height: 1.5; }
-#apikey-banner input { width: 100%; margin-top: 10px; background: var(--card); border: 0.5px solid var(--border2); border-radius: 10px; padding: 11px 13px; color: var(--text); font-family: monospace; font-size: 16px; outline: none; min-height: 44px; -webkit-appearance: none; }
-.save-key-btn { margin-top: 8px; width: 100%; background: var(--amber); border: none; border-radius: 10px; padding: 12px; color: white; font-family: var(--font-b); font-size: 14px; font-weight: 600; cursor: pointer; min-height: 44px; -webkit-appearance: none; }
+/* Selection action bar — slides in when ingredients are selected */
+.lab-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: rgba(200,133,10,.06);
+  border-bottom: 0.5px solid rgba(200,133,10,.25);
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height .22s ease, opacity .22s ease, padding .22s ease;
+}
+.lab-action-bar.visible {
+  max-height: 52px;
+  opacity: 1;
+  padding: 10px 16px;
+}
+.lab-sel-count {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--amber-l);
+}
+.lab-clear-btn {
+  background: none;
+  border: 0.5px solid rgba(200,133,10,.5);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-b);
+  color: var(--amber-l);
+  cursor: pointer;
+  min-height: 32px;
+  -webkit-appearance: none;
+  transition: background .18s;
+  letter-spacing: .02em;
+}
+.lab-clear-btn:active { background: var(--amber-glow); }
+
+/* Ingredient chips grid */
+.lab-chips-wrap {
+  padding: 14px 0 4px;
+}
+.lab-cat-group {
+  padding: 0 16px;
+  margin-bottom: 18px;
+}
+.lab-group-hd {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 9px;
+}
+.lab-group-icon  { font-size: 14px; line-height: 1; }
+.lab-group-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.lab-chip-row { display: flex; flex-wrap: wrap; gap: 7px; }
+
+.lab-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--card);
+  border: 0.5px solid var(--border2);
+  border-radius: 20px;
+  padding: 7px 13px;
+  font-size: 13px;
+  font-family: var(--font-b);
+  color: var(--text);
+  cursor: pointer;
+  min-height: 36px;
+  white-space: nowrap;
+  -webkit-appearance: none;
+  transition: border-color .15s, background .15s, transform .1s;
+}
+.lab-chip:active     { transform: scale(.94); }
+.lab-chip.selected   { background: var(--amber-glow); border-color: var(--amber); color: var(--amber-l); }
+.lchip-check { font-size: 10px; font-weight: 700; color: var(--amber); flex-shrink: 0; }
+.lchip-name  { font-weight: 400; }
+
+/* Results area */
+.lab-results { padding: 0 0 20px; }
+
+/* Empty state */
+.lab-empty {
+  text-align: center;
+  padding: 52px 24px 36px;
+}
+.lab-empty-icon {
+  font-size: 46px;
+  display: block;
+  margin-bottom: 14px;
+  animation: lab-float 3s ease-in-out infinite;
+}
+@keyframes lab-float {
+  0%,100% { transform: translateY(0);   }
+  50%      { transform: translateY(-6px); }
+}
+.lab-empty-title {
+  font-family: var(--font-d);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.lab-empty-sub {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+  font-weight: 300;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+/* Results header */
+.lab-results-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 6px;
+}
+.lab-results-count {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.lab-perfect-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--amber-l);
+  background: var(--amber-glow);
+  border: 0.5px solid rgba(200,133,10,.4);
+  border-radius: 12px;
+  padding: 3px 10px;
+}
+
+/* Result section */
+.lab-result-section { padding: 0 16px; margin-bottom: 14px; }
+.lab-sec-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  padding-top: 2px;
+}
+.lab-card-list { display: flex; flex-direction: column; gap: 9px; }
+
+/* Cocktail result card */
+.lab-cocktail-card {
+  display: flex;
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-radius: var(--rlg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .2s, transform .14s;
+  animation: pour .32s cubic-bezier(.16,1,.3,1) both;
+}
+.lab-cocktail-card:active  { transform: scale(.984); }
+.lab-cocktail-card.perfect { border-color: rgba(200,133,10,.55); background: linear-gradient(135deg, var(--card) 0%, rgba(200,133,10,.05) 100%); }
+
+/* Coloured left-edge accent strip — shows spirit type */
+.lab-card-strip { width: 5px; flex-shrink: 0; }
+
+.lab-card-body  { flex: 1; padding: 13px 14px; min-width: 0; }
+
+.lab-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 3px;
+}
+.lab-card-name {
+  font-family: var(--font-d);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  flex: 1;
+}
+.lab-card-badge {
+  flex-shrink: 0;
+  border-radius: 12px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  min-height: 22px;
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+.badge-perfect { background: var(--amber-glow); border: 0.5px solid var(--amber); color: var(--amber-l); }
+.badge-partial { background: var(--surface);    border: 0.5px solid var(--border2); color: var(--muted); }
+
+.lab-card-spirit {
+  font-family: var(--font-d);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--amber-l);
+  margin-bottom: 4px;
+}
+.lab-card-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  font-weight: 300;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 9px;
+}
+.lab-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Difficulty badge */
+.lab-diff {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .03em;
+  border-radius: 10px;
+  padding: 2px 9px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.diff-easy   { background: rgba(22,163,74,.1);   color: #4ade80; border: 0.5px solid rgba(22,163,74,.3);  }
+.diff-medium { background: rgba(200,133,10,.1);  color: var(--amber-l); border: 0.5px solid rgba(200,133,10,.3); }
+.diff-hard   { background: rgba(239,68,68,.08);  color: #f87171; border: 0.5px solid rgba(239,68,68,.25); }
+
+/* Match progress bar */
+.lab-match-bar {
+  flex: 1;
+  height: 3px;
+  background: var(--border2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.lab-match-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--amber), var(--amber-l));
+  border-radius: 2px;
+  transition: width .35s cubic-bezier(.16,1,.3,1);
+}
+.lab-match-pct {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  min-width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Missing ingredient hint */
+.lab-card-missing {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--muted2);
+  font-style: italic;
+  line-height: 1.4;
+}
 
 /* ══════════════════════════════════════════
    MODAL

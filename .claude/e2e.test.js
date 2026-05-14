@@ -54,14 +54,16 @@ assert('no onsubmit=',  !html.includes('onsubmit='));
 
 // ── Five-screen navigation structure ─────────────────────────────────────
 console.log('Five-screen navigation');
-const screens = ['home','bar','cocktails','decide','ai'];
-screens.forEach(s => {
+const screens = ['home','bar','cocktails','decide','lab'];
+const labScreens = ['home','bar','cocktails','decide','lab'];
+labScreens.forEach(s => {
   assert('screen-' + s + ' exists',         html.includes('id="screen-' + s + '"'));
   assert('nav data-screen=' + s,            html.includes('data-screen="' + s + '"'));
 });
 assert('nav element present',               html.includes('id="nav"'));
 assert('5 nav buttons with data-screen',    (html.match(/data-screen="/g) || []).length >= 5);
 assert('home screen is active by default',  html.includes('class="screen active" id="screen-home"'));
+assert('no screen-ai (replaced by lab)',    !html.includes('id="screen-ai"'));
 
 // ── Home screen flows ─────────────────────────────────────────────────────
 console.log('Home screen flows');
@@ -102,21 +104,33 @@ assert('tod-grid present',              html.includes('id="tod-grid"'));
 assert('spirit-btns present',           html.includes('id="decide-spirits"'));
 assert('gen-btn wired in js',           appjs.includes("getElementById('gen-btn')"));
 
-// ── AI screen & chat flow ─────────────────────────────────────────────────
-console.log('AI screen');
-assert('apikey-input present',          html.includes('id="apikey-input"'));
-assert('save-key-btn id',               html.includes('id="save-key-btn"'));
-assert('chat-messages div',             html.includes('id="chat-messages"'));
-assert('chat-input textarea',           html.includes('id="chat-input"'));
-assert('send-btn id',                   html.includes('id="send-btn"'));
-assert('suggest-chips present',         html.includes('class="suggest-chips"'));
-assert('suggest-chips wired in js',     appjs.includes("querySelector('.suggest-chips')"));
-assert('save-key-btn wired in js',      appjs.includes("getElementById('save-key-btn')"));
-assert('send-btn wired in js',          appjs.includes("getElementById('send-btn')"));
-assert('chat-input wired in js',        appjs.includes("getElementById('chat-input')"));
-assert('chatHistory capped at 20',      appjs.includes('chatHistory.length > 20'));
-assert('fetchWithRetry used for API',   appjs.includes('fetchWithRetry'));
-assert('dangerous-direct-browser-access header', appjs.includes('anthropic-dangerous-direct-browser-access'));
+// ── Vault Lab screen ──────────────────────────────────────────────────────
+console.log('Vault Lab screen');
+assert('screen-lab exists',             html.includes('id="screen-lab"'));
+assert('lab-cats div',                  html.includes('id="lab-cats"'));
+assert('lab-action-bar div',            html.includes('id="lab-action-bar"'));
+assert('lab-sel-count span',            html.includes('id="lab-sel-count"'));
+assert('lab-clear-btn present',         html.includes('id="lab-clear-btn"'));
+assert('lab-chips-wrap div',            html.includes('id="lab-chips-wrap"'));
+assert('lab-results div',               html.includes('id="lab-results"'));
+assert('nb-lab nav button',             html.includes('id="nb-lab"'));
+assert('VALID_SCREENS includes lab',    appjs.includes("'lab'"));
+assert('no AI in VALID_SCREENS',        !appjs.includes("'ai'"));
+assert('labSelectedIds state',          appjs.includes('labSelectedIds'));
+assert('labBuildKeys defined',          appjs.includes('function labBuildKeys'));
+assert('labScoreCocktail defined',      appjs.includes('function labScoreCocktail'));
+assert('buildLabCatTabs defined',       appjs.includes('function buildLabCatTabs'));
+assert('renderLabChips defined',        appjs.includes('function renderLabChips'));
+assert('renderLabResults defined',      appjs.includes('function renderLabResults'));
+assert('clearLabSelection defined',     appjs.includes('function clearLabSelection'));
+assert('labCardHTML defined',           appjs.includes('function labCardHTML'));
+assert('labChipHTML defined',           appjs.includes('function labChipHTML'));
+assert('LAB_SPIRIT_GRAD defined',       appjs.includes('LAB_SPIRIT_GRAD'));
+assert('year-strip in labBuildKeys',    appjs.includes('years?|yr|year'));
+assert('lab-cats event wired',          appjs.includes("getElementById('lab-cats')"));
+assert('lab-chips-wrap event wired',    appjs.includes("getElementById('lab-chips-wrap')"));
+assert('lab-results event wired',       appjs.includes("getElementById('lab-results')"));
+assert('lab-clear-btn event wired',     appjs.includes("getElementById('lab-clear-btn')"));
 
 // ── Modal flow ─────────────────────────────────────────────────────────────
 console.log('Modal flow');
