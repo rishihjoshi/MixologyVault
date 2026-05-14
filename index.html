@@ -160,34 +160,29 @@
       </div>
     </div>
 
-    <!-- ══ AI MIXOLOGIST ══ -->
-    <div class="screen" id="screen-ai">
-      <div class="page-header"><h1>AI <em>Mixologist</em></h1><p>Tell me what you're in the mood for</p></div>
-      <div id="apikey-banner">
-        <p>Enter your Anthropic API key to activate the AI Mixologist. Your key is stored locally on this device only.</p>
-        <input type="password" id="apikey-input" placeholder="sk-ant-…" style="font-size:16px" autocomplete="off" autocorrect="off" spellcheck="false">
-        <button class="save-key-btn" id="save-key-btn">Save Key &amp; Start Chatting</button>
+    <!-- ══ VAULT LAB ══ -->
+    <div class="screen" id="screen-lab">
+      <div class="page-header">
+        <h1>Vault <em>Lab</em></h1>
+        <p>Select ingredients · Discover your cocktails</p>
       </div>
-      <div class="suggest-chips">
-        <div class="suggest-chip">What can I make tonight?</div>
-        <div class="suggest-chip">Something with Empress gin</div>
-        <div class="suggest-chip">A smoky Scotch cocktail</div>
-        <div class="suggest-chip">Impress my wife tonight</div>
-        <div class="suggest-chip">Tequila, not too sweet</div>
-        <div class="suggest-chip">Surprise me!</div>
+
+      <!-- Category filter tabs (sticky) -->
+      <div class="lab-cats" id="lab-cats"></div>
+
+      <!-- Selection action bar — appears when ingredients are selected -->
+      <div class="lab-action-bar" id="lab-action-bar">
+        <span class="lab-sel-count" id="lab-sel-count">0 selected</span>
+        <button class="lab-clear-btn" id="lab-clear-btn">Clear ✕</button>
       </div>
-      <div id="chat-messages">
-        <div class="msg ai">
-          <strong>Mixologist</strong>
-          Welcome to your Vault! I know your bar — Empress 1908 Gin, Glenfiddich 12 Year, Kirkland Tequila Añejo and more. Tell me your mood and I'll craft something perfect.
-        </div>
+
+      <!-- Ingredient chips -->
+      <div class="lab-chips-wrap" id="lab-chips-wrap">
+        <div class="loader" style="padding:20px 16px"><div class="dots"><span></span><span></span><span></span></div></div>
       </div>
-      <div class="chat-bar">
-        <textarea id="chat-input" rows="1" placeholder="Ask your mixologist…" style="font-size:16px" autocomplete="off" spellcheck="false"></textarea>
-        <button class="send-btn" id="send-btn">
-          <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
-        </button>
-      </div>
+
+      <!-- Results section -->
+      <div class="lab-results" id="lab-results"></div>
     </div>
 
   </div><!-- /scroll-area -->
@@ -216,9 +211,13 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 3l4 8 4-8M5 8h14l-2 10H7L5 8zM12 18v3M9 21h6"/></svg>
       <span>Cocktails</span>
     </button>
-    <button class="nav-btn" id="nb-ai" data-screen="ai">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-      <span>AI Mix</span>
+    <button class="nav-btn" id="nb-lab" data-screen="lab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M9 3h6" stroke-linecap="round"/>
+        <path d="M10 3v6.8L5.4 18.2A2 2 0 007.2 21h9.6a2 2 0 001.8-2.8L14 9.8V3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M7.5 16h3M8 18.5h2.5" stroke-linecap="round" opacity=".5"/>
+      </svg>
+      <span>Lab</span>
     </button>
   </nav>
 
