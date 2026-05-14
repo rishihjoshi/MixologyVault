@@ -143,7 +143,7 @@ function cardHTML(c, extraClass) {
 }
 
 function esc(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
 }
 
 // safeMarkup: for AI replies — escape all HTML, then allow line breaks only.
@@ -183,7 +183,7 @@ function renderHome() {
   const sigEl = document.getElementById('home-signatures');
   sigEl.innerHTML = sigs.length > 0
     ? sigs.slice(0, 3).map(c => cardHTML(c, 'featured')).join('')
-    : '<div class="empty"><div class="ei">✨</div>Tag cocktails "Signature" in your Google Sheet</div>';
+    : '<div class="empty"><div class="ei">✨</div>Add &#x27;Signature&#x27; to a cocktail&#x27;s tags in cocktails.json to feature it here.</div>';
 
   // Stats
   document.getElementById('count-ingredients').textContent = allIngredients.length;
@@ -610,6 +610,62 @@ async function init() {
     if (e.key === 'Escape' && activeModalId !== null) closeModal(null);
   });
 
+  // ── Wire all event handlers (replaces inline onclick/oninput/onkeydown) ──
+
+  // Hero brand mark unlock animation
+  document.getElementById('hero-brand-mark')?.addEventListener('click', triggerVaultUnlock);
+
+  // Home screen — stat pills navigate to bar/cocktails screens
+  document.querySelectorAll('.stat-pill--link[data-screen]').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const navBtn = pill.dataset.navBtn ? document.getElementById(pill.dataset.navBtn) : null;
+      switchScreen(pill.dataset.screen, navBtn);
+    });
+  });
+
+  // Home CTA — "What should I drink right now?"
+  document.getElementById('home-cta')?.addEventListener('click', () => switchScreen('decide', null));
+
+  // Shuffle tonight's pick
+  document.getElementById('shuffle-btn')?.addEventListener('click', renderHome);
+
+  // Generate drinks (Decide screen)
+  document.getElementById('gen-btn')?.addEventListener('click', generateDrinks);
+
+  // AI screen — save API key
+  document.getElementById('save-key-btn')?.addEventListener('click', saveApiKey);
+
+  // AI screen — quick prompt chips
+  document.querySelector('.suggest-chips')?.addEventListener('click', e => {
+    const chip = e.target.closest('.suggest-chip');
+    if (chip) quickPrompt(chip);
+  });
+
+  // AI screen — chat textarea auto-resize and Enter-to-send
+  const chatInput = document.getElementById('chat-input');
+  chatInput?.addEventListener('input', function() { autoResize(this); });
+  chatInput?.addEventListener('keydown', chatKeydown);
+
+  // AI screen — send button
+  document.getElementById('send-btn')?.addEventListener('click', sendChat);
+
+  // Bottom nav — delegate all nav-button clicks via data-screen attribute
+  document.getElementById('nav')?.addEventListener('click', e => {
+    const btn = e.target.closest('[data-screen]');
+    if (!btn) return;
+    // Pass btn as the activatable nav button only if it has .nav-btn class
+    const navBtn = btn.classList.contains('nav-btn') ? btn : null;
+    switchScreen(btn.dataset.screen, navBtn);
+  });
+
+  // Modal — close on overlay backdrop click (not on modal content itself)
+  document.getElementById('modal-overlay')?.addEventListener('click', closeModal);
+  document.getElementById('modal-close-btn')?.addEventListener('click', () => closeModal(null));
+
+  // Modal — unit toggle
+  document.getElementById('unit-oz')?.addEventListener('click', () => setUnit('oz'));
+  document.getElementById('unit-ml')?.addEventListener('click', () => setUnit('ml'));
+
   // Cocktail search
   document.getElementById('cocktail-search')?.addEventListener('input', e => {
     renderCocktails(activeFilter, e.target.value);
@@ -642,6 +698,11 @@ async function init() {
   renderHome();
   renderBar();
   renderCocktails('all', '');
+
+  // Service Worker registration (moved here from inline script in HTML)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW:', err));
+  }
 }
 
 // ── PWA INSTALL PROMPT (Android A2HS) ────────────────────
