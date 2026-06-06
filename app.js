@@ -409,7 +409,7 @@ function closeModal(e) {
 }
 
 // ── NAVIGATION ────────────────────────────────────────────
-const VALID_SCREENS = new Set(['home','bar','cocktails','decide','lab']);
+const VALID_SCREENS = new Set(['home','bar','cocktails','decide','lab','camera']);
 function switchScreen(id, btn) {
   if (!VALID_SCREENS.has(id)) return; // reject unknown screen IDs
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -722,6 +722,369 @@ function triggerVaultUnlock() {
   setTimeout(() => icon.classList.remove('unlocking'), 700);
 }
 
+// ── SNAP & SIP (CAMERA) ───────────────────────────────────
+const CAM_KEY_STORE = 'mv_anthropic_key';
+const CAM_MODEL     = 'claude-haiku-4-5-20251001';
+const CAM_PROMPT    = 'List every alcoholic bottle, mixer, juice, syrup, or cocktail ingredient visible in this photo. Return ONLY a JSON array of ingredient name strings. Be specific about brands where visible. Example: ["Tanqueray Gin","Cointreau","Angostura Bitters"]';
+const ALWAYS_PRESENT = [
+  { item: 'Simple Syrup', category: 'syrups', id: '_simple-syrup',
+    note: 'Use 1:1 sugar & hot water, or a sugar cube' },
+  { item: 'Lemon Juice',  category: 'juices',  id: '_lemon-juice' },
+];
+
+let camIdentifiedIngs = [];
+let camRemovedIds     = new Set();
+let camEditMode       = false;
+let camCurrentFile    = null;
+let camPreviewURL     = null;
+
+function camGetKey()      { return localStorage.getItem(CAM_KEY_STORE); }
+function camSetKey(k)     { localStorage.setItem(CAM_KEY_STORE, k); }
+function camClearKey()    { localStorage.removeItem(CAM_KEY_STORE); }
+
+function camShowSetup() {
+  document.getElementById('cam-setup-panel').style.display = '';
+  document.getElementById('cam-main').style.display = 'none';
+}
+function camShowMain() {
+  document.getElementById('cam-setup-panel').style.display = 'none';
+  document.getElementById('cam-main').style.display = '';
+}
+
+function camSettingsOpen() {
+  document.getElementById('cam-key-edit-input').value = '';
+  document.getElementById('cam-settings-overlay').style.display = '';
+}
+function camSettingsClose() {
+  document.getElementById('cam-settings-overlay').style.display = 'none';
+}
+
+function camHandleKeyChange(inputId, successCb) {
+  const input = document.getElementById(inputId);
+  const val   = input.value.trim();
+  if (!val.startsWith('sk-ant-') || val.length < 20) {
+    input.classList.add('error');
+    setTimeout(() => input.classList.remove('error'), 600);
+    return;
+  }
+  camSetKey(val);
+  input.value = '';
+  successCb();
+}
+
+function camShowError(msg) {
+  const el = document.getElementById('cam-error');
+  el.textContent = msg;
+  el.style.display = '';
+  setTimeout(() => { el.style.display = 'none'; }, 8000);
+}
+
+function camFileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataURL   = reader.result;
+      const commaIdx  = dataURL.indexOf(',');
+      const meta      = dataURL.substring(5, commaIdx);       // e.g. "image/jpeg;base64"
+      const mediaType = meta.replace(';base64', '');
+      const base64    = dataURL.substring(commaIdx + 1);
+      resolve({ base64, mediaType });
+    };
+    reader.onerror = () => reject(new Error('Could not read file'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function camCallClaude(base64, mediaType) {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key':                               camGetKey(),
+      'anthropic-version':                       '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
+      'content-type':                            'application/json',
+    },
+    body: JSON.stringify({
+      model:      CAM_MODEL,
+      max_tokens: 1024,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+          { type: 'text',  text: CAM_PROMPT },
+        ],
+      }],
+    }),
+  });
+  if (!resp.ok) {
+    let msg = `API error ${resp.status}`;
+    try { const j = await resp.json(); msg = j.error?.message || msg; } catch (_) {}
+    throw new Error(msg);
+  }
+  return resp.json();
+}
+
+function camParseIngredients(apiResp) {
+  try {
+    const text  = apiResp?.content?.[0]?.text || '';
+    const match = text.match(/\[[\s\S]*?\]/);
+    if (!match) return [];
+    const arr = JSON.parse(match[0]);
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .filter(x => typeof x === 'string' && x.trim().length > 1 && x.trim().length < 80)
+      .map(x => x.trim());
+  } catch (_) {
+    return [];
+  }
+}
+
+function camBuildIngObjects(names) {
+  const fromClaude = names.map(name => ({
+    item:     name,
+    category: 'spirits',
+    id:       '_cam_' + name.toLowerCase().replace(/\W+/g, '-'),
+  }));
+  return [...ALWAYS_PRESENT, ...fromClaude];
+}
+
+function camActiveIngs() {
+  return camIdentifiedIngs.filter(i => !camRemovedIds.has(i.id));
+}
+
+function camRenderChips() {
+  const wrap = document.getElementById('cam-chips-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = camIdentifiedIngs.map(ing => {
+    const removed  = camRemovedIds.has(ing.id);
+    const isAlways = ing.id === '_simple-syrup' || ing.id === '_lemon-juice';
+    const removeX  = camEditMode && !isAlways
+      ? `<span class="cam-chip-remove" data-cam-remove="${esc(ing.id)}">×</span>`
+      : '';
+    const alwaysCls = isAlways ? ' cam-chip--always' : '';
+    const removeCls = removed  ? ' cam-chip--removed' : '';
+    const note      = isAlways && ing.note
+      ? `<span class="cam-chip-note" title="${esc(ing.note)}"> ✦</span>` : '';
+    return `<button class="cam-chip${alwaysCls}${removeCls}" data-cam-id="${esc(ing.id)}">${esc(ing.item)}${note}${removeX}</button>`;
+  }).join('');
+}
+
+function camRenderResults() {
+  const active  = camActiveIngs();
+  const scored  = allCocktails
+    .map(c => { const r = labScoreCocktail(c, active); return r ? { c, r } : null; })
+    .filter(x => x && x.r.matched > 0)
+    .sort((a, b) => b.r.score - a.r.score);
+
+  const perfect  = scored.filter(x => x.r.score === 1);
+  const partial  = scored.filter(x => x.r.score <  1);
+
+  const el = document.getElementById('cam-cocktail-results');
+  if (!el) return;
+
+  if (!scored.length) {
+    el.innerHTML = `<div class="cam-empty">Couldn't match any cocktails — try adding more ingredients or retake with better lighting.</div>`;
+    camRenderElevation([]);
+    return;
+  }
+
+  let html = '';
+  if (perfect.length) {
+    html += `<div class="lab-results-hd"><span class="lab-rh-badge rh-can">✓ Can Make Now</span><span class="lab-rh-count">${perfect.length}</span></div>`;
+    html += `<div class="lab-cards-grid">` + perfect.map(({ c }) => cardHTML(c, 'pour-in')).join('') + `</div>`;
+  }
+  if (partial.length) {
+    html += `<div class="lab-results-hd" style="margin-top:18px"><span class="lab-rh-badge rh-almost">◐ Almost There</span><span class="lab-rh-count">${partial.length}</span></div>`;
+    html += `<div class="lab-cards-grid">` + partial.slice(0, 20).map(({ c, r }) => {
+      const pct = Math.round(r.score * 100);
+      const grad = LAB_SPIRIT_GRAD[c.spiritKey] || LAB_SPIRIT_GRAD.other;
+      return `<div class="lab-cocktail-card drink-card" data-id="${esc(String(c.id))}">
+        <div class="lcc-accent" style="background:${grad}"></div>
+        <div class="lcc-body">
+          <div class="lcc-name">${esc(c.name)}</div>
+          <div class="lcc-spirit">${esc(c.baseSpirit)}</div>
+          <div class="lcc-bar">
+            <div class="lcc-fill" style="width:${pct}%;background:${grad}"></div>
+          </div>
+          <div class="lcc-pct">${pct}% matched</div>
+        </div>
+      </div>`;
+    }).join('') + `</div>`;
+  }
+  el.innerHTML = html;
+  camRenderElevation(partial);
+}
+
+function camRenderElevation(partial) {
+  const freq = new Map();
+  for (const { r } of partial) {
+    for (const { line, hit } of r.detail) {
+      if (!hit) freq.set(line, (freq.get(line) || 0) + 1);
+    }
+  }
+  const top3 = [...freq.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3);
+
+  const secEl = document.getElementById('cam-elevate-section');
+  const listEl = document.getElementById('cam-elevate-list');
+  if (!secEl || !listEl) return;
+
+  if (!top3.length) { secEl.style.display = 'none'; return; }
+
+  listEl.innerHTML = top3.map(([name, count]) =>
+    `<div class="cam-elevate-item">
+      <span class="cam-elevate-name">${esc(name)}</span>
+      <span class="cam-elevate-count">+${count} cocktail${count > 1 ? 's' : ''}</span>
+    </div>`
+  ).join('');
+  secEl.style.display = '';
+}
+
+function camToggleEditMode() {
+  camEditMode = !camEditMode;
+  document.getElementById('cam-edit-toggle').textContent = camEditMode ? 'Done' : 'Edit';
+  document.getElementById('cam-add-row').style.display = camEditMode ? '' : 'none';
+  camRenderChips();
+  if (!camEditMode) camRenderResults();
+}
+
+function camHandleAddIngredient() {
+  const input = document.getElementById('cam-add-input');
+  const val   = input.value.trim();
+  if (!val || val.length > 80) return;
+  camIdentifiedIngs.push({
+    item:     val,
+    category: 'spirits',
+    id:       '_cam_' + val.toLowerCase().replace(/\W+/g, '-') + '_' + Date.now(),
+  });
+  input.value = '';
+  camRenderChips();
+}
+
+function camHandleFileChange(evt) {
+  const file = evt.target.files?.[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    camShowError('Please select an image file.'); return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    camShowError('Image is too large (max 5 MB). Try a lower-resolution photo.'); return;
+  }
+
+  if (camPreviewURL) URL.revokeObjectURL(camPreviewURL);
+  camPreviewURL = URL.createObjectURL(file);
+  camCurrentFile = file;
+
+  const img = document.getElementById('cam-preview-img');
+  img.src = camPreviewURL;
+  img.style.display = '';
+  document.getElementById('cam-placeholder').style.display = 'none';
+  document.getElementById('cam-snap-label').textContent = 'Retake';
+  document.getElementById('cam-analyse-btn').style.display = '';
+  document.getElementById('cam-results-area').style.display = 'none';
+  document.getElementById('cam-error').style.display = 'none';
+}
+
+async function camRunAnalysis() {
+  if (!camCurrentFile) return;
+  document.getElementById('cam-loading').style.display = '';
+  document.getElementById('cam-analyse-btn').style.display = 'none';
+  document.getElementById('cam-results-area').style.display = 'none';
+  document.getElementById('cam-error').style.display = 'none';
+  camEditMode = false;
+  camRemovedIds = new Set();
+
+  try {
+    const { base64, mediaType } = await camFileToBase64(camCurrentFile);
+    const apiResp = await camCallClaude(base64, mediaType);
+    const names   = camParseIngredients(apiResp);
+
+    if (!names.length) {
+      camShowError("Claude couldn't identify any ingredients — try a clearer photo with good lighting.");
+      document.getElementById('cam-analyse-btn').style.display = '';
+      return;
+    }
+
+    camIdentifiedIngs = camBuildIngObjects(names);
+    camRenderChips();
+    camRenderResults();
+    document.getElementById('cam-results-area').style.display = '';
+    document.getElementById('cam-results-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (err) {
+    camShowError(err.message || 'Something went wrong. Please try again.');
+    document.getElementById('cam-analyse-btn').style.display = '';
+    if (err.message?.toLowerCase().includes('api key') ||
+        err.message?.toLowerCase().includes('invalid') ||
+        err.message?.toLowerCase().includes('401') ||
+        err.message?.toLowerCase().includes('unauthorized')) {
+      camSettingsOpen();
+    }
+  } finally {
+    document.getElementById('cam-loading').style.display = 'none';
+  }
+}
+
+function camInit() {
+  if (camGetKey()) camShowMain(); else camShowSetup();
+
+  // Save key (setup panel)
+  document.getElementById('cam-key-save-btn')?.addEventListener('click', () =>
+    camHandleKeyChange('cam-key-input', camShowMain));
+
+  document.getElementById('cam-key-input')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') camHandleKeyChange('cam-key-input', camShowMain);
+  });
+
+  // Settings gear
+  document.getElementById('cam-settings-btn')?.addEventListener('click', camSettingsOpen);
+  document.getElementById('cam-settings-cancel')?.addEventListener('click', camSettingsClose);
+  document.getElementById('cam-key-update-btn')?.addEventListener('click', () =>
+    camHandleKeyChange('cam-key-edit-input', camSettingsClose));
+  document.getElementById('cam-key-clear-btn')?.addEventListener('click', () => {
+    camClearKey();
+    camSettingsClose();
+    camShowSetup();
+  });
+
+  // Capture zone click → trigger file input
+  document.getElementById('cam-capture-zone')?.addEventListener('click', e => {
+    if (e.target.closest('#cam-snap-btn') || e.target.closest('#cam-preview-img') ||
+        e.target.closest('#cam-placeholder')) {
+      document.getElementById('cam-file-input').click();
+    }
+  });
+  document.getElementById('cam-snap-btn')?.addEventListener('click', e => {
+    e.stopPropagation();
+    document.getElementById('cam-file-input').click();
+  });
+  document.getElementById('cam-file-input')?.addEventListener('change', camHandleFileChange);
+
+  // Analyse button
+  document.getElementById('cam-analyse-btn')?.addEventListener('click', camRunAnalysis);
+
+  // Edit mode toggle
+  document.getElementById('cam-edit-toggle')?.addEventListener('click', camToggleEditMode);
+
+  // Chip removal (delegation)
+  document.getElementById('cam-chips-wrap')?.addEventListener('click', e => {
+    const rmSpan = e.target.closest('[data-cam-remove]');
+    if (rmSpan && camEditMode) {
+      const id = rmSpan.dataset.camRemove;
+      if (camRemovedIds.has(id)) camRemovedIds.delete(id);
+      else camRemovedIds.add(id);
+      camRenderChips();
+      return;
+    }
+  });
+
+  // Add ingredient
+  document.getElementById('cam-add-confirm')?.addEventListener('click', camHandleAddIngredient);
+  document.getElementById('cam-add-input')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') camHandleAddIngredient();
+  });
+}
+
 // ── INIT ──────────────────────────────────────────────────
 async function init() {
   setGreeting();
@@ -826,6 +1189,7 @@ async function init() {
   wireCardArea(document.getElementById('home-signatures'));
   wireCardArea(document.getElementById('cocktail-list'));
   wireCardArea(document.getElementById('results-list'));
+  wireCardArea(document.getElementById('cam-cocktail-results'));
 
   // Load local JSON files in parallel
   [allIngredients, allCocktails] = await Promise.all([
@@ -841,6 +1205,9 @@ async function init() {
   buildLabCatTabs();
   renderLabChips();
   renderLabResults();
+
+  // Snap & Sip camera tab
+  camInit();
 
   // Service Worker registration (moved here from inline script in HTML)
   if ('serviceWorker' in navigator) {
