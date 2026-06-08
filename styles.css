@@ -1002,3 +1002,154 @@ body {
   .stats-row           { margin-top: 8px; }
   #home-cta            { margin-top: 10px; }
 }
+
+/* ══════════════════════════════════════════
+   SNAP & SIP — CAMERA TAB
+══════════════════════════════════════════ */
+
+/* Header */
+.cam-page-header      { padding-bottom: 10px; }
+.cam-header-row       { display: flex; justify-content: space-between; align-items: flex-start; }
+.cam-settings-btn     { width: 40px; height: 40px; border-radius: 50%; background: var(--card);
+                         border: 0.5px solid var(--border2); display: flex; align-items: center;
+                         justify-content: center; color: var(--muted); cursor: pointer;
+                         flex-shrink: 0; margin-top: 6px; -webkit-appearance: none; transition: transform .18s; }
+.cam-settings-btn:active { transform: scale(.88); }
+
+/* Setup panel */
+.cam-setup-panel      { padding: 32px 24px; text-align: center; }
+.cam-setup-icon       { font-size: 48px; display: block; margin-bottom: 14px; }
+.cam-setup-title      { font-family: var(--font-d); font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+.cam-setup-sub        { font-size: 13px; color: var(--muted); line-height: 1.65; font-weight: 300;
+                         margin-bottom: 20px; max-width: 290px; margin-left: auto; margin-right: auto; }
+.cam-key-input        { display: block; width: 100%; box-sizing: border-box;
+                         background: var(--card); border: 0.5px solid var(--border2);
+                         border-radius: var(--r); padding: 13px 16px; color: var(--text);
+                         font-family: var(--font-b); font-size: 15px; outline: none;
+                         min-height: 44px; -webkit-appearance: none; letter-spacing: .04em;
+                         transition: border-color .2s; }
+.cam-key-input:focus  { border-color: var(--amber); }
+.cam-key-input.error  { border-color: #f87171; animation: cam-shake .35s; }
+.cam-key-save-btn     { margin-top: 14px; width: 100%; min-height: 50px;
+                         background: linear-gradient(135deg, var(--amber), var(--amber-l));
+                         border: none; border-radius: var(--rlg); color: white;
+                         font-family: var(--font-b); font-size: 16px; font-weight: 600;
+                         cursor: pointer; -webkit-appearance: none; transition: transform .18s;
+                         display: flex; align-items: center; justify-content: center; gap: 8px; }
+.cam-key-save-btn:active { transform: scale(.97); }
+
+/* Main camera UI wrapper */
+.cam-main             { padding: 0 16px 100px; }
+
+/* Capture zone */
+.cam-capture-zone     { position: relative; border: 1.5px dashed var(--border2);
+                         border-radius: var(--rlg); overflow: hidden; min-height: 180px;
+                         display: flex; align-items: center; justify-content: center;
+                         cursor: pointer; transition: border-color .2s; margin-bottom: 12px; }
+.cam-capture-zone:active { border-color: var(--amber); }
+.cam-preview-img      { width: 100%; max-height: 280px; object-fit: cover; display: block;
+                         border-radius: calc(var(--rlg) - 1.5px); }
+.cam-placeholder      { display: flex; flex-direction: column; align-items: center;
+                         gap: 12px; padding: 44px 20px; color: var(--muted); }
+.cam-placeholder-icon { width: 52px; height: 52px; opacity: .3; }
+.cam-placeholder-text { font-size: 14px; font-weight: 300; text-align: center; }
+.cam-snap-btn         { position: absolute; bottom: 10px; right: 10px;
+                         background: rgba(9,9,9,.82); border: 0.5px solid var(--border2);
+                         border-radius: 22px; padding: 7px 13px;
+                         display: flex; align-items: center; gap: 6px;
+                         font-size: 13px; font-weight: 500; color: var(--text);
+                         cursor: pointer; -webkit-appearance: none;
+                         backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+                         transition: border-color .18s; }
+.cam-snap-btn:active  { transform: scale(.92); }
+
+/* Analyse button */
+.cam-analyse-btn      { width: 100%; min-height: 50px; margin-bottom: 14px;
+                         background: linear-gradient(135deg, var(--amber), var(--amber-l));
+                         border: none; border-radius: var(--rlg); color: white;
+                         font-family: var(--font-b); font-size: 16px; font-weight: 600;
+                         cursor: pointer; -webkit-appearance: none;
+                         display: flex; align-items: center; justify-content: center; gap: 8px;
+                         transition: transform .18s;
+                         box-shadow: 0 4px 20px rgba(200,133,10,.22); }
+.cam-analyse-btn:active { transform: scale(.97); }
+
+/* Loading */
+.cam-loading          { padding: 24px 0; display: flex; align-items: center; justify-content: center; }
+
+/* Error */
+.cam-error            { background: rgba(239,68,68,.08); border: 0.5px solid rgba(239,68,68,.3);
+                         border-radius: var(--r); padding: 12px 16px;
+                         font-size: 13px; color: #f87171; line-height: 1.55; margin-bottom: 14px; }
+
+/* Ingredient chips section */
+.cam-ing-section      { background: var(--card); border: 0.5px solid var(--border);
+                         border-radius: var(--rlg); padding: 14px 16px; margin-bottom: 14px; }
+.cam-section-hd       { display: flex; align-items: center; justify-content: space-between;
+                         margin-bottom: 10px; }
+.cam-section-label    { font-size: 11px; font-weight: 600; letter-spacing: .08em;
+                         text-transform: uppercase; color: var(--muted); }
+.cam-edit-btn         { font-size: 12px; color: var(--amber-l); background: none;
+                         border: none; cursor: pointer; font-family: var(--font-b); font-weight: 500; padding: 0; }
+.cam-chips-wrap       { display: flex; flex-wrap: wrap; gap: 7px; }
+.cam-chip             { display: inline-flex; align-items: center; gap: 5px;
+                         background: var(--card); border: 0.5px solid var(--border2);
+                         border-radius: 20px; padding: 6px 12px;
+                         font-size: 13px; font-family: var(--font-b); color: var(--text);
+                         min-height: 34px; white-space: nowrap; -webkit-appearance: none;
+                         cursor: default; }
+.cam-chip--always     { border-style: dashed; color: var(--muted); font-style: italic; }
+.cam-chip--removed    { opacity: .35; text-decoration: line-through; }
+.cam-chip-remove      { font-size: 13px; font-weight: 700; color: var(--muted);
+                         margin-left: 2px; cursor: pointer; line-height: 1; }
+.cam-chip-note        { font-size: 11px; color: var(--amber-l); }
+.cam-add-row          { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+.cam-add-input        { flex: 1; background: var(--card); border: 0.5px solid var(--border2);
+                         border-radius: var(--r); padding: 10px 14px; color: var(--text);
+                         font-family: var(--font-b); font-size: 14px; outline: none;
+                         min-height: 40px; -webkit-appearance: none; transition: border-color .2s; }
+.cam-add-input:focus  { border-color: var(--amber); }
+.cam-add-confirm      { background: var(--amber-glow); border: 0.5px solid var(--amber);
+                         border-radius: 22px; padding: 8px 16px;
+                         font-size: 13px; font-weight: 600; color: var(--amber-l);
+                         cursor: pointer; white-space: nowrap; -webkit-appearance: none; }
+
+/* Elevation section */
+.cam-elevate-section  { background: var(--card); border: 0.5px solid var(--border);
+                         border-radius: var(--rlg); padding: 14px 16px; margin-bottom: 14px; }
+.cam-elevate-sub      { font-size: 12px; color: var(--muted); margin-bottom: 12px; font-weight: 300; }
+.cam-elevate-item     { display: flex; align-items: center; gap: 12px;
+                         padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+.cam-elevate-item:last-child { border-bottom: none; }
+.cam-elevate-name     { font-size: 14px; font-weight: 500; flex: 1; }
+.cam-elevate-count    { font-size: 12px; color: var(--amber-l); font-weight: 600; white-space: nowrap; }
+
+/* Empty state */
+.cam-empty            { padding: 28px 0; text-align: center; color: var(--muted);
+                         font-size: 14px; font-weight: 300; line-height: 1.65; }
+
+/* Settings overlay */
+.cam-settings-overlay { position: absolute; inset: 0; background: rgba(9,9,9,.93);
+                         z-index: 50; display: flex; align-items: center;
+                         justify-content: center; padding: 24px; box-sizing: border-box; }
+.cam-settings-card    { background: var(--surface); border: 0.5px solid var(--border2);
+                         border-radius: var(--rlg); padding: 22px; width: 100%; }
+.cam-settings-title   { font-family: var(--font-d); font-size: 20px; font-weight: 700; margin-bottom: 14px; }
+.cam-settings-actions { display: flex; gap: 8px; margin-top: 12px; }
+.cam-settings-cancel  { flex: 1; background: none; border: 0.5px solid var(--border2);
+                         border-radius: var(--rlg); padding: 12px;
+                         color: var(--muted); font-size: 14px; font-weight: 500;
+                         cursor: pointer; -webkit-appearance: none; font-family: var(--font-b); }
+.cam-key-clear-btn    { display: block; margin: 14px auto 0;
+                         background: none; border: 0.5px solid rgba(239,68,68,.35);
+                         border-radius: 22px; padding: 8px 20px;
+                         font-size: 12px; color: #f87171; cursor: pointer; -webkit-appearance: none; }
+
+/* Shake animation for invalid key */
+@keyframes cam-shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(3px); }
+}
