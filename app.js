@@ -727,9 +727,9 @@ const CAM_KEY_STORE = 'mv_anthropic_key';
 const CAM_MODEL     = 'claude-haiku-4-5-20251001';
 const CAM_PROMPT    = 'List every alcoholic bottle, mixer, juice, syrup, or cocktail ingredient visible in this photo. Return ONLY a JSON array of ingredient name strings. Be specific about brands where visible. Example: ["Tanqueray Gin","Cointreau","Angostura Bitters"]';
 const ALWAYS_PRESENT = [
-  { item: 'Simple Syrup', category: 'syrups', id: '_simple-syrup',
+  { item: 'Simple Syrup', category: 'syrups', id: '_simple-syrup', alwaysPresent: true,
     note: 'Use 1:1 sugar & hot water, or a sugar cube' },
-  { item: 'Lemon Juice',  category: 'juices',  id: '_lemon-juice' },
+  { item: 'Lemon Juice',  category: 'juices',  id: '_lemon-juice', alwaysPresent: true },
 ];
 
 let camIdentifiedIngs = [];
@@ -772,11 +772,13 @@ function camHandleKeyChange(inputId, successCb) {
   successCb();
 }
 
+let camErrorTimer = null;
 function camShowError(msg) {
   const el = document.getElementById('cam-error');
   el.textContent = msg;
   el.style.display = '';
-  setTimeout(() => { el.style.display = 'none'; }, 8000);
+  clearTimeout(camErrorTimer);
+  camErrorTimer = setTimeout(() => { el.style.display = 'none'; }, 8000);
 }
 
 function camFileToBase64(file) {
@@ -827,7 +829,9 @@ async function camCallClaude(base64, mediaType) {
 function camParseIngredients(apiResp) {
   try {
     const text  = apiResp?.content?.[0]?.text || '';
-    const match = text.match(/\[[\s\S]*?\]/);
+    // Greedy match captures the longest [...] span — Claude sometimes prefixes
+    // its real answer with a short example array, and the real list is the one we want.
+    const match = text.match(/\[[\s\S]*\]/);
     if (!match) return [];
     const arr = JSON.parse(match[0]);
     if (!Array.isArray(arr)) return [];
@@ -857,7 +861,7 @@ function camRenderChips() {
   if (!wrap) return;
   wrap.innerHTML = camIdentifiedIngs.map(ing => {
     const removed  = camRemovedIds.has(ing.id);
-    const isAlways = ing.id === '_simple-syrup' || ing.id === '_lemon-juice';
+    const isAlways = !!ing.alwaysPresent;
     const removeX  = camEditMode && !isAlways
       ? `<span class="cam-chip-remove" data-cam-remove="${esc(ing.id)}">×</span>`
       : '';
@@ -994,6 +998,7 @@ async function camRunAnalysis() {
   document.getElementById('cam-error').style.display = 'none';
   camEditMode = false;
   camRemovedIds = new Set();
+  camIdentifiedIngs = [];
 
   try {
     const { base64, mediaType } = await camFileToBase64(camCurrentFile);
@@ -1010,7 +1015,9 @@ async function camRunAnalysis() {
     camRenderChips();
     camRenderResults();
     document.getElementById('cam-results-area').style.display = '';
-    document.getElementById('cam-results-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (document.getElementById('screen-camera').classList.contains('active')) {
+      document.getElementById('cam-results-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   } catch (err) {
     camShowError(err.message || 'Something went wrong. Please try again.');
     document.getElementById('cam-analyse-btn').style.display = '';
@@ -1047,12 +1054,9 @@ function camInit() {
     camShowSetup();
   });
 
-  // Capture zone click → trigger file input
-  document.getElementById('cam-capture-zone')?.addEventListener('click', e => {
-    if (e.target.closest('#cam-snap-btn') || e.target.closest('#cam-preview-img') ||
-        e.target.closest('#cam-placeholder')) {
-      document.getElementById('cam-file-input').click();
-    }
+  // Capture zone click → trigger file input (snap-btn stops propagation to avoid double-fire)
+  document.getElementById('cam-capture-zone')?.addEventListener('click', () => {
+    document.getElementById('cam-file-input').click();
   });
   document.getElementById('cam-snap-btn')?.addEventListener('click', e => {
     e.stopPropagation();
