@@ -37,3 +37,9 @@ __pycache__/
 dist/
 build/
 .cache/
+_site/
+
+# ── Playwright / test output ──────────────────────────────
+test-results/
+playwright-report/
+playwright/.cache/

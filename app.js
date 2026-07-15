@@ -7,6 +7,9 @@
 // ── CONFIG ──────────────────────────────────────────────
 const DATA_BASE = './'; // path prefix for JSON data files
 
+// App version — bump this AND CACHE_NAME in sw.js together on every release.
+const APP_VERSION = '2.0.0';
+
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
 let allCocktails      = [];
@@ -409,7 +412,7 @@ function closeModal(e) {
 }
 
 // ── NAVIGATION ────────────────────────────────────────────
-const VALID_SCREENS = new Set(['home','bar','cocktails','decide','lab','camera']);
+const VALID_SCREENS = new Set(['home','bar','cocktails','decide','lab']);
 function switchScreen(id, btn) {
   if (!VALID_SCREENS.has(id)) return; // reject unknown screen IDs
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -722,8 +725,9 @@ function triggerVaultUnlock() {
   setTimeout(() => icon.classList.remove('unlocking'), 700);
 }
 
-// ── SNAP & SIP (CAMERA) ───────────────────────────────────
-const CAM_KEY_STORE = 'mv_anthropic_key';
+// ── SNAP & SIP (CAMERA — lives inside the Decide tab's "By photo" panel) ──
+// The Anthropic API key is injected at deploy time into config.js as
+// window.ANTHROPIC_API_KEY (see .github/workflows/deploy.yml). No user key UI.
 const CAM_MODEL     = 'claude-haiku-4-5-20251001';
 const CAM_PROMPT    = 'List every alcoholic bottle, mixer, juice, syrup, or cocktail ingredient visible in this photo. Return ONLY a JSON array of ingredient name strings. Be specific about brands where visible. Example: ["Tanqueray Gin","Cointreau","Angostura Bitters"]';
 const ALWAYS_PRESENT = [
@@ -738,39 +742,7 @@ let camEditMode       = false;
 let camCurrentFile    = null;
 let camPreviewURL     = null;
 
-function camGetKey()      { return localStorage.getItem(CAM_KEY_STORE); }
-function camSetKey(k)     { localStorage.setItem(CAM_KEY_STORE, k); }
-function camClearKey()    { localStorage.removeItem(CAM_KEY_STORE); }
-
-function camShowSetup() {
-  document.getElementById('cam-setup-panel').style.display = '';
-  document.getElementById('cam-main').style.display = 'none';
-}
-function camShowMain() {
-  document.getElementById('cam-setup-panel').style.display = 'none';
-  document.getElementById('cam-main').style.display = '';
-}
-
-function camSettingsOpen() {
-  document.getElementById('cam-key-edit-input').value = '';
-  document.getElementById('cam-settings-overlay').style.display = '';
-}
-function camSettingsClose() {
-  document.getElementById('cam-settings-overlay').style.display = 'none';
-}
-
-function camHandleKeyChange(inputId, successCb) {
-  const input = document.getElementById(inputId);
-  const val   = input.value.trim();
-  if (!val.startsWith('sk-ant-') || val.length < 20) {
-    input.classList.add('error');
-    setTimeout(() => input.classList.remove('error'), 600);
-    return;
-  }
-  camSetKey(val);
-  input.value = '';
-  successCb();
-}
+function camHasKey() { return !!window.ANTHROPIC_API_KEY; }
 
 let camErrorTimer = null;
 function camShowError(msg) {
@@ -801,7 +773,7 @@ async function camCallClaude(base64, mediaType) {
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
-      'x-api-key':                               camGetKey(),
+      'x-api-key':                               window.ANTHROPIC_API_KEY,
       'anthropic-version':                       '2023-06-01',
       'anthropic-dangerous-direct-browser-access': 'true',
       'content-type':                            'application/json',
@@ -1015,44 +987,27 @@ async function camRunAnalysis() {
     camRenderChips();
     camRenderResults();
     document.getElementById('cam-results-area').style.display = '';
-    if (document.getElementById('screen-camera').classList.contains('active')) {
+    if (document.getElementById('screen-decide').classList.contains('active')) {
       document.getElementById('cam-results-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   } catch (err) {
     camShowError(err.message || 'Something went wrong. Please try again.');
     document.getElementById('cam-analyse-btn').style.display = '';
-    if (err.message?.toLowerCase().includes('api key') ||
-        err.message?.toLowerCase().includes('invalid') ||
-        err.message?.toLowerCase().includes('401') ||
-        err.message?.toLowerCase().includes('unauthorized')) {
-      camSettingsOpen();
-    }
   } finally {
     document.getElementById('cam-loading').style.display = 'none';
   }
 }
 
 function camInit() {
-  if (camGetKey()) camShowMain(); else camShowSetup();
-
-  // Save key (setup panel)
-  document.getElementById('cam-key-save-btn')?.addEventListener('click', () =>
-    camHandleKeyChange('cam-key-input', camShowMain));
-
-  document.getElementById('cam-key-input')?.addEventListener('keydown', e => {
-    if (e.key === 'Enter') camHandleKeyChange('cam-key-input', camShowMain);
-  });
-
-  // Settings gear
-  document.getElementById('cam-settings-btn')?.addEventListener('click', camSettingsOpen);
-  document.getElementById('cam-settings-cancel')?.addEventListener('click', camSettingsClose);
-  document.getElementById('cam-key-update-btn')?.addEventListener('click', () =>
-    camHandleKeyChange('cam-key-edit-input', camSettingsClose));
-  document.getElementById('cam-key-clear-btn')?.addEventListener('click', () => {
-    camClearKey();
-    camSettingsClose();
-    camShowSetup();
-  });
+  // No API key configured (local/dev, or before first deploy injects it):
+  // show a graceful notice and skip wiring the capture UI.
+  if (!camHasKey()) {
+    const unavail = document.getElementById('decide-snap-unavailable');
+    const main    = document.getElementById('cam-main');
+    if (unavail) unavail.style.display = '';
+    if (main)    main.style.display = 'none';
+    return;
+  }
 
   // Capture zone click → trigger file input (snap-btn stops propagation to avoid double-fire)
   document.getElementById('cam-capture-zone')?.addEventListener('click', () => {
@@ -1121,6 +1076,17 @@ async function init() {
 
   // Generate drinks (Decide screen)
   document.getElementById('gen-btn')?.addEventListener('click', generateDrinks);
+
+  // Decide mode toggle — "By mood" (manual picker) vs "By photo" (Snap flow)
+  document.getElementById('decide-toggle')?.addEventListener('click', e => {
+    const btn = e.target.closest('[data-decide-mode]');
+    if (!btn) return;
+    const mode = btn.dataset.decideMode;
+    document.querySelectorAll('.decide-toggle-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.decideMode === mode));
+    document.getElementById('decide-mood-panel').style.display  = mode === 'mood'  ? '' : 'none';
+    document.getElementById('decide-photo-panel').style.display = mode === 'photo' ? '' : 'none';
+  });
 
   // ── Vault Lab ─────────────────────────────────────────────
   // Category tab clicks — delegate on the tab row (wired once, always present in DOM)
@@ -1210,13 +1176,59 @@ async function init() {
   renderLabChips();
   renderLabResults();
 
-  // Snap & Sip camera tab
+  // Snap flow (lives inside Decide's "By photo" panel)
   camInit();
 
-  // Service Worker registration (moved here from inline script in HTML)
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW:', err));
-  }
+  // Visible app version (Home footer)
+  const verEl = document.getElementById('app-version');
+  if (verEl) verEl.textContent = 'v' + APP_VERSION;
+
+  registerServiceWorker();
+}
+
+// ── SERVICE WORKER + UPDATE FLOW ─────────────────────────
+// New SW installs → "A new version is available" banner → user clicks Refresh →
+// SKIP_WAITING → controllerchange → reload onto the fresh assets.
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+
+  const showUpdateBanner = () => {
+    document.getElementById('update-banner')?.classList.remove('hidden');
+  };
+
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    // Check for a new worker on load and whenever the tab regains focus.
+    reg.update();
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') reg.update();
+    });
+
+    if (reg.waiting) showUpdateBanner();
+
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      if (!newWorker) return;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          showUpdateBanner();
+        }
+      });
+    });
+  }).catch(err => console.warn('SW:', err));
+
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (reloading) return;
+    reloading = true;
+    window.location.reload();
+  });
+
+  document.getElementById('btn-update-reload')?.addEventListener('click', () => {
+    navigator.serviceWorker.getRegistration().then(reg => {
+      if (reg && reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+      else window.location.reload();
+    });
+  });
 }
 
 // ── PWA INSTALL PROMPT (Android A2HS) ────────────────────
