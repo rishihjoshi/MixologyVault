@@ -32,7 +32,7 @@ Because the key is injected into `config.js` and used for direct browser→`api.
 **Required mitigations (in priority order):**
 1. **Keep the repository and GitHub Pages private.** A public Pages site publishes the key to the world.
 2. **Set a low monthly spend cap** on the Anthropic key and monitor usage.
-3. **Rotate the key periodically** (and immediately if the site is ever made public). Rotation requires a redeploy plus a cache bump so the cached `config.js` refreshes.
+3. **Rotate the key periodically** (and immediately if the site is ever made public). Rotation is a redeploy only — `config.js` is served network-first by the service worker, so a rotated key reaches users on their next load without an app-version/cache bump.
 4. **Long-term:** proxy the call through a serverless function (e.g. Cloudflare Worker / Netlify Function) so the key never reaches the browser. This is the only way to fully close the exposure.
 
 ### 3.3 Standing posture (unchanged, verified healthy)
@@ -51,7 +51,7 @@ Because the key is injected into `config.js` and used for direct browser→`api.
 ## 5. PWA / functionality
 
 - **Update flow (new):** `install` no longer calls `skipWaiting()` silently; instead a waiting worker surfaces the banner, and the user's Refresh click posts `SKIP_WAITING` → `controllerchange` → one clean reload. This prevents mid-session asset mismatch and makes updates visible.
-- **Offline:** cache-first app shell; `api.anthropic.com` is never intercepted. `config.js` is cached, so key rotation needs a cache bump (documented).
+- **Offline:** cache-first app shell; `api.anthropic.com` is never intercepted. `config.js` is served **network-first** (cached copy is the offline fallback), so a rotated key propagates on the next load with no cache bump.
 - **Manifest:** standalone PWA with icons and shortcuts; unaffected by this release.
 - **Graceful degradation:** with no key (local/dev), `By photo` shows a friendly "unavailable" notice and `By mood` remains fully functional — no errors.
 

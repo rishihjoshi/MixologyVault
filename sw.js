@@ -45,6 +45,24 @@ self.addEventListener('fetch', e => {
   // Never intercept Anthropic API calls — always live
   if (url.hostname === 'api.anthropic.com') return;
 
+  // config.js carries the deploy-injected API key — serve it network-first so a
+  // rotated key propagates on the next load without an app-version/cache bump.
+  // Falls back to the cached copy when offline.
+  if (url.pathname.endsWith('/config.js')) {
+    e.respondWith(
+      fetch(request)
+        .then(res => {
+          if (res.ok) {
+            const clone = res.clone();
+            caches.open(CACHE_NAME).then(c => c.put(request, clone));
+          }
+          return res;
+        })
+        .catch(() => caches.match(request))
+    );
+    return;
+  }
+
   // CDN fonts: network-first with cache fallback
   if (url.hostname !== self.location.hostname) {
     e.respondWith(
