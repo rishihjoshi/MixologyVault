@@ -1,0 +1,14 @@
+{
+  "name": "mixology-vault",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Your personal cocktail vault, powered by what's in your bar.",
+  "scripts": {
+    "serve": "npx serve . -p 3333 --no-clipboard",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}

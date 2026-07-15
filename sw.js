@@ -1,7 +1,9 @@
-const CACHE_NAME = 'mixvault-v2'; // Bump on every static asset change
+// Release ritual: bump CACHE_NAME here AND APP_VERSION in app.js together.
+const CACHE_NAME = 'mixvault-v3';
 const STATIC_ASSETS = [
   './index.html',
   './app.js',
+  './config.js',
   './styles.css',
   './manifest.json',
   './AppIcon.png',
@@ -15,11 +17,17 @@ const CDN_ASSETS = [
 ];
 
 self.addEventListener('install', e => {
+  // Do NOT skipWaiting() here — the new worker waits until the user clicks
+  // "Refresh" in the update banner, which posts SKIP_WAITING (see below).
   e.waitUntil(
     caches.open(CACHE_NAME)
       .then(c => c.addAll(STATIC_ASSETS))
-      .then(() => self.skipWaiting())
   );
+});
+
+// Triggered by the update banner's Refresh button (app.js registerServiceWorker).
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
 
 self.addEventListener('activate', e => {

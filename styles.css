@@ -1004,42 +1004,29 @@ body {
 }
 
 /* ══════════════════════════════════════════
-   SNAP & SIP — CAMERA TAB
+   SNAP FLOW — "By photo" panel inside Decide
 ══════════════════════════════════════════ */
 
-/* Header */
-.cam-page-header      { padding-bottom: 10px; }
-.cam-header-row       { display: flex; justify-content: space-between; align-items: flex-start; }
-.cam-settings-btn     { width: 40px; height: 40px; border-radius: 50%; background: var(--card);
-                         border: 0.5px solid var(--border2); display: flex; align-items: center;
-                         justify-content: center; color: var(--muted); cursor: pointer;
-                         flex-shrink: 0; margin-top: 6px; -webkit-appearance: none; transition: transform .18s; }
-.cam-settings-btn:active { transform: scale(.88); }
+/* Decide mode toggle (By mood / By photo) */
+.decide-toggle        { display: flex; gap: 3px; margin: 14px 16px 0;
+                         background: var(--card); border: 0.5px solid var(--border2);
+                         border-radius: 22px; padding: 3px; }
+.decide-toggle-btn    { flex: 1; text-align: center; border: none; cursor: pointer;
+                         background: none; color: var(--muted); font-family: var(--font-b);
+                         font-size: 13px; font-weight: 500; padding: 9px 0; border-radius: 19px;
+                         -webkit-appearance: none; transition: background .18s, color .18s; }
+.decide-toggle-btn.active { background: linear-gradient(135deg, var(--amber), var(--amber-l));
+                         color: #1a1206; font-weight: 600; }
 
-/* Setup panel */
-.cam-setup-panel      { padding: 32px 24px; text-align: center; }
+/* Unavailable notice (no API key configured) — reuses cam-setup-* type styles */
+.decide-snap-unavailable { padding: 40px 24px; text-align: center; }
 .cam-setup-icon       { font-size: 48px; display: block; margin-bottom: 14px; }
 .cam-setup-title      { font-family: var(--font-d); font-size: 22px; font-weight: 700; margin-bottom: 10px; }
 .cam-setup-sub        { font-size: 13px; color: var(--muted); line-height: 1.65; font-weight: 300;
                          margin-bottom: 20px; max-width: 290px; margin-left: auto; margin-right: auto; }
-.cam-key-input        { display: block; width: 100%; box-sizing: border-box;
-                         background: var(--card); border: 0.5px solid var(--border2);
-                         border-radius: var(--r); padding: 13px 16px; color: var(--text);
-                         font-family: var(--font-b); font-size: 15px; outline: none;
-                         min-height: 44px; -webkit-appearance: none; letter-spacing: .04em;
-                         transition: border-color .2s; }
-.cam-key-input:focus  { border-color: var(--amber); }
-.cam-key-input.error  { border-color: #f87171; animation: cam-shake .35s; }
-.cam-key-save-btn     { margin-top: 14px; width: 100%; min-height: 50px;
-                         background: linear-gradient(135deg, var(--amber), var(--amber-l));
-                         border: none; border-radius: var(--rlg); color: white;
-                         font-family: var(--font-b); font-size: 16px; font-weight: 600;
-                         cursor: pointer; -webkit-appearance: none; transition: transform .18s;
-                         display: flex; align-items: center; justify-content: center; gap: 8px; }
-.cam-key-save-btn:active { transform: scale(.97); }
 
 /* Main camera UI wrapper */
-.cam-main             { padding: 0 16px 100px; }
+.cam-main             { padding: 14px 16px 100px; }
 
 /* Capture zone */
 .cam-capture-zone     { position: relative; border: 1.5px dashed var(--border2);
@@ -1128,28 +1115,22 @@ body {
 .cam-empty            { padding: 28px 0; text-align: center; color: var(--muted);
                          font-size: 14px; font-weight: 300; line-height: 1.65; }
 
-/* Settings overlay */
-.cam-settings-overlay { position: absolute; inset: 0; background: rgba(9,9,9,.93);
-                         z-index: 50; display: flex; align-items: center;
-                         justify-content: center; padding: 24px; box-sizing: border-box; }
-.cam-settings-card    { background: var(--surface); border: 0.5px solid var(--border2);
-                         border-radius: var(--rlg); padding: 22px; width: 100%; }
-.cam-settings-title   { font-family: var(--font-d); font-size: 20px; font-weight: 700; margin-bottom: 14px; }
-.cam-settings-actions { display: flex; gap: 8px; margin-top: 12px; }
-.cam-settings-cancel  { flex: 1; background: none; border: 0.5px solid var(--border2);
-                         border-radius: var(--rlg); padding: 12px;
-                         color: var(--muted); font-size: 14px; font-weight: 500;
-                         cursor: pointer; -webkit-appearance: none; font-family: var(--font-b); }
-.cam-key-clear-btn    { display: block; margin: 14px auto 0;
-                         background: none; border: 0.5px solid rgba(239,68,68,.35);
-                         border-radius: 22px; padding: 8px 20px;
-                         font-size: 12px; color: #f87171; cursor: pointer; -webkit-appearance: none; }
+/* ══════════════════════════════════════════
+   VERSION — update banner + version label
+══════════════════════════════════════════ */
+.app-version-line     { text-align: center; font-size: 11px; color: var(--muted);
+                         letter-spacing: .06em; padding: 20px 0 8px; }
+#app-version          { color: var(--muted2); }
 
-/* Shake animation for invalid key */
-@keyframes cam-shake {
-  0%,100% { transform: translateX(0); }
-  20%      { transform: translateX(-6px); }
-  40%      { transform: translateX(6px); }
-  60%      { transform: translateX(-4px); }
-  80%      { transform: translateX(3px); }
-}
+.update-banner        { position: fixed; left: 50%; transform: translateX(-50%);
+                         bottom: calc(var(--nav-h) + var(--safe-b) + 14px);
+                         z-index: 200; display: flex; align-items: center; gap: 12px;
+                         background: var(--card); border: 0.5px solid var(--border2);
+                         border-radius: 24px; padding: 10px 12px 10px 18px;
+                         box-shadow: 0 8px 30px rgba(0,0,0,.5);
+                         font-size: 13px; color: var(--text); max-width: calc(100vw - 32px); }
+.update-banner.hidden { display: none; }
+.update-banner button { background: linear-gradient(135deg, var(--amber), var(--amber-l));
+                         border: none; border-radius: 18px; padding: 8px 16px;
+                         font-family: var(--font-b); font-size: 13px; font-weight: 600;
+                         color: #1a1206; cursor: pointer; -webkit-appearance: none; white-space: nowrap; }
