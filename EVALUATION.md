@@ -67,10 +67,10 @@ Because the key is injected into `config.js` and used for direct browser→`api.
 - `camBuildIngObjects()`, `camHasKey()`, `cardHTML()` — object shaping, key gate, and output escaping.
 
 **E2E tests — `e2e/mixology.spec.js` (17 tests):**
-- **Removal regressions:** 5 nav buttons, no `#nb-camera`/`#screen-camera`, no key UI, `mv_anthropic_key` never set.
+- **Removal regressions:** 4 nav buttons, no `#nb-camera`/`#screen-camera`, no `#nb-lab`/`#screen-lab`, no key UI, `mv_anthropic_key` never set.
 - **Relocation:** capture UI lives in `#screen-decide`; `By photo` shows the unavailable notice with an empty key; `By mood` is the default.
 - **Versioning:** `#app-version` = `v2.0.0`; `#update-banner` present and hidden.
-- **Navigation:** each of the 5 tabs activates its screen.
+- **Navigation:** each of the 4 tabs activates its screen; My Vault → "I can make" lists makeable cocktails (with empty-state).
 - **Core flows:** Decide generate (3 picks), cocktail search + modal open, My Vault override persistence.
 
 ## 7. Prioritized recommendations

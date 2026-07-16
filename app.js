@@ -18,10 +18,7 @@ let activeFilter      = 'all';
 let activeUnit        = 'oz';
 let activeModalId     = null;
 let barActiveFilter   = 'all';
-
-// ── VAULT LAB STATE ──────────────────────────────────────
-let labSelectedIds  = new Set();  // ingredient IDs selected in Vault Lab
-let labActiveCat    = 'all';      // active category tab in Vault Lab
+let vaultMode         = 'shelf';  // 'shelf' | 'make' — My Vault view toggle
 
 // ── INGREDIENT OVERRIDES ─────────────────────────────────
 // { [ingId]: 'have' | 'need' } — persisted to localStorage
@@ -412,7 +409,7 @@ function closeModal(e) {
 }
 
 // ── NAVIGATION ────────────────────────────────────────────
-const VALID_SCREENS = new Set(['home','bar','cocktails','decide','lab']);
+const VALID_SCREENS = new Set(['home','bar','cocktails','decide']);
 function switchScreen(id, btn) {
   if (!VALID_SCREENS.has(id)) return; // reject unknown screen IDs
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -481,22 +478,7 @@ function generateDrinks() {
   ra.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ── VAULT LAB ─────────────────────────────────────────────
-// Maps ingredient category keys to display metadata for the Lab UI
-const LAB_CAT_META = {
-  'spirits':   { icon: '🥃', label: 'Spirits'  },
-  'liqueurs':  { icon: '🍶', label: 'Mixers'   },
-  'bitters':   { icon: '🌿', label: 'Bitters'  },
-  'juices':    { icon: '🍋', label: 'Citrus'   },
-  'syrups':    { icon: '🍯', label: 'Syrups'   },
-  'garnishes': { icon: '🌱', label: 'Garnish'  },
-  'wine':      { icon: '🍷', label: 'Wine'     },
-  'top up':    { icon: '💧', label: 'Top Up'   },
-};
-
-// Category display order
-const LAB_CAT_ORDER = ['spirits','liqueurs','bitters','juices','syrups','garnishes','wine','top up'];
-
+// ── MAKEABLE-COCKTAIL ENGINE (My Vault "I can make" + camera) ─────
 // Spirit-keyed gradient colours for the card accent strip
 const LAB_SPIRIT_GRAD = {
   gin:     'linear-gradient(160deg, #7c3aed 0%, #a78bfa 100%)',
@@ -549,95 +531,25 @@ function labScoreCocktail(cocktail, selectedIngs) {
   return { matched, total: lines.length, score: matched / lines.length, detail };
 }
 
-// ── Lab category tabs ─────────────────────────────────────
-function buildLabCatTabs() {
-  const el = document.getElementById('lab-cats');
-  if (!el) return;
-  // Only show categories that exist in the loaded ingredient set
-  const presentCats = LAB_CAT_ORDER.filter(cat =>
-    allIngredients.some(i => i.category.toLowerCase() === cat));
-  const tabs = ['all', ...presentCats];
-  el.innerHTML = tabs.map(cat => {
-    const meta = cat === 'all' ? { icon: '✦', label: 'All' } : (LAB_CAT_META[cat] || { icon: '●', label: cat });
-    return `<button class="lab-cat-btn ${cat === labActiveCat ? 'active' : ''}" data-lab-cat="${cat}">
-      <span class="lc-icon">${meta.icon}</span>${meta.label}
-    </button>`;
-  }).join('');
-}
-
-// ── Lab chip rendering ────────────────────────────────────
-function renderLabChips() {
-  const el = document.getElementById('lab-chips-wrap');
-  if (!el) return;
-  // Filter by active category
-  const ings = labActiveCat === 'all'
-    ? allIngredients
-    : allIngredients.filter(i => i.category.toLowerCase() === labActiveCat);
-
-  if (labActiveCat === 'all') {
-    // Group by category with headings
-    const groups = {};
-    for (const ing of ings) {
-      const key = ing.category.toLowerCase();
-      if (!groups[key]) groups[key] = [];
-      groups[key].push(ing);
-    }
-    const orderedKeys = [...new Set([...LAB_CAT_ORDER, ...Object.keys(groups)])];
-    let html = '';
-    for (const key of orderedKeys) {
-      if (!groups[key]?.length) continue;
-      const meta = LAB_CAT_META[key] || { icon: '●', label: key };
-      html += `<div class="lab-cat-group">
-        <div class="lab-group-hd">
-          <span class="lab-group-icon">${meta.icon}</span>
-          <span class="lab-group-label">${meta.label}</span>
-        </div>
-        <div class="lab-chip-row">${groups[key].map(labChipHTML).join('')}</div>
-      </div>`;
-    }
-    el.innerHTML = html;
-  } else {
-    el.innerHTML = `<div class="lab-chip-row" style="padding:0 16px 4px">${ings.map(labChipHTML).join('')}</div>`;
-  }
-}
-
-function labChipHTML(ing) {
-  const sel = labSelectedIds.has(ing.id);
-  return `<button class="lab-chip${sel ? ' selected' : ''}" data-lab-id="${esc(ing.id)}">
-    ${sel ? '<span class="lchip-check">✓</span>' : ''}
-    <span class="lchip-name">${esc(ing.item)}</span>
-  </button>`;
-}
-
-// ── Lab action bar (shows selected count + clear) ─────────
-function updateLabActionBar() {
-  const bar = document.getElementById('lab-action-bar');
-  const cnt = document.getElementById('lab-sel-count');
-  if (!bar || !cnt) return;
-  const n = labSelectedIds.size;
-  bar.classList.toggle('visible', n > 0);
-  cnt.textContent = `${n} ingredient${n !== 1 ? 's' : ''} selected`;
-}
-
-// ── Lab results rendering ─────────────────────────────────
-function renderLabResults() {
-  const el = document.getElementById('lab-results');
+// ── My Vault "I can make" — score cocktails from available ingredients ──
+function renderVaultMake() {
+  const el = document.getElementById('vault-make-results');
   if (!el) return;
 
-  if (labSelectedIds.size === 0) {
+  const haves = allIngredients.filter(i => getIngStatus(i) === 'have');
+
+  if (haves.length === 0) {
     el.innerHTML = `<div class="lab-empty">
       <div class="lab-empty-icon">🧪</div>
-      <div class="lab-empty-title">Your lab awaits</div>
-      <div class="lab-empty-sub">Select ingredients above to instantly discover every cocktail you can craft right now</div>
+      <div class="lab-empty-title">Nothing marked available yet</div>
+      <div class="lab-empty-sub">Mark ingredients as available in <strong>My shelf</strong> to see every cocktail you can make right now</div>
     </div>`;
     return;
   }
 
-  const selectedIngs = allIngredients.filter(i => labSelectedIds.has(i.id));
-
-  // Score all cocktails, keep any with ≥1 match
+  // Score all cocktails against what's on the shelf, keep any with ≥1 match
   const scored = allCocktails
-    .map(c => ({ c, r: labScoreCocktail(c, selectedIngs) }))
+    .map(c => ({ c, r: labScoreCocktail(c, haves) }))
     .filter(x => x.r && x.r.matched > 0)
     .sort((a, b) => b.r.score - a.r.score || b.r.matched - a.r.matched);
 
@@ -645,7 +557,7 @@ function renderLabResults() {
     el.innerHTML = `<div class="lab-empty">
       <div class="lab-empty-icon">🥃</div>
       <div class="lab-empty-title">No matches yet</div>
-      <div class="lab-empty-sub">Try adding more ingredients — even one extra can unlock a dozen cocktails</div>
+      <div class="lab-empty-sub">Mark a few more staples available — even one extra can unlock a dozen cocktails</div>
     </div>`;
     return;
   }
@@ -654,8 +566,8 @@ function renderLabResults() {
   const partial = scored.filter(x => x.r.score < 1);
 
   let html = `<div class="lab-results-hd">
-    <span class="lab-results-count">${scored.length} cocktail${scored.length !== 1 ? 's' : ''} found</span>
-    ${perfect.length ? `<span class="lab-perfect-badge">${perfect.length} perfect match${perfect.length !== 1 ? 'es' : ''}</span>` : ''}
+    <span class="lab-results-count">${scored.length} cocktail${scored.length !== 1 ? 's' : ''} within reach</span>
+    ${perfect.length ? `<span class="lab-perfect-badge">${perfect.length} you can make now</span>` : ''}
   </div>`;
 
   if (perfect.length) {
@@ -704,13 +616,6 @@ function labCardHTML(cocktail, result) {
       ${missingNote}
     </div>
   </div>`;
-}
-
-function clearLabSelection() {
-  labSelectedIds.clear();
-  updateLabActionBar();
-  renderLabChips();
-  renderLabResults();
 }
 
 // ── VAULT ICON — UNLOCK ANIMATION ────────────────────────
@@ -1088,37 +993,23 @@ async function init() {
     document.getElementById('decide-photo-panel').style.display = mode === 'photo' ? '' : 'none';
   });
 
-  // ── Vault Lab ─────────────────────────────────────────────
-  // Category tab clicks — delegate on the tab row (wired once, always present in DOM)
-  document.getElementById('lab-cats')?.addEventListener('click', e => {
-    const btn = e.target.closest('.lab-cat-btn');
+  // ── My Vault: shelf / "I can make" toggle ─────────────────
+  document.getElementById('vault-toggle')?.addEventListener('click', e => {
+    const btn = e.target.closest('[data-vault-mode]');
     if (!btn) return;
-    labActiveCat = btn.dataset.labCat;
-    document.querySelectorAll('.lab-cat-btn').forEach(b =>
-      b.classList.toggle('active', b.dataset.labCat === labActiveCat));
-    renderLabChips();
+    vaultMode = btn.dataset.vaultMode;
+    document.querySelectorAll('#vault-toggle .decide-toggle-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.vaultMode === vaultMode));
+    document.getElementById('vault-shelf-panel').style.display = vaultMode === 'shelf' ? '' : 'none';
+    document.getElementById('vault-make-panel').style.display  = vaultMode === 'make'  ? '' : 'none';
+    if (vaultMode === 'make') renderVaultMake();
   });
 
-  // Ingredient chip clicks — delegate on the chips container
-  document.getElementById('lab-chips-wrap')?.addEventListener('click', e => {
-    const chip = e.target.closest('.lab-chip[data-lab-id]');
-    if (!chip) return;
-    const id = chip.dataset.labId;
-    if (labSelectedIds.has(id)) labSelectedIds.delete(id);
-    else                         labSelectedIds.add(id);
-    updateLabActionBar();
-    renderLabChips();
-    renderLabResults();
-  });
-
-  // Results card clicks — delegate on the results container
-  document.getElementById('lab-results')?.addEventListener('click', e => {
+  // "I can make" result cards → open recipe modal (delegated)
+  document.getElementById('vault-make-results')?.addEventListener('click', e => {
     const card = e.target.closest('.lab-cocktail-card[data-id]');
     if (card) openModal(card.dataset.id);
   });
-
-  // Clear selection button
-  document.getElementById('lab-clear-btn')?.addEventListener('click', clearLabSelection);
 
   // Bottom nav — delegate all nav-button clicks via data-screen attribute
   document.getElementById('nav')?.addEventListener('click', e => {
@@ -1171,10 +1062,8 @@ async function init() {
   renderBar();
   renderCocktails('all', '');
 
-  // Vault Lab — build category tabs and render initial state (now data is loaded)
-  buildLabCatTabs();
-  renderLabChips();
-  renderLabResults();
+  // My Vault "I can make" — initial render (now data is loaded)
+  renderVaultMake();
 
   // Snap flow (lives inside Decide's "By photo" panel)
   camInit();
@@ -1242,8 +1131,6 @@ function handleFragmentShortcut() {
   const hash = window.location.hash;
   if (hash === '#decide') {
     switchScreen('decide', document.getElementById('nav-decide'));
-  } else if (hash === '#lab') {
-    switchScreen('lab', document.getElementById('nb-lab'));
   }
   if (hash) window.history.replaceState(null, '', './index.html');
 }

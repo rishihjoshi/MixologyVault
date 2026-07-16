@@ -75,15 +75,30 @@
     <div class="screen" id="screen-bar">
       <div class="page-header">
         <h1>My <em>Vault</em></h1>
-        <p>Tap any ingredient to toggle availability</p>
+        <p>Mark what you have · See what you can make</p>
       </div>
-      <div class="bar-filter-row">
-        <button class="bar-filter-btn active" data-bar-filter="all">All <span class="bf-badge" id="bf-count-all">–</span></button>
-        <button class="bar-filter-btn" data-bar-filter="available">✅ Available <span class="bf-badge" id="bf-count-available">–</span></button>
-        <button class="bar-filter-btn" data-bar-filter="need">🛒 Need <span class="bf-badge" id="bf-count-need">–</span></button>
+
+      <!-- Mode toggle: curate shelf vs. discover makeable cocktails -->
+      <div class="decide-toggle" id="vault-toggle">
+        <button class="decide-toggle-btn active" data-vault-mode="shelf">My shelf</button>
+        <button class="decide-toggle-btn" data-vault-mode="make">🍸 I can make</button>
       </div>
-      <div class="section" style="margin-top:16px">
-        <div id="bar-sections"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading vault…</div></div>
+
+      <!-- My shelf: ingredient inventory -->
+      <div id="vault-shelf-panel">
+        <div class="bar-filter-row">
+          <button class="bar-filter-btn active" data-bar-filter="all">All <span class="bf-badge" id="bf-count-all">–</span></button>
+          <button class="bar-filter-btn" data-bar-filter="available">✅ Available <span class="bf-badge" id="bf-count-available">–</span></button>
+          <button class="bar-filter-btn" data-bar-filter="need">🛒 Need <span class="bf-badge" id="bf-count-need">–</span></button>
+        </div>
+        <div class="section" style="margin-top:16px">
+          <div id="bar-sections"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading vault…</div></div>
+        </div>
+      </div>
+
+      <!-- I can make: cocktails scored from available ingredients -->
+      <div id="vault-make-panel" style="display:none">
+        <div class="lab-results" id="vault-make-results"></div>
       </div>
     </div>
 
@@ -243,31 +258,6 @@
       </div><!-- /decide-photo-panel -->
     </div>
 
-    <!-- ══ VAULT LAB ══ -->
-    <div class="screen" id="screen-lab">
-      <div class="page-header">
-        <h1>Vault <em>Lab</em></h1>
-        <p>Select ingredients · Discover your cocktails</p>
-      </div>
-
-      <!-- Category filter tabs (sticky) -->
-      <div class="lab-cats" id="lab-cats"></div>
-
-      <!-- Selection action bar — appears when ingredients are selected -->
-      <div class="lab-action-bar" id="lab-action-bar">
-        <span class="lab-sel-count" id="lab-sel-count">0 selected</span>
-        <button class="lab-clear-btn" id="lab-clear-btn">Clear ✕</button>
-      </div>
-
-      <!-- Ingredient chips -->
-      <div class="lab-chips-wrap" id="lab-chips-wrap">
-        <div class="loader" style="padding:20px 16px"><div class="dots"><span></span><span></span><span></span></div></div>
-      </div>
-
-      <!-- Results section -->
-      <div class="lab-results" id="lab-results"></div>
-    </div>
-
   </div><!-- /scroll-area -->
 
   <!-- ══ BOTTOM NAV ══ -->
@@ -293,14 +283,6 @@
     <button class="nav-btn" id="nb-cocktails" data-screen="cocktails">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 3l4 8 4-8M5 8h14l-2 10H7L5 8zM12 18v3M9 21h6"/></svg>
       <span>Cocktails</span>
-    </button>
-    <button class="nav-btn" id="nb-lab" data-screen="lab">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M9 3h6" stroke-linecap="round"/>
-        <path d="M10 3v6.8L5.4 18.2A2 2 0 007.2 21h9.6a2 2 0 001.8-2.8L14 9.8V3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M7.5 16h3M8 18.5h2.5" stroke-linecap="round" opacity=".5"/>
-      </svg>
-      <span>Lab</span>
     </button>
   </nav>
 

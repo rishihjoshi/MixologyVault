@@ -12,10 +12,13 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('Snap tab + user API-key UI removed', () => {
-  test('bottom nav has exactly 5 buttons and no Snap tab', async ({ page }) => {
-    await expect(page.locator('#nav > button')).toHaveCount(5);
+  test('bottom nav has exactly 4 buttons and no Snap or Lab tab', async ({ page }) => {
+    await expect(page.locator('#nav > button')).toHaveCount(4);
     await expect(page.locator('#nb-camera')).toHaveCount(0);
+    await expect(page.locator('#nb-lab')).toHaveCount(0);
+    await expect(page.locator('#screen-lab')).toHaveCount(0);
     await expect(page.locator('nav#nav')).not.toContainText('Snap');
+    await expect(page.locator('nav#nav')).not.toContainText('Lab');
   });
 
   test('no standalone camera screen exists', async ({ page }) => {
@@ -68,12 +71,11 @@ test.describe('Version functionality', () => {
   });
 });
 
-test.describe('Navigation — all 5 tabs', () => {
+test.describe('Navigation — all 4 tabs', () => {
   const tabs = [
     { btn: '#nb-bar', screen: '#screen-bar' },
     { btn: '#nb-cocktails', screen: '#screen-cocktails' },
     { btn: '#nav-decide', screen: '#screen-decide' },
-    { btn: '#nb-lab', screen: '#screen-lab' },
     { btn: '#nb-home', screen: '#screen-home' },
   ];
   for (const { btn, screen } of tabs) {
@@ -108,5 +110,34 @@ test.describe('Core flows unaffected', () => {
     const overrides = await page.evaluate(() => localStorage.getItem('mv_ing_overrides'));
     expect(overrides).not.toBeNull();
     expect(overrides).not.toEqual('{}');
+  });
+
+  test('My Vault → "I can make" lists makeable cocktails from available ingredients', async ({ page }) => {
+    // Mark every ingredient available, reload so the vault reflects it.
+    await page.evaluate(() => {
+      const ov = {};
+      for (const ing of allIngredients) ov[ing.id] = 'have';
+      localStorage.setItem('mv_ing_overrides', JSON.stringify(ov));
+    });
+    await page.reload();
+    await expect(page.locator('#screen-home')).toHaveClass(/active/);
+    await page.locator('#nb-bar').click();
+    await page.locator('[data-vault-mode="make"]').click();
+    await expect(page.locator('#vault-make-panel')).toBeVisible();
+    await expect(page.locator('#vault-shelf-panel')).toBeHidden();
+    await expect(page.locator('#vault-make-results .lab-cocktail-card').first()).toBeVisible();
+  });
+
+  test('My Vault → "I can make" shows the empty-state prompt when nothing is available', async ({ page }) => {
+    await page.evaluate(() => {
+      const ov = {};
+      for (const ing of allIngredients) ov[ing.id] = 'need';
+      localStorage.setItem('mv_ing_overrides', JSON.stringify(ov));
+    });
+    await page.reload();
+    await expect(page.locator('#screen-home')).toHaveClass(/active/);
+    await page.locator('#nb-bar').click();
+    await page.locator('[data-vault-mode="make"]').click();
+    await expect(page.locator('#vault-make-results .lab-empty')).toBeVisible();
   });
 });
