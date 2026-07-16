@@ -39,6 +39,8 @@ jobs:
             --exclude 'package-lock.json' \
             --exclude 'playwright.config.js' \
             --exclude 'EVALUATION.md' \
+            --exclude 'api' \
+            --exclude '.vercelignore' \
             ./ _site/
 
       - name: Inject Anthropic API key into config.js
