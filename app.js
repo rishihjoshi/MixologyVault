@@ -8,13 +8,15 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '2.1.0';
+const APP_VERSION = '2.2.0';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
 let allCocktails      = [];
+let allMocktails      = [];
 let favourites        = new Set();
 let activeFilter      = 'all';
+let mocktailFilter    = 'all';
 let activeUnit        = 'oz';
 let activeModalId     = null;
 let barActiveFilter   = 'all';
@@ -115,6 +117,36 @@ async function loadCocktails() {
     }));
   } catch (e) {
     console.warn('Failed to load cocktails.json:', e.message);
+    return [];
+  }
+}
+
+// Pure: map one raw mocktails.json record → the normalized card shape used by
+// cardHTML/openModal. Zero-proof, so baseSpirit carries the base ingredient and
+// there's no spiritKey. Kept pure so it can be unit-tested in isolation.
+function mocktailToCard(m) {
+  return {
+    id:          m.id,
+    name:        m.name,
+    baseSpirit:  m.baseIngredient || '',
+    tag:         (m.tags || []).join(', '),
+    ingredients: (m.ingredients     || []).join('\n'),
+    measML:      (m.measurementsMl  || []).join('\n'),
+    measOz:      (m.measurementsOz  || []).join('\n'),
+    steps:       m.recipe      || '',
+    history:     m.history     || '',
+    description: m.description || '',
+    isMocktail:  true,
+  };
+}
+
+async function loadMocktails() {
+  try {
+    const res  = await fetch(DATA_BASE + 'mocktails.json');
+    const data = await res.json();
+    return data.map(mocktailToCard);
+  } catch (e) {
+    console.warn('Failed to load mocktails.json:', e.message);
     return [];
   }
 }
@@ -308,6 +340,55 @@ function renderCocktails(filterKey, search) {
     : list.map(c => cardHTML(c)).join('');
 }
 
+// ── RENDER MOCKTAILS (zero-proof) ─────────────────────────
+// Distinct tags across all mocktails, most-common first (for the filter chips).
+function mocktailTags() {
+  const freq = new Map();
+  for (const m of allMocktails) {
+    for (const t of (m.tag ? m.tag.split(',') : [])) {
+      const tag = t.trim();
+      if (tag) freq.set(tag, (freq.get(tag) || 0) + 1);
+    }
+  }
+  return [...freq.entries()].sort((a, b) => b[1] - a[1]).map(([t]) => t).slice(0, 6);
+}
+
+function buildMocktailFilterChips() {
+  const row = document.getElementById('mocktail-filter-row');
+  if (!row) return;
+  const chips = ['all', ...mocktailTags()];
+  row.innerHTML = chips.map(t =>
+    `<button class="filter-chip ${t === 'all' ? 'active' : ''}" data-mfilter="${esc(t)}">
+      <span class="chip-icon">${t === 'all' ? '✦' : '🌿'}</span>${t === 'all' ? 'All' : esc(t)}
+    </button>`).join('');
+
+  row.addEventListener('click', e => {
+    const chip = e.target.closest('.filter-chip');
+    if (!chip) return;
+    row.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    mocktailFilter = chip.dataset.mfilter;
+    renderMocktails(mocktailFilter, document.getElementById('mocktail-search').value);
+  });
+}
+
+function renderMocktails(filterKey, search) {
+  filterKey  = filterKey || 'all';
+  const q    = (search || '').toLowerCase();
+  let   list = allMocktails.filter(m => {
+    if (!q) return true;
+    return (m.name + ' ' + m.baseSpirit + ' ' + m.tag + ' ' + m.ingredients).toLowerCase().includes(q);
+  });
+  if (filterKey !== 'all') list = list.filter(m => m.tag.toLowerCase().includes(filterKey.toLowerCase()));
+
+  document.getElementById('mocktail-count').textContent = `${list.length} mocktail${list.length !== 1 ? 's' : ''}`;
+
+  const el = document.getElementById('mocktail-list');
+  el.innerHTML = list.length === 0
+    ? '<div class="empty"><div class="ei">🍹</div>No mocktails found. Try a different filter.</div>'
+    : list.map(m => cardHTML(m)).join('');
+}
+
 // ── FAVOURITES ────────────────────────────────────────────
 // FIX: receives the button element directly (not the event).
 //      Passing the event and using e.currentTarget gives the
@@ -328,13 +409,20 @@ function toggleFav(btn, id) {
 }
 
 // ── MODAL ─────────────────────────────────────────────────
+// Look up a drink across both cocktails and mocktails (ids are unique slugs).
+function findDrink(id) {
+  return allCocktails.find(x => x.id === id) || allMocktails.find(x => x.id === id);
+}
+
 function openModal(id) {
-  const c = allCocktails.find(x => x.id === id);
+  const c = findDrink(id);
   if (!c) return;
   activeModalId = id;
 
   document.getElementById('modal-tag').textContent  = c.tag || '';
   document.getElementById('modal-name').textContent = c.name;
+  const baseLabel = document.querySelector('.modal-base-label');
+  if (baseLabel) baseLabel.textContent = c.isMocktail ? 'Base: ' : 'Base spirit: ';
   document.getElementById('modal-base').textContent = c.baseSpirit || '—';
 
   const descEl = document.getElementById('modal-description');
@@ -396,7 +484,7 @@ function setUnit(u) {
   document.getElementById('unit-oz').classList.toggle('on', u === 'oz');
   document.getElementById('unit-ml').classList.toggle('on', u === 'ml');
   if (activeModalId !== null) {
-    const c = allCocktails.find(x => x.id === activeModalId);
+    const c = findDrink(activeModalId);
     if (c) renderModalIngredients(c);
   }
 }
@@ -409,7 +497,7 @@ function closeModal(e) {
 }
 
 // ── NAVIGATION ────────────────────────────────────────────
-const VALID_SCREENS = new Set(['home','bar','cocktails','decide']);
+const VALID_SCREENS = new Set(['home','bar','cocktails','mocktails','decide']);
 function switchScreen(id, btn) {
   if (!VALID_SCREENS.has(id)) return; // reject unknown screen IDs
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1032,6 +1120,11 @@ async function init() {
     renderCocktails(activeFilter, e.target.value);
   });
 
+  // Mocktail search
+  document.getElementById('mocktail-search')?.addEventListener('input', e => {
+    renderMocktails(mocktailFilter, e.target.value);
+  });
+
   // Bar filter tabs
   document.querySelectorAll('.bar-filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1048,18 +1141,24 @@ async function init() {
   wireCardArea(document.getElementById('featured-card'));
   wireCardArea(document.getElementById('home-signatures'));
   wireCardArea(document.getElementById('cocktail-list'));
+  wireCardArea(document.getElementById('mocktail-list'));
   wireCardArea(document.getElementById('results-list'));
   wireCardArea(document.getElementById('cam-cocktail-results'));
 
   // Load local JSON files in parallel
-  [allIngredients, allCocktails] = await Promise.all([
+  [allIngredients, allCocktails, allMocktails] = await Promise.all([
     loadIngredients(),
     loadCocktails(),
+    loadMocktails(),
   ]);
 
   renderHome();
   renderBar();
   renderCocktails('all', '');
+
+  // Mocktails tab — build tag filters + initial render
+  buildMocktailFilterChips();
+  renderMocktails('all', '');
 
   // My Vault "I can make" — initial render (now data is loaded)
   renderVaultMake();
@@ -1130,6 +1229,8 @@ function handleFragmentShortcut() {
   const hash = window.location.hash;
   if (hash === '#decide') {
     switchScreen('decide', document.getElementById('nav-decide'));
+  } else if (hash === '#mocktails') {
+    switchScreen('mocktails', document.getElementById('nb-mocktails'));
   }
   if (hash) window.history.replaceState(null, '', './index.html');
 }

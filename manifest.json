@@ -36,10 +36,10 @@
       "icons": [{ "src": "AppIcon.png", "sizes": "1087x1087" }]
     },
     {
-      "name": "AI Mixologist",
-      "short_name": "AI Mix",
-      "description": "Chat with your AI mixologist",
-      "url": "./index.html#ai",
+      "name": "Mocktails",
+      "short_name": "Mocktails",
+      "description": "Browse zero-proof drinks",
+      "url": "./index.html#mocktails",
       "icons": [{ "src": "AppIcon.png", "sizes": "1087x1087" }]
     }
   ]

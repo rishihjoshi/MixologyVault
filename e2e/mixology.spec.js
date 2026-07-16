@@ -12,11 +12,12 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('Snap tab + user API-key UI removed', () => {
-  test('bottom nav has exactly 4 buttons and no Snap or Lab tab', async ({ page }) => {
-    await expect(page.locator('#nav > button')).toHaveCount(4);
+  test('bottom nav has exactly 5 buttons and no Snap or Lab tab', async ({ page }) => {
+    await expect(page.locator('#nav > button')).toHaveCount(5);
     await expect(page.locator('#nb-camera')).toHaveCount(0);
     await expect(page.locator('#nb-lab')).toHaveCount(0);
     await expect(page.locator('#screen-lab')).toHaveCount(0);
+    await expect(page.locator('#nb-mocktails')).toHaveCount(1);
     await expect(page.locator('nav#nav')).not.toContainText('Snap');
     await expect(page.locator('nav#nav')).not.toContainText('Lab');
   });
@@ -62,7 +63,7 @@ test.describe('Snap feature relocated into Decide', () => {
 
 test.describe('Version functionality', () => {
   test('visible version label reads v2.0.0', async ({ page }) => {
-    await expect(page.locator('#app-version')).toHaveText('v2.1.0');
+    await expect(page.locator('#app-version')).toHaveText('v2.2.0');
   });
 
   test('update banner exists and starts hidden', async ({ page }) => {
@@ -72,10 +73,11 @@ test.describe('Version functionality', () => {
   });
 });
 
-test.describe('Navigation — all 4 tabs', () => {
+test.describe('Navigation — all 5 tabs', () => {
   const tabs = [
     { btn: '#nb-bar', screen: '#screen-bar' },
     { btn: '#nb-cocktails', screen: '#screen-cocktails' },
+    { btn: '#nb-mocktails', screen: '#screen-mocktails' },
     { btn: '#nav-decide', screen: '#screen-decide' },
     { btn: '#nb-home', screen: '#screen-home' },
   ];
@@ -101,6 +103,18 @@ test.describe('Core flows unaffected', () => {
     await expect(firstCard).toBeVisible();
     await firstCard.click();
     await expect(page.locator('#modal-overlay')).toHaveClass(/open/);
+  });
+
+  test('Mocktails tab lists drinks, search filters, and a card opens the modal', async ({ page }) => {
+    await page.locator('#nb-mocktails').click();
+    await expect(page.locator('#screen-mocktails')).toHaveClass(/active/);
+    await expect(page.locator('#mocktail-list .drink-card').first()).toBeVisible();
+    await page.locator('#mocktail-search').fill('mojito');
+    const firstCard = page.locator('#mocktail-list .drink-card').first();
+    await expect(firstCard).toBeVisible();
+    await firstCard.click();
+    await expect(page.locator('#modal-overlay')).toHaveClass(/open/);
+    await expect(page.locator('.modal-base-label')).toHaveText('Base:');
   });
 
   test('My Vault ingredient toggle persists an override', async ({ page }) => {
