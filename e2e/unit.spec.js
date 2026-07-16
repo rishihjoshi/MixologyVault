@@ -312,3 +312,52 @@ test.describe('cardHTML()', () => {
     expect(html).toContain('pour-in');
   });
 });
+
+// ── mocktailToCard() — normalize a raw mocktail record ───
+test.describe('mocktailToCard()', () => {
+  const raw = {
+    id: 'virgin-mojito',
+    name: 'Virgin Mojito',
+    baseIngredient: 'Lime',
+    tags: ['Classic', 'Refreshing'],
+    ingredients: ['Lime', 'Mint', 'Soda'],
+    measurementsMl: ['30 ml', '', '90 ml'],
+    measurementsOz: ['1 oz', '', '3 oz'],
+    recipe: '1. Muddle\n2. Top with soda',
+    description: 'A zero-proof classic.',
+    history: 'Cuban roots.',
+  };
+
+  test('maps baseIngredient → baseSpirit and flags isMocktail', async ({ page }) => {
+    const c = await call(page, 'mocktailToCard', raw);
+    expect(c.baseSpirit).toBe('Lime');
+    expect(c.isMocktail).toBe(true);
+    expect(c.spiritKey).toBeUndefined();
+  });
+
+  test('joins tags / ingredients / measurements and maps recipe → steps', async ({ page }) => {
+    const c = await call(page, 'mocktailToCard', raw);
+    expect(c.tag).toBe('Classic, Refreshing');
+    expect(c.ingredients).toBe('Lime\nMint\nSoda');
+    expect(c.measML).toBe('30 ml\n\n90 ml');
+    expect(c.steps).toBe('1. Muddle\n2. Top with soda');
+  });
+
+  test('missing fields default to empty strings', async ({ page }) => {
+    const c = await call(page, 'mocktailToCard', { id: 'x', name: 'Bare' });
+    expect(c.baseSpirit).toBe('');
+    expect(c.tag).toBe('');
+    expect(c.ingredients).toBe('');
+    expect(c.steps).toBe('');
+    expect(c.isMocktail).toBe(true);
+  });
+
+  test('the live allMocktails is populated and every entry is a mocktail', async ({ page }) => {
+    const info = await page.evaluate(() => ({
+      count: allMocktails.length,
+      allFlagged: allMocktails.every(m => m.isMocktail === true),
+    }));
+    expect(info.count).toBeGreaterThan(0);
+    expect(info.allFlagged).toBe(true);
+  });
+});
