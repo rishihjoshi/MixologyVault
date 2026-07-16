@@ -1,9 +1,8 @@
 // Release ritual: bump CACHE_NAME here AND APP_VERSION in app.js together.
-const CACHE_NAME = 'mixvault-v3';
+const CACHE_NAME = 'mixvault-v4';
 const STATIC_ASSETS = [
   './index.html',
   './app.js',
-  './config.js',
   './styles.css',
   './manifest.json',
   './AppIcon.png',
@@ -42,26 +41,8 @@ self.addEventListener('fetch', e => {
   const { request } = e;
   const url = new URL(request.url);
 
-  // Never intercept Anthropic API calls — always live
-  if (url.hostname === 'api.anthropic.com') return;
-
-  // config.js carries the deploy-injected API key — serve it network-first so a
-  // rotated key propagates on the next load without an app-version/cache bump.
-  // Falls back to the cached copy when offline.
-  if (url.pathname.endsWith('/config.js')) {
-    e.respondWith(
-      fetch(request)
-        .then(res => {
-          if (res.ok) {
-            const clone = res.clone();
-            caches.open(CACHE_NAME).then(c => c.put(request, clone));
-          }
-          return res;
-        })
-        .catch(() => caches.match(request))
-    );
-    return;
-  }
+  // Never intercept the Anthropic proxy — always live
+  if (url.hostname === 'mixology-vault.vercel.app') return;
 
   // CDN fonts: network-first with cache fallback
   if (url.hostname !== self.location.hostname) {

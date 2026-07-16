@@ -285,21 +285,15 @@ test.describe('camBuildIngObjects()', () => {
   });
 });
 
-// ── camHasKey() — key availability gate ──────────────────
+// ── camHasKey() — availability gate (now proxy-based) ────
 test.describe('camHasKey()', () => {
-  test('false when no key is configured (empty local config.js)', async ({ page }) => {
-    expect(await call(page, 'camHasKey')).toBe(false);
+  test('true — the photo feature is available via the configured proxy', async ({ page }) => {
+    expect(await call(page, 'camHasKey')).toBe(true);
   });
 
-  test('true once a key is present on window', async ({ page }) => {
-    const result = await page.evaluate(() => {
-      const prev = window.ANTHROPIC_API_KEY;
-      window.ANTHROPIC_API_KEY = 'sk-ant-test';
-      const r = /** @type {any} */ (window).camHasKey();
-      window.ANTHROPIC_API_KEY = prev;
-      return r;
-    });
-    expect(result).toBe(true);
+  test('CAM_PROXY_URL points at the Vercel proxy endpoint', async ({ page }) => {
+    const url = await page.evaluate(() => CAM_PROXY_URL);
+    expect(url).toContain('vercel.app/api/analyze');
   });
 });
 

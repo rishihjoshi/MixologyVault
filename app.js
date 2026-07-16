@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '2.0.0';
+const APP_VERSION = '2.1.0';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -631,10 +631,10 @@ function triggerVaultUnlock() {
 }
 
 // ── SNAP & SIP (CAMERA — lives inside the Decide tab's "By photo" panel) ──
-// The Anthropic API key is injected at deploy time into config.js as
-// window.ANTHROPIC_API_KEY (see .github/workflows/deploy.yml). No user key UI.
-const CAM_MODEL     = 'claude-haiku-4-5-20251001';
-const CAM_PROMPT    = 'List every alcoholic bottle, mixer, juice, syrup, or cocktail ingredient visible in this photo. Return ONLY a JSON array of ingredient name strings. Be specific about brands where visible. Example: ["Tanqueray Gin","Cointreau","Angostura Bitters"]';
+// The photo is sent to a serverless proxy (Vercel) that holds the Anthropic
+// key in its ANTHROPIC_API_KEY env var and forwards to Claude. The key is
+// NEVER in the browser. Model + prompt are pinned server-side in api/analyze.js.
+const CAM_PROXY_URL = 'https://mixology-vault.vercel.app/api/analyze';
 const ALWAYS_PRESENT = [
   { item: 'Simple Syrup', category: 'syrups', id: '_simple-syrup', alwaysPresent: true,
     note: 'Use 1:1 sugar & hot water, or a sugar cube' },
@@ -647,7 +647,7 @@ let camEditMode       = false;
 let camCurrentFile    = null;
 let camPreviewURL     = null;
 
-function camHasKey() { return !!window.ANTHROPIC_API_KEY; }
+function camHasKey() { return !!CAM_PROXY_URL; }
 
 let camErrorTimer = null;
 function camShowError(msg) {
@@ -658,46 +658,45 @@ function camShowError(msg) {
   camErrorTimer = setTimeout(() => { el.style.display = 'none'; }, 8000);
 }
 
+// Downscale the photo to a max 1568px long edge (Anthropic's recommended cap)
+// and return base64 JPEG. Keeps the upload well under the proxy's ~4.5 MB body
+// limit and cuts Claude token cost, without a visible quality hit.
 function camFileToBase64(file) {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataURL   = reader.result;
-      const commaIdx  = dataURL.indexOf(',');
-      const meta      = dataURL.substring(5, commaIdx);       // e.g. "image/jpeg;base64"
-      const mediaType = meta.replace(';base64', '');
-      const base64    = dataURL.substring(commaIdx + 1);
-      resolve({ base64, mediaType });
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const MAX = 1568;
+      let w = img.naturalWidth, h = img.naturalHeight;
+      if (Math.max(w, h) > MAX) {
+        const scale = MAX / Math.max(w, h);
+        w = Math.round(w * scale);
+        h = Math.round(h * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataURL = canvas.toDataURL('image/jpeg', 0.85);
+      resolve({ base64: dataURL.substring(dataURL.indexOf(',') + 1), mediaType: 'image/jpeg' });
     };
-    reader.onerror = () => reject(new Error('Could not read file'));
-    reader.readAsDataURL(file);
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not read image')); };
+    img.src = url;
   });
 }
 
+// POST the image to the Vercel proxy, which attaches the key and forwards to
+// Anthropic. On success the proxy returns Claude's raw response JSON.
 async function camCallClaude(base64, mediaType) {
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+  const resp = await fetch(CAM_PROXY_URL, {
     method: 'POST',
-    headers: {
-      'x-api-key':                               window.ANTHROPIC_API_KEY,
-      'anthropic-version':                       '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-      'content-type':                            'application/json',
-    },
-    body: JSON.stringify({
-      model:      CAM_MODEL,
-      max_tokens: 1024,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-          { type: 'text',  text: CAM_PROMPT },
-        ],
-      }],
-    }),
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ base64, mediaType }),
   });
   if (!resp.ok) {
-    let msg = `API error ${resp.status}`;
-    try { const j = await resp.json(); msg = j.error?.message || msg; } catch (_) {}
+    let msg = `Error ${resp.status}`;
+    try { const j = await resp.json(); msg = j.error?.message || j.error || msg; } catch (_) {}
     throw new Error(msg);
   }
   return resp.json();

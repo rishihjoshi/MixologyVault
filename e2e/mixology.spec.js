@@ -1,9 +1,9 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 
-// These tests run against the local checkout, where config.js ships an EMPTY
-// window.ANTHROPIC_API_KEY — so the "By photo" flow shows its unavailable
-// notice and never makes a real Anthropic API call.
+// The photo feature calls a Vercel proxy (CAM_PROXY_URL). These tests only
+// assert UI wiring — they never upload a photo, so no real proxy/Anthropic
+// call is made.
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
@@ -44,12 +44,13 @@ test.describe('Snap feature relocated into Decide', () => {
     await expect(page.locator('#screen-decide #decide-toggle')).toHaveCount(1);
   });
 
-  test('with no key configured, By photo shows the unavailable notice', async ({ page }) => {
+  test('By photo shows the capture UI (proxy configured)', async ({ page }) => {
     await page.locator('#nav-decide').click();
     await expect(page.locator('#screen-decide')).toHaveClass(/active/);
     await page.locator('.decide-toggle-btn[data-decide-mode="photo"]').click();
-    await expect(page.locator('#decide-snap-unavailable')).toBeVisible();
-    await expect(page.locator('#cam-main')).toBeHidden();
+    await expect(page.locator('#cam-main')).toBeVisible();
+    await expect(page.locator('#cam-capture-zone')).toBeVisible();
+    await expect(page.locator('#decide-snap-unavailable')).toBeHidden();
   });
 
   test('By mood is the default panel', async ({ page }) => {
@@ -61,7 +62,7 @@ test.describe('Snap feature relocated into Decide', () => {
 
 test.describe('Version functionality', () => {
   test('visible version label reads v2.0.0', async ({ page }) => {
-    await expect(page.locator('#app-version')).toHaveText('v2.0.0');
+    await expect(page.locator('#app-version')).toHaveText('v2.1.0');
   });
 
   test('update banner exists and starts hidden', async ({ page }) => {
