@@ -2756,26 +2756,145 @@
       "Bourbon",
       "Sweet Vermouth",
       "DOM Bénédictine",
-      "Ancho Reyes Chile Liqueur",
-      "Orange Twist"
+      "Ancho Reyes Chile Liqueur"
     ],
     "measurementsMl": [
       "60 ml",
       "22.5 ml",
       "7.5 ml",
-      "7.5 ml",
-      "Garnish"
+      "7.5 ml"
     ],
     "measurementsOz": [
       "2 oz",
       "0.75 oz",
       "0.25 oz",
-      "0.25 oz",
-      "Garnish"
+      "0.25 oz"
     ],
     "history": "A modern riff on the Manhattan built on a 2 : ¾ : ¼ : ¼ home-bar ratio. Sweet vermouth keeps the classic structure, while Bénédictine and Ancho Reyes add herbal and chile layers.",
     "description": "Bourbon-forward, herbal, lightly sweet, with baking spice, warm chile, and orange. The bourbon stays the star; Bénédictine adds honeyed herbal complexity without turning syrupy, and Ancho Reyes brings a gentle chile finish.",
     "recipe": "Add all ingredients to a mixing glass filled with ice. Stir 20–30 seconds until very cold and properly diluted. Strain into a chilled Nick & Nora or coupe. Express an orange twist over the surface and garnish.",
     "mood": "Bold"
+  },
+  {
+    "id": "monte-carlo",
+    "name": "Monte Carlo",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Spirit-Forward",
+      "Classic"
+    ],
+    "ingredients": [
+      "Bourbon",
+      "DOM Bénédictine",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz",
+      "2 dashes"
+    ],
+    "history": "Documented in David Embury’s 1948 ‘The Fine Art of Mixing Drinks’ as a whiskey cocktail sweetened with Bénédictine instead of vermouth. Classic spec uses rye; bourbon makes it rounder.",
+    "description": "An Old Fashioned’s richer cousin — Bénédictine’s honeyed herbs and baking spice wrap around bourbon, with Angostura keeping it dry and aromatic.",
+    "recipe": "Add all ingredients to a mixing glass with ice. Stir 20–30 seconds until well chilled. Strain into a rocks glass over a large ice cube. Express a lemon twist over the drink and garnish.",
+    "mood": "Bold"
+  },
+  {
+    "id": "frisco-sour",
+    "name": "Frisco Sour",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Sour",
+      "Classic"
+    ],
+    "ingredients": [
+      "Bourbon",
+      "DOM Bénédictine",
+      "Fresh Lemon Juice",
+      "Fresh Lime Juice"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "15 ml",
+      "15 ml",
+      "7.5 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.5 oz",
+      "0.5 oz",
+      "0.25 oz"
+    ],
+    "history": "A classic whiskey sour variation named for San Francisco, where Bénédictine replaces the sugar and a split of lemon and lime sharpens the citrus.",
+    "description": "A whiskey sour with herbal depth — Bénédictine brings honey and spice in place of syrup, while lemon and lime keep it bright and dry.",
+    "recipe": "Add all ingredients to a shaker with ice. Shake hard 12–15 seconds. Strain into a chilled coupe. Garnish with a lemon twist.",
+    "mood": "Curious"
+  },
+  {
+    "id": "whiskey-smash",
+    "name": "Whiskey Smash",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Refreshing",
+      "Classic"
+    ],
+    "ingredients": [
+      "Bourbon",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Mint"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "6–8 leaves"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "6–8 leaves"
+    ],
+    "history": "The Smash appears in Jerry Thomas’s 1862 bar guide as a smaller julep. Dale DeGroff’s lemon-and-mint Whiskey Smash revived it for the modern cocktail bar in the 2000s.",
+    "description": "Bright, minty, and easy-drinking — bourbon’s vanilla warmth meets fresh lemon and cooling mint over crushed ice. A julep with a citrus kick.",
+    "recipe": "Gently muddle the mint with the simple syrup in a shaker. Add bourbon, lemon juice, and ice. Shake 10–12 seconds. Strain into a rocks glass over crushed ice. Garnish with a mint sprig.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "spicy-ancho-margarita",
+    "name": "Spicy Ancho Margarita",
+    "baseSpirit": "Tequila",
+    "tags": [
+      "Margarita",
+      "Spicy",
+      "Modern Classic"
+    ],
+    "ingredients": [
+      "Tequila Anejo",
+      "Ancho Reyes Chile Liqueur",
+      "Cointreau",
+      "Fresh Lime Juice"
+    ],
+    "measurementsMl": [
+      "45 ml",
+      "15 ml",
+      "15 ml",
+      "30 ml"
+    ],
+    "measurementsOz": [
+      "1.5 oz",
+      "0.5 oz",
+      "0.5 oz",
+      "1 oz"
+    ],
+    "history": "Ancho Reyes, a Puebla-style chile liqueur based on a 1927 recipe, launched in 2014 and quickly became the bartender’s shortcut to a spicy Margarita without muddling fresh peppers.",
+    "description": "A Margarita with a slow, smoky warmth — Añejo’s oak and vanilla meet Ancho Reyes’ dried-chile heat, with Cointreau and lime keeping it bright.",
+    "recipe": "Rim a rocks glass with salt. Add all ingredients to a shaker with ice. Shake hard 12–15 seconds. Strain into the glass over fresh ice. Garnish with a lime wheel.",
+    "mood": "Party"
   }
 ]
