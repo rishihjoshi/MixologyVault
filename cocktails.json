@@ -2742,5 +2742,40 @@
     "description": "Crisp, clean, and floral — vodka's neutrality lets St-Germain's honeyed elderflower take centre stage, with citrus and soda for refreshment.",
     "recipe": "Add vodka, St-Germain, and lemon juice to a shaker with ice. Shake 10 seconds. Strain into a tall glass over ice. Top with soda. Stir gently. Garnish with a lemon twist or an edible flower.",
     "mood": "Fresh"
+  },
+  {
+    "id": "gentlemans-knock",
+    "name": "Gentleman’s Knock",
+    "baseSpirit": "Whisky",
+    "tags": [
+      "Spirit-Forward",
+      "Modern Classic",
+      "Spicy"
+    ],
+    "ingredients": [
+      "Bourbon",
+      "Sweet Vermouth",
+      "DOM Bénédictine",
+      "Ancho Reyes Chile Liqueur",
+      "Orange Twist"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "7.5 ml",
+      "7.5 ml",
+      "Garnish"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.25 oz",
+      "0.25 oz",
+      "Garnish"
+    ],
+    "history": "A modern riff on the Manhattan built on a 2 : ¾ : ¼ : ¼ home-bar ratio. Sweet vermouth keeps the classic structure, while Bénédictine and Ancho Reyes add herbal and chile layers.",
+    "description": "Bourbon-forward, herbal, lightly sweet, with baking spice, warm chile, and orange. The bourbon stays the star; Bénédictine adds honeyed herbal complexity without turning syrupy, and Ancho Reyes brings a gentle chile finish.",
+    "recipe": "Add all ingredients to a mixing glass filled with ice. Stir 20–30 seconds until very cold and properly diluted. Strain into a chilled Nick & Nora or coupe. Express an orange twist over the surface and garnish.",
+    "mood": "Bold"
   }
 ]
