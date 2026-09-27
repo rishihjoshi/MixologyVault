@@ -56,6 +56,14 @@
     "notes": null
   },
   {
+    "id": "spirits-bourbon",
+    "category": "Spirits",
+    "name": "Bourbon",
+    "brand": null,
+    "status": "have",
+    "notes": "Kentucky straight bourbon — for Gentleman’s Knock, Monte Carlo, Frisco Sour, Whiskey Smash"
+  },
+  {
     "id": "liqueurs-vermouth",
     "category": "Liqueurs",
     "name": "Vermouth",
@@ -94,6 +102,30 @@
     "brand": "St-Germain",
     "status": "have",
     "notes": "French elderflower liqueur — floral, honeyed, pairs beautifully with gin, prosecco, citrus"
+  },
+  {
+    "id": "liqueurs-sweet-vermouth",
+    "category": "Liqueurs",
+    "name": "Sweet Vermouth",
+    "brand": null,
+    "status": "have",
+    "notes": "Rosso / Italian-style red vermouth — Manhattan-style drinks"
+  },
+  {
+    "id": "liqueurs-benedictine",
+    "category": "Liqueurs",
+    "name": "Bénédictine",
+    "brand": "DOM",
+    "status": "have",
+    "notes": "Honeyed herbal liqueur with baking spice"
+  },
+  {
+    "id": "liqueurs-chile-liqueur",
+    "category": "Liqueurs",
+    "name": "Chile Liqueur",
+    "brand": "Ancho Reyes",
+    "status": "have",
+    "notes": "Ancho chile liqueur from Puebla — gentle, smoky heat"
   },
   {
     "id": "bitters-aromatic-bitters",
