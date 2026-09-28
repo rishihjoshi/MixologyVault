@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '2.3.0';
+const APP_VERSION = '2.4.0';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -21,6 +21,30 @@ let activeUnit        = 'oz';
 let activeModalId     = null;
 let barActiveFilter   = 'all';
 let vaultMode         = 'shelf';  // 'shelf' | 'make' — My bar view toggle
+
+// ── AGE GATE (21+) ───────────────────────────────────────
+// Confirmation is remembered on-device. A "no" is not remembered, so the
+// question is asked again next time rather than locking the device out.
+const AGE_KEY = 'mv_age_ok';
+function ageConfirmed() {
+  try { return localStorage.getItem(AGE_KEY) === '21'; } catch { return false; }
+}
+function wireAgeGate() {
+  const gate = document.getElementById('age-gate');
+  if (!gate) return;
+  if (ageConfirmed()) { gate.classList.add('hidden'); return; }
+  document.getElementById('age-gate-yes')?.addEventListener('click', () => {
+    try { localStorage.setItem(AGE_KEY, '21'); } catch {}
+    gate.classList.add('hidden');
+  });
+  document.getElementById('age-gate-no')?.addEventListener('click', () => {
+    document.getElementById('age-gate-ask').hidden    = true;
+    document.getElementById('age-gate-denied').hidden = false;
+  });
+  document.getElementById('age-gate-yes')?.focus();
+}
+// Run immediately (not in async init) so returning visitors don't see a flash.
+wireAgeGate();
 
 // ── FAVOURITES (persisted) ───────────────────────────────
 function loadFavourites() {

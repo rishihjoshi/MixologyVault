@@ -1001,6 +1001,27 @@ body {
                          letter-spacing: .06em; padding: 20px 0 8px; }
 #app-version          { color: var(--muted2); }
 
+/* ── Age gate (21+) ── */
+.age-gate             { position: fixed; inset: 0; z-index: 1000; background: var(--bg);
+                         display: flex; align-items: center; justify-content: center;
+                         padding: calc(24px + var(--safe-t)) 16px calc(24px + var(--safe-b)); }
+.age-gate.hidden      { display: none; }
+.age-gate-card        { width: 100%; max-width: 360px; text-align: center;
+                         display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.age-gate-card[hidden] { display: none; }
+.age-gate-icon        { width: 72px; height: 72px; border-radius: 18px; margin-bottom: 4px; }
+.age-gate-emoji       { font-size: 44px; }
+.age-gate-title       { font-family: var(--font-d); font-size: 26px; font-weight: 700; line-height: 1.15; }
+.age-gate-sub         { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.5; }
+.age-gate-yes         { margin-top: 8px; width: 100%; min-height: 52px; border: none; border-radius: var(--rlg);
+                         background: linear-gradient(135deg, var(--amber) 0%, var(--amber-l) 100%);
+                         color: white; font-family: var(--font-b); font-size: 16px; font-weight: 600;
+                         cursor: pointer; -webkit-appearance: none; }
+.age-gate-no          { width: 100%; min-height: 48px; border: 0.5px solid var(--border2); border-radius: var(--rlg);
+                         background: transparent; color: var(--text); font-family: var(--font-b);
+                         font-size: 15px; cursor: pointer; -webkit-appearance: none; }
+.age-gate-fine        { font-size: 11px; color: var(--muted); letter-spacing: .06em; margin-top: 4px; }
+
 .update-banner        { position: fixed; left: 50%; transform: translateX(-50%);
                          bottom: calc(var(--nav-h) + var(--safe-b) + 14px);
                          z-index: 200; display: flex; align-items: center; gap: 12px;

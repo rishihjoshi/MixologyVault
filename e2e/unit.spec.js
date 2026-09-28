@@ -16,6 +16,8 @@ async function call(page, fnName, ...args) {
 }
 
 test.beforeEach(async ({ page }) => {
+  // Past the 21+ age gate (covered separately in age-gate.spec.js).
+  await page.addInitScript(() => localStorage.setItem('mv_age_ok', '21'));
   await page.goto('/');
   await expect(page.locator('#screen-home')).toHaveClass(/active/);
 });

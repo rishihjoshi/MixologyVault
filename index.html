@@ -230,7 +230,7 @@
               <span id="cam-snap-label">Take photo</span>
             </button>
           </div>
-          <div class="cam-privacy-note">Your photo is sent to Anthropic's Claude only to identify bottles.</div>
+          <div class="cam-privacy-note">Mixology Vault never saves your photo. It's sent to Anthropic's Claude only to identify bottles; Anthropic deletes it within 30 days and doesn't use it for training.</div>
 
           <button class="cam-analyse-btn" id="cam-analyse-btn" style="display:none">
             <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="18" height="18">
@@ -345,6 +345,24 @@
       <div class="modal-section-label">Recipe</div>
       <ol class="step-list" id="modal-steps"></ol>
     </div>
+  </div>
+</div>
+
+<!-- Age gate (21+): visible by default so nothing shows before it's answered;
+     app.js hides it at load for visitors who already confirmed. -->
+<div id="age-gate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-title">
+  <div class="age-gate-card" id="age-gate-ask">
+    <img src="./AppIcon.png" class="age-gate-icon" alt="" draggable="false">
+    <h2 class="age-gate-title" id="age-gate-title">Are you 21 or older?</h2>
+    <p class="age-gate-sub">Mixology Vault features alcoholic drinks. You must be of legal drinking age (21+) to enter.</p>
+    <button class="age-gate-yes" id="age-gate-yes" type="button">I'm 21 or older</button>
+    <button class="age-gate-no" id="age-gate-no" type="button">I'm under 21</button>
+    <p class="age-gate-fine">Please drink responsibly.</p>
+  </div>
+  <div class="age-gate-card" id="age-gate-denied" hidden>
+    <div class="age-gate-emoji">🍹</div>
+    <h2 class="age-gate-title">Sorry, you must be 21+ to enter</h2>
+    <p class="age-gate-sub">Mixology Vault is for adults of legal drinking age. Come back when you're 21.</p>
   </div>
 </div>
 
