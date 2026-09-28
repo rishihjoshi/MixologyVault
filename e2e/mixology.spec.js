@@ -6,6 +6,8 @@ const { test, expect } = require('@playwright/test');
 // call is made.
 
 test.beforeEach(async ({ page }) => {
+  // Past the 21+ age gate (covered separately in age-gate.spec.js).
+  await page.addInitScript(() => localStorage.setItem('mv_age_ok', '21'));
   await page.goto('/');
   // Wait for JSON data + first render.
   await expect(page.locator('#screen-home')).toHaveClass(/active/);
@@ -62,8 +64,8 @@ test.describe('Snap feature relocated into Decide', () => {
 });
 
 test.describe('Version functionality', () => {
-  test('visible version label reads v2.3.0', async ({ page }) => {
-    await expect(page.locator('#app-version')).toHaveText('v2.3.0');
+  test('visible version label reads v2.4.0', async ({ page }) => {
+    await expect(page.locator('#app-version')).toHaveText('v2.4.0');
   });
 
   test('update banner exists and starts hidden', async ({ page }) => {

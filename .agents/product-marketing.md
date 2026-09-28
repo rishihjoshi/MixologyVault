@@ -1,6 +1,6 @@
 # Product Marketing Context
 
-**Document version:** v2
+**Document version:** v3
 **Last updated:** 2026-09-28
 
 > Auto-drafted from the codebase and the 2026-09-28 brand/UX-copy review, then synced with the copy pass shipped in v2.3.0. Items marked **[assumed]** are inferences — confirm or correct.
@@ -66,11 +66,11 @@ B2C — single user. Informal segments:
 | Objection | Response |
 |-----------|----------|
 | "Entering my bar is tedious." | Tap a pill to toggle it, or snap a photo and let Claude fill it in. |
-| "Where does my photo go?" | It's sent to Anthropic's Claude only to identify bottles (stated in-app under the camera). No account and no photo library. Don't claim "never stored" until retention is confirmed. |
+| "Where does my photo go?" | Mixology Vault never saves it: the proxy passes it straight to Anthropic's Claude in memory and doesn't log it. Anthropic deletes API inputs within 30 days and doesn't train on them. Never say "not stored anywhere", because Anthropic holds it for up to 30 days (up to 2 years if flagged for a usage-policy violation). |
 | "Only ~100 cocktails?" | Curated on purpose: classics plus signatures, each with history and method. Quality over volume. |
 | "Is this just another recipe site?" | No. It tells you what you can make right now, and what to buy next. |
 
-**Anti-persona:** Professional bartenders who need batch or costing tools; people who want thousands of obscure recipes; anyone under legal drinking age.
+**Anti-persona:** Professional bartenders who need batch or costing tools; people who want thousands of obscure recipes; anyone under 21 (turned away by the age gate).
 
 ## Switching Dynamics
 **Push:** Recipe sites ignore what's in your bar; ads and bloat; accounts and paywalls.
@@ -132,8 +132,9 @@ B2C — single user. Informal segments:
 - ✅ Morning Decide picks are zero-proof only.
 - ✅ Photo disclosure under the camera: "Your photo is sent to Anthropic's Claude only to identify bottles."
 - ✅ "Claude" is used descriptively only; the button says "Identify my bottles".
-- ⬜ **Open:** age confirmation (18+/21+) before first use. Needed for app-store listings and some markets.
-- ⬜ **Open:** confirm photo retention on the proxy/Anthropic side before promising "not stored".
+- ✅ 21+ age gate on first launch. "Yes" is remembered on the device; "No" isn't, so the question is asked again next time.
+- ✅ Photo retention confirmed (2026-09-28). Approved copy: "Mixology Vault never saves your photo. It's sent to Anthropic's Claude only to identify bottles; Anthropic deletes it within 30 days and doesn't use it for training." Re-check if the Anthropic Console org opts into data sharing or the proxy starts logging.
+- Photo data facts: the proxy keeps the caller's IP in memory only, for rate limiting (10-minute window, cleared daily or on cold start). The photo is never written to disk or logs. Sources: Anthropic Privacy Center, "How long do you store my organization's data?" and "Is my data used for model training?"
 
 ## Goals
 **Business goal:** **[assumed]** Personal/portfolio project that grows repeat home use and installs.
@@ -142,5 +143,6 @@ B2C — single user. Informal segments:
 
 ## Changelog
 *Newest first. One line per revision: what changed and why.*
+- v3 (2026-09-28) — Added 21+ age gate; replaced the open photo-retention item with confirmed facts and approved privacy copy; updated the photo objection and anti-persona.
 - v2 (2026-09-28) — Synced with the v2.3.0 copy pass: glossary now matches the shipped UI (My bar / In my bar / In your bar, Quick/Moderate/Advanced), Decide now uses mood/sweetness/time, favourites persist; added error-copy rule; compliance items marked done or open.
 - v1 (2026-09-28) — Initial context, auto-drafted from the codebase and the brand/UX-copy review.
