@@ -10,6 +10,32 @@ const ALLOWED_ORIGIN = 'https://rishihjoshi.github.io';
 const MODEL  = 'claude-haiku-4-5-20251001';
 const PROMPT = 'List every alcoholic bottle, mixer, juice, syrup, or cocktail ingredient visible in this photo. Return ONLY a JSON array of ingredient name strings. Be specific about brands where visible. Example: ["Tanqueray Gin","Cointreau","Angostura Bitters"]';
 
+// Best-effort rate limiting. State lives in the warm function instance's memory,
+// so it resets on cold starts and isn't shared across instances — it stops
+// casual abuse and runaway loops. The hard cost ceiling is the spend limit on
+// the Anthropic Console workspace that owns the key.
+const PER_IP_LIMIT     = 10;              // photos per IP per window
+const PER_IP_WINDOW_MS = 10 * 60 * 1000;  // 10 minutes
+const DAILY_LIMIT      = 200;             // photos per instance per UTC day
+const ipHits = new Map();                 // ip -> [timestamps]
+let dayKey = '', dayCount = 0;
+
+function rateLimit(ip, now = Date.now()) {
+  const today = new Date(now).toISOString().slice(0, 10);
+  if (today !== dayKey) { dayKey = today; dayCount = 0; ipHits.clear(); }
+  if (dayCount >= DAILY_LIMIT) return 'Daily photo limit reached — try again tomorrow';
+
+  const hits = (ipHits.get(ip) || []).filter(t => now - t < PER_IP_WINDOW_MS);
+  if (hits.length >= PER_IP_LIMIT) {
+    ipHits.set(ip, hits);
+    return 'Too many photos — wait a few minutes and try again';
+  }
+  hits.push(now);
+  ipHits.set(ip, hits);
+  dayCount++;
+  return null;
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
   res.setHeader('Vary', 'Origin');
@@ -36,6 +62,14 @@ export default async function handler(req, res) {
     }
     if (!/^image\/(jpeg|png|webp|gif)$/.test(mediaType || '')) {
       return res.status(400).json({ error: 'Unsupported image type' });
+    }
+
+    // Counted only after validation, so rejected requests don't use up quota.
+    const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
+    const limited = rateLimit(ip);
+    if (limited) {
+      res.setHeader('Retry-After', '600');
+      return res.status(429).json({ error: limited });
     }
 
     const r = await fetch('https://api.anthropic.com/v1/messages', {
