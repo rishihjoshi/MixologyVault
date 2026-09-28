@@ -62,8 +62,8 @@ test.describe('Snap feature relocated into Decide', () => {
 });
 
 test.describe('Version functionality', () => {
-  test('visible version label reads v2.2.3', async ({ page }) => {
-    await expect(page.locator('#app-version')).toHaveText('v2.2.3');
+  test('visible version label reads v2.3.0', async ({ page }) => {
+    await expect(page.locator('#app-version')).toHaveText('v2.3.0');
   });
 
   test('update banner exists and starts hidden', async ({ page }) => {
@@ -154,5 +154,57 @@ test.describe('Core flows unaffected', () => {
     await page.locator('#nb-bar').click();
     await page.locator('[data-vault-mode="make"]').click();
     await expect(page.locator('#vault-make-results .lab-empty')).toBeVisible();
+  });
+});
+
+test.describe('Brand-voice pass: Decide, favourites, home stats', () => {
+  test('Morning picks are zero-proof and say so', async ({ page }) => {
+    await page.locator('#nav-decide').click();
+    await page.locator('.tod-btn[data-tod="Morning"]').click();
+    await page.locator('#gen-btn').click();
+    const ids = await page.locator('#results-list .drink-card').evaluateAll(els => els.map(e => e.dataset.id));
+    expect(ids).toHaveLength(3);
+    const allMock = await page.evaluate(ids => ids.every(id => allMocktails.some(m => m.id === id)), ids);
+    expect(allMock).toBe(true);
+    await expect(page.locator('#results-note')).toHaveText('Morning picks are zero-proof.');
+  });
+
+  test('mood choice steers Decide picks', async ({ page }) => {
+    await page.locator('#nav-decide').click();
+    await page.locator('.tod-btn[data-tod="Evening"]').click();
+    await page.locator('.mood-btn[data-mood="Romantic"]').click();
+    await page.locator('#gen-btn').click();
+    const moods = await page.locator('#results-list .drink-card').evaluateAll(els =>
+      els.map(e => allCocktails.find(c => c.id === e.dataset.id)?.mood));
+    expect(moods).toEqual(['Romantic', 'Romantic', 'Romantic']);
+  });
+
+  test('favourites persist and the home pill opens the Favourites filter', async ({ page }) => {
+    await page.locator('#nb-cocktails').click();
+    const first = page.locator('#cocktail-list .drink-card').first();
+    const id = await first.getAttribute('data-id');
+    await first.locator('.fav-btn').click();
+    await expect(first.locator('.fav-btn')).toHaveAttribute('aria-label', 'Remove from favourites');
+    await page.reload();
+    await expect(page.locator('#count-favourites')).toHaveText('1');
+    await page.locator('.stat-pill[data-filter-fav]').click();
+    await expect(page.locator('#screen-cocktails')).toHaveClass(/active/);
+    await expect(page.locator('#cocktail-list .drink-card')).toHaveCount(1);
+    await expect(page.locator(`#cocktail-list .drink-card[data-id="${id}"]`)).toHaveCount(1);
+  });
+
+  test('home "In your bar" counts only in-stock ingredients', async ({ page }) => {
+    await page.evaluate(() => {
+      const ov = {};
+      allIngredients.forEach((ing, i) => { ov[ing.id] = i < 3 ? 'have' : 'need'; });
+      localStorage.setItem('mv_ing_overrides', JSON.stringify(ov));
+    });
+    await page.reload();
+    await expect(page.locator('#count-ingredients')).toHaveText('3');
+  });
+
+  test('no developer copy leaks into the UI', async ({ page }) => {
+    await expect(page.locator('body')).not.toContainText('cocktails.json');
+    await expect(page.locator('body')).not.toContainText('configured');
   });
 });

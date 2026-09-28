@@ -2,7 +2,7 @@
   "name": "mixology-vault",
   "version": "2.0.0",
   "private": true,
-  "description": "Your personal cocktail vault, powered by what's in your bar.",
+  "description": "Know what you can pour tonight, from the bottles you already own.",
   "scripts": {
     "serve": "npx serve . -p 3333 --no-clipboard",
     "test": "playwright test",
