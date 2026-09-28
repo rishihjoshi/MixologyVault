@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '2.2.3';
+const APP_VERSION = '2.3.0';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -20,7 +20,18 @@ let mocktailFilter    = 'all';
 let activeUnit        = 'oz';
 let activeModalId     = null;
 let barActiveFilter   = 'all';
-let vaultMode         = 'shelf';  // 'shelf' | 'make' — My Vault view toggle
+let vaultMode         = 'shelf';  // 'shelf' | 'make' — My bar view toggle
+
+// ── FAVOURITES (persisted) ───────────────────────────────
+function loadFavourites() {
+  try {
+    const ids = JSON.parse(localStorage.getItem('mv_favourites') || '[]');
+    if (Array.isArray(ids)) favourites = new Set(ids.filter(x => typeof x === 'string'));
+  } catch {}
+}
+function saveFavourites() {
+  try { localStorage.setItem('mv_favourites', JSON.stringify([...favourites])); } catch {}
+}
 
 // ── INGREDIENT OVERRIDES ─────────────────────────────────
 // { [ingId]: 'have' | 'need' } — persisted to localStorage
@@ -64,7 +75,7 @@ const CAT_META = {
   'syrups':    { icon: '🍯', label: 'Syrups',    cls: 'cat-syrups'    },
   'garnishes': { icon: '🌱', label: 'Garnishes', cls: 'cat-garnishes' },
   'wine':      { icon: '🍷', label: 'Wine',      cls: 'cat-wine'      },
-  'top up':    { icon: '💧', label: 'Top Up',    cls: 'cat-topup'     },
+  'top up':    { icon: '💧', label: 'Top up',    cls: 'cat-topup'     },
 };
 
 const SPIRIT_FILTERS = [
@@ -75,6 +86,7 @@ const SPIRIT_FILTERS = [
   { key: 'rum',     label: 'Rum',     icon: '🏝️' },
   { key: 'vodka',   label: 'Vodka',   icon: '🫙' },
   { key: 'other',   label: 'Other',   icon: '✨' },
+  { key: 'fav',     label: 'Favourites', icon: '❤️' },
 ];
 
 // ── LOCAL JSON LOADERS ───────────────────────────────────
@@ -113,6 +125,7 @@ async function loadCocktails() {
       steps:       c.recipe      || '',
       history:     c.history     || '',
       description: c.description || '',
+      mood:        normaliseMood(c.mood),
       spiritKey:   normaliseSpiritKey(c.baseSpirit),
     }));
   } catch (e) {
@@ -136,6 +149,7 @@ function mocktailToCard(m) {
     steps:       m.recipe      || '',
     history:     m.history     || '',
     description: m.description || '',
+    mood:        normaliseMood(m.mood),
     isMocktail:  true,
   };
 }
@@ -149,6 +163,11 @@ async function loadMocktails() {
     console.warn('Failed to load mocktails.json:', e.message);
     return [];
   }
+}
+
+// Data mixes 'Cozy' and 'Cosy'; the UI uses British spelling.
+function normaliseMood(m) {
+  return m === 'Cozy' ? 'Cosy' : (m || '');
 }
 
 function normaliseSpiritKey(b) {
@@ -166,7 +185,7 @@ function normaliseSpiritKey(b) {
 function cardHTML(c, extraClass) {
   const isFav = favourites.has(c.id);
   return `<div class="drink-card ${extraClass || ''}" data-id="${esc(c.id)}">
-    <button class="fav-btn ${isFav ? 'on' : ''}" data-id="${esc(c.id)}" aria-label="Favourite">${isFav ? '❤️' : '🤍'}</button>
+    <button class="fav-btn ${isFav ? 'on' : ''}" data-id="${esc(c.id)}" aria-label="${isFav ? 'Remove from favourites' : 'Add to favourites'}">${isFav ? '❤️' : '🤍'}</button>
     <div class="dc-name">${esc(c.name)}</div>
     ${c.baseSpirit  ? `<div class="dc-eyebrow">${esc(c.baseSpirit)}</div>` : ''}
     ${c.description ? `<div class="dc-desc">${esc(c.description)}</div>`  : ''}
@@ -216,12 +235,16 @@ function renderHome() {
   // Signature cocktails
   const sigs  = allCocktails.filter(c => (c.tag || '').toLowerCase().includes('signature'));
   const sigEl = document.getElementById('home-signatures');
-  sigEl.innerHTML = sigs.length > 0
-    ? sigs.slice(0, 3).map(c => cardHTML(c, 'featured')).join('')
-    : '<div class="empty"><div class="ei">✨</div>Add &#x27;Signature&#x27; to a cocktail&#x27;s tags in cocktails.json to feature it here.</div>';
+  sigEl.innerHTML = sigs.slice(0, 3).map(c => cardHTML(c, 'featured')).join('');
+  const sigSection = document.getElementById('home-signatures-section');
+  if (sigSection) sigSection.style.display = sigs.length ? '' : 'none';
 
-  // Stats
-  document.getElementById('count-ingredients').textContent = allIngredients.length;
+  renderHomeStats();
+}
+
+function renderHomeStats() {
+  document.getElementById('count-ingredients').textContent =
+    allIngredients.filter(i => getIngStatus(i) === 'have').length;
   document.getElementById('count-cocktails').textContent   = allCocktails.length;
   document.getElementById('count-favourites').textContent  = favourites.size;
 }
@@ -273,7 +296,7 @@ function renderBar() {
         ${items.map(ing => {
           const isHave = getIngStatus(ing) === 'have';
           return `<button class="pill ${isHave ? 'have' : 'need-it'}" data-ing-id="${esc(ing.id)}"
-            aria-label="${esc(ing.item)}: ${isHave ? 'available' : 'needed'}">
+            aria-label="${esc(ing.item)}: ${isHave ? 'in stock' : 'missing'}">
             <div class="pill-dot"></div>
             <span class="pill-name">${esc(ing.item)}</span>
             ${ing.brand ? `<span class="pill-brand">· ${esc(ing.brand)}</span>` : ''}
@@ -299,6 +322,7 @@ function renderBar() {
       if (!ing) return;
       ingredientOverrides[id] = getIngStatus(ing) === 'have' ? 'need' : 'have';
       saveOverrides();
+      renderHomeStats();
       pill.style.transform = 'scale(0.93)';
       setTimeout(() => { pill.style.transform = ''; renderBar(); }, 130);
     });
@@ -323,21 +347,33 @@ function buildFilterChips() {
   });
 }
 
+function setCocktailFilter(key) {
+  activeFilter = key;
+  document.querySelectorAll('#filter-row .filter-chip').forEach(c =>
+    c.classList.toggle('active', c.dataset.filter === key));
+  renderCocktails(activeFilter, document.getElementById('cocktail-search').value);
+}
+
 function renderCocktails(filterKey, search) {
   filterKey  = filterKey || 'all';
   const q    = (search || '').toLowerCase();
-  let   list = allCocktails.filter(c => {
+  const fav  = filterKey === 'fav';
+  // Favourites can include mocktails, so search both lists for that filter.
+  const src  = fav ? [...allCocktails, ...allMocktails].filter(c => favourites.has(c.id)) : allCocktails;
+  let   list = src.filter(c => {
     if (!q) return true;
     return (c.name + ' ' + c.baseSpirit + ' ' + c.tag + ' ' + c.ingredients).toLowerCase().includes(q);
   });
-  if (filterKey !== 'all') list = list.filter(c => c.spiritKey === filterKey);
+  if (filterKey !== 'all' && !fav) list = list.filter(c => c.spiritKey === filterKey);
 
-  document.getElementById('cocktail-count').textContent = `${list.length} cocktail${list.length !== 1 ? 's' : ''}`;
+  const noun = fav ? 'favourite' : 'cocktail';
+  document.getElementById('cocktail-count').textContent = `${list.length} ${noun}${list.length !== 1 ? 's' : ''}`;
 
+  const empty = fav && !q
+    ? '<div class="empty"><div class="ei">🤍</div>No favourites yet. Tap 🤍 on any drink to save it here.</div>'
+    : '<div class="empty"><div class="ei">🍸</div>No cocktails match. Try another spirit or search.</div>';
   const el = document.getElementById('cocktail-list');
-  el.innerHTML = list.length === 0
-    ? '<div class="empty"><div class="ei">🍸</div>No cocktails found. Try a different filter.</div>'
-    : list.map(c => cardHTML(c)).join('');
+  el.innerHTML = list.length === 0 ? empty : list.map(c => cardHTML(c)).join('');
 }
 
 // ── RENDER MOCKTAILS (zero-proof) ─────────────────────────
@@ -385,7 +421,7 @@ function renderMocktails(filterKey, search) {
 
   const el = document.getElementById('mocktail-list');
   el.innerHTML = list.length === 0
-    ? '<div class="empty"><div class="ei">🍹</div>No mocktails found. Try a different filter.</div>'
+    ? '<div class="empty"><div class="ei">🍹</div>No mocktails match. Try another filter or search.</div>'
     : list.map(m => cardHTML(m)).join('');
 }
 
@@ -398,13 +434,16 @@ function toggleFav(btn, id) {
     favourites.delete(id);
     btn.textContent = '🤍';
     btn.classList.remove('on');
+    btn.setAttribute('aria-label', 'Add to favourites');
   } else {
     favourites.add(id);
     btn.textContent = '❤️';
     btn.classList.add('on');
+    btn.setAttribute('aria-label', 'Remove from favourites');
     btn.style.transform = 'scale(1.4)';
     setTimeout(() => { btn.style.transform = ''; }, 300);
   }
+  saveFavourites();
   document.getElementById('count-favourites').textContent = favourites.size;
 }
 
@@ -547,9 +586,29 @@ function generateDrinks() {
   setTimeout(() => btn.classList.remove('shaking'), 550);
 
   const spirit = document.querySelector('.spirit-btn.on')?.dataset.spirit || 'any';
-  let pool = spirit !== 'any' ? allCocktails.filter(c => c.spiritKey === spirit) : [...allCocktails];
-  if (!pool.length) pool = [...allCocktails];
-  const picks = pool.sort(() => Math.random() - .5).slice(0, 3);
+  const mood   = document.querySelector('.mood-btn.on')?.dataset.mood || '';
+  const sweet  = Number(document.getElementById('sweet-slider')?.value || 2);
+  const tod    = document.querySelector('.tod-btn.on')?.dataset.tod || '';
+  // Morning → zero-proof only; we don't suggest alcohol before noon.
+  const morning = tod === 'Morning';
+
+  let pool;
+  if (morning) pool = [...allMocktails];
+  else {
+    pool = spirit !== 'any' ? allCocktails.filter(c => c.spiritKey === spirit) : [...allCocktails];
+    if (!pool.length) pool = [...allCocktails];
+  }
+  const picks = pool
+    .map(c => ({ c, s: decideScore(c, mood, sweet, tod) + Math.random() }))
+    .sort((a, b) => b.s - a.s)
+    .slice(0, 3)
+    .map(x => x.c);
+
+  const note = document.getElementById('results-note');
+  if (note) {
+    note.textContent = morning ? 'Morning picks are zero-proof.' : '';
+    note.style.display = morning ? '' : 'none';
+  }
 
   const ra = document.getElementById('results-area');
   ra.style.display = 'block';
@@ -564,6 +623,26 @@ function generateDrinks() {
     rl.appendChild(card);
   });
   ra.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Soft ranking for Decide: mood match dominates, sweetness and time of day
+// nudge. Random jitter (added by the caller, 0–1) keeps results varied.
+const SWEET_TAGS = ['sweet', 'fruity', 'nutty', 'floral'];
+const DRY_TAGS   = ['spirit-forward', 'aperitif', 'italian classic', 'bold'];
+const TOD_TAGS   = {
+  'Afternoon':  ['refreshing', 'highball', 'sparkling', 'citrus', 'aperitif'],
+  'Evening':    ['classic', 'signature', 'modern classic'],
+  'Late night': ['spirit-forward', 'hot drink', 'nutty'],
+};
+function decideScore(c, mood, sweet, tod) {
+  const tags = (c.tag || '').toLowerCase();
+  const has  = list => list.some(t => tags.includes(t));
+  let s = 0;
+  if (mood && c.mood === mood) s += 3;
+  if (sweet === 3 && has(SWEET_TAGS)) s += 1;
+  if (sweet === 1 && has(DRY_TAGS))   s += 1;
+  if (TOD_TAGS[tod] && has(TOD_TAGS[tod])) s += 1;
+  return s;
 }
 
 // ── MAKEABLE-COCKTAIL ENGINE (My Vault "I can make" + camera) ─────
@@ -629,8 +708,8 @@ function renderVaultMake() {
   if (haves.length === 0) {
     el.innerHTML = `<div class="lab-empty">
       <div class="lab-empty-icon">🧪</div>
-      <div class="lab-empty-title">Nothing marked available yet</div>
-      <div class="lab-empty-sub">Mark ingredients as available in <strong>My shelf</strong> to see every cocktail you can make right now</div>
+      <div class="lab-empty-title">Nothing in stock yet</div>
+      <div class="lab-empty-sub">Mark what you own in <strong>In my bar</strong> to see every cocktail you can make right now.</div>
     </div>`;
     return;
   }
@@ -645,7 +724,7 @@ function renderVaultMake() {
     el.innerHTML = `<div class="lab-empty">
       <div class="lab-empty-icon">🥃</div>
       <div class="lab-empty-title">No matches yet</div>
-      <div class="lab-empty-sub">Mark a few more staples available — even one extra can unlock a dozen cocktails</div>
+      <div class="lab-empty-sub">Mark a few more staples in stock — even one extra can unlock a dozen cocktails.</div>
     </div>`;
     return;
   }
@@ -655,18 +734,18 @@ function renderVaultMake() {
 
   let html = `<div class="lab-results-hd">
     <span class="lab-results-count">${scored.length} cocktail${scored.length !== 1 ? 's' : ''} within reach</span>
-    ${perfect.length ? `<span class="lab-perfect-badge">${perfect.length} you can make now</span>` : ''}
+    ${perfect.length ? `<span class="lab-perfect-badge">${perfect.length} ready to make</span>` : ''}
   </div>`;
 
   if (perfect.length) {
     html += `<div class="lab-result-section">
-      <div class="lab-sec-label">✓ Can Make Now</div>
+      <div class="lab-sec-label">✓ Ready to make</div>
       <div class="lab-card-list">${perfect.map(x => labCardHTML(x.c, x.r)).join('')}</div>
     </div>`;
   }
   if (partial.length) {
     html += `<div class="lab-result-section">
-      <div class="lab-sec-label">◑ Almost There</div>
+      <div class="lab-sec-label">◐ Almost there</div>
       <div class="lab-card-list">${partial.slice(0, 18).map(x => labCardHTML(x.c, x.r)).join('')}</div>
     </div>`;
   }
@@ -677,12 +756,12 @@ function renderVaultMake() {
 function labCardHTML(cocktail, result) {
   const perfect = result.score === 1;
   const grad    = LAB_SPIRIT_GRAD[cocktail.spiritKey] || LAB_SPIRIT_GRAD.other;
-  const diff    = result.total <= 2 ? 'Easy' : result.total <= 4 ? 'Medium' : 'Advanced';
+  const diff    = result.total <= 2 ? 'Quick' : result.total <= 4 ? 'Moderate' : 'Advanced';
   const diffCls = result.total <= 2 ? 'diff-easy' : result.total <= 4 ? 'diff-medium' : 'diff-hard';
   const pct     = Math.round(result.score * 100);
   const missing = result.detail.filter(d => !d.hit).map(d => d.line);
   const missingNote = !perfect && missing.length
-    ? `<div class="lab-card-missing">Need: ${esc(missing.slice(0,2).join(', '))}${missing.length > 2 ? '…' : ''}</div>`
+    ? `<div class="lab-card-missing">Missing: ${esc(missing.slice(0,2).join(', '))}${missing.length > 2 ? '…' : ''}</div>`
     : '';
 
   return `<div class="lab-cocktail-card${perfect ? ' perfect' : ''}" data-id="${esc(cocktail.id)}">
@@ -774,19 +853,32 @@ function camFileToBase64(file) {
   });
 }
 
+// User-facing photo errors. Server/Anthropic messages are never shown raw.
+const CAM_MSG = {
+  tooLarge:    "That photo's too large or in an unsupported format. Try a JPG or PNG under 5 MB.",
+  rateLimited: 'Too many photos — wait a few minutes and try again.',
+  unreachable: "We couldn't reach the photo service. Check your connection and try again, or use By mood.",
+};
+function camErrorMessage(status) {
+  if (status === 413 || status === 400) return CAM_MSG.tooLarge;
+  if (status === 429) return CAM_MSG.rateLimited;
+  return CAM_MSG.unreachable;
+}
+
 // POST the image to the Vercel proxy, which attaches the key and forwards to
 // Anthropic. On success the proxy returns Claude's raw response JSON.
 async function camCallClaude(base64, mediaType) {
-  const resp = await fetch(CAM_PROXY_URL, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ base64, mediaType }),
-  });
-  if (!resp.ok) {
-    let msg = `Error ${resp.status}`;
-    try { const j = await resp.json(); msg = j.error?.message || j.error || msg; } catch {}
-    throw new Error(msg);
+  let resp;
+  try {
+    resp = await fetch(CAM_PROXY_URL, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ base64, mediaType }),
+    });
+  } catch {
+    throw new Error(CAM_MSG.unreachable);
   }
+  if (!resp.ok) throw new Error(camErrorMessage(resp.status));
   return resp.json();
 }
 
@@ -851,18 +943,18 @@ function camRenderResults() {
   if (!el) return;
 
   if (!scored.length) {
-    el.innerHTML = `<div class="cam-empty">Couldn't match any cocktails — try adding more ingredients or retake with better lighting.</div>`;
+    el.innerHTML = `<div class="cam-empty">No cocktails match these bottles yet. Tap <strong>Edit</strong> to add what the photo missed.</div>`;
     camRenderElevation([]);
     return;
   }
 
   let html = '';
   if (perfect.length) {
-    html += `<div class="lab-results-hd"><span class="lab-rh-badge rh-can">✓ Can Make Now</span><span class="lab-rh-count">${perfect.length}</span></div>`;
+    html += `<div class="lab-results-hd"><span class="lab-rh-badge rh-can">✓ Ready to make</span><span class="lab-rh-count">${perfect.length}</span></div>`;
     html += `<div class="lab-cards-grid">` + perfect.map(({ c }) => cardHTML(c, 'pour-in')).join('') + `</div>`;
   }
   if (partial.length) {
-    html += `<div class="lab-results-hd" style="margin-top:18px"><span class="lab-rh-badge rh-almost">◐ Almost There</span><span class="lab-rh-count">${partial.length}</span></div>`;
+    html += `<div class="lab-results-hd" style="margin-top:18px"><span class="lab-rh-badge rh-almost">◐ Almost there</span><span class="lab-rh-count">${partial.length}</span></div>`;
     html += `<div class="lab-cards-grid">` + partial.slice(0, 20).map(({ c, r }) => {
       const pct = Math.round(r.score * 100);
       const grad = LAB_SPIRIT_GRAD[c.spiritKey] || LAB_SPIRIT_GRAD.other;
@@ -934,10 +1026,10 @@ function camHandleFileChange(evt) {
   const file = evt.target.files?.[0];
   if (!file) return;
   if (!file.type.startsWith('image/')) {
-    camShowError('Please select an image file.'); return;
+    camShowError("That file isn't a photo. Choose a JPG or PNG."); return;
   }
   if (file.size > 5 * 1024 * 1024) {
-    camShowError('Image is too large (max 5 MB). Try a lower-resolution photo.'); return;
+    camShowError(CAM_MSG.tooLarge); return;
   }
 
   if (camPreviewURL) URL.revokeObjectURL(camPreviewURL);
@@ -970,7 +1062,7 @@ async function camRunAnalysis() {
     const names   = camParseIngredients(apiResp);
 
     if (!names.length) {
-      camShowError("Claude couldn't identify any ingredients — try a clearer photo with good lighting.");
+      camShowError('No bottles spotted. Try again with the labels facing the camera and good lighting.');
       document.getElementById('cam-analyse-btn').style.display = '';
       return;
     }
@@ -983,7 +1075,7 @@ async function camRunAnalysis() {
       document.getElementById('cam-results-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   } catch (err) {
-    camShowError(err.message || 'Something went wrong. Please try again.');
+    camShowError(err.message || CAM_MSG.unreachable);
     document.getElementById('cam-analyse-btn').style.display = '';
   } finally {
     document.getElementById('cam-loading').style.display = 'none';
@@ -1056,6 +1148,10 @@ async function init() {
   document.querySelectorAll('.stat-pill--link[data-screen]').forEach(pill => {
     pill.addEventListener('click', () => {
       const navBtn = pill.dataset.navBtn ? document.getElementById(pill.dataset.navBtn) : null;
+      if (pill.dataset.screen === 'cocktails') {
+        // Favourites pill opens Cocktails pre-filtered; Cocktails pill resets to All.
+        setCocktailFilter(pill.dataset.filterFav ? 'fav' : 'all');
+      }
       switchScreen(pill.dataset.screen, navBtn);
     });
   });
@@ -1146,6 +1242,7 @@ async function init() {
   wireCardArea(document.getElementById('cam-cocktail-results'));
 
   // Load local JSON files in parallel
+  loadFavourites();
   [allIngredients, allCocktails, allMocktails] = await Promise.all([
     loadIngredients(),
     loadCocktails(),

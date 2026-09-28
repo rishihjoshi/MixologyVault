@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="
@@ -19,7 +19,7 @@
 <meta name="application-name" content="MixVault">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#090909">
-<meta name="description" content="Your personal cocktail vault, powered by what's in your bar.">
+<meta name="description" content="Know what you can pour tonight, from the bottles you already own.">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <title>Mixology Vault</title>
@@ -42,57 +42,57 @@
           <img src="./AppIcon.png" class="vault-icon" id="vault-hero-icon" alt="" draggable="false">
         </div>
         <h1>Mixology<br><em>Vault</em></h1>
-        <p id="hero-sub">Your personal cocktail vault, powered by what's in your bar.</p>
+        <p id="hero-sub">Know what you can pour tonight, from the bottles you already own.</p>
         <div class="stats-row">
-          <div class="stat-pill stat-pill--link" data-screen="bar" data-nav-btn="nb-bar"><div class="stat-num" id="count-ingredients">–</div><div class="stat-lbl">Ingredients</div></div>
+          <div class="stat-pill stat-pill--link" data-screen="bar" data-nav-btn="nb-bar"><div class="stat-num" id="count-ingredients">–</div><div class="stat-lbl">In your bar</div></div>
           <div class="stat-pill stat-pill--link" data-screen="cocktails" data-nav-btn="nb-cocktails"><div class="stat-num" id="count-cocktails">–</div><div class="stat-lbl">Cocktails</div></div>
-          <div class="stat-pill"><div class="stat-num" id="count-favourites">0</div><div class="stat-lbl">Favourites</div></div>
+          <div class="stat-pill stat-pill--link" data-screen="cocktails" data-nav-btn="nb-cocktails" data-filter-fav="1"><div class="stat-num" id="count-favourites">0</div><div class="stat-lbl">Favourites</div></div>
         </div>
       </div>
 
       <button id="home-cta">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         What should I drink right now?
       </button>
 
       <div class="section">
         <div class="section-hd">
-          <div class="section-title">Tonight's Pick</div>
+          <div class="section-title">Tonight's pick</div>
           <button class="section-action" id="shuffle-btn">Shuffle ✦</button>
         </div>
         <div id="featured-card"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading…</div></div>
       </div>
 
-      <div class="section">
-        <div class="section-hd"><div class="section-title">Signature Cocktails</div></div>
+      <div class="section" id="home-signatures-section">
+        <div class="section-hd"><div class="section-title">Signature cocktails</div></div>
         <div id="home-signatures"><div class="loader"><div class="dots"><span></span><span></span><span></span></div></div></div>
       </div>
 
-      <div class="app-version-line">Mixology Vault <span id="app-version"></span></div>
+      <div class="app-version-line">Mixology Vault <span id="app-version"></span> · Please drink responsibly</div>
     </div>
 
-    <!-- ══ MY VAULT ══ -->
+    <!-- ══ MY BAR ══ -->
     <div class="screen" id="screen-bar">
       <div class="page-header">
-        <h1>My <em>Vault</em></h1>
+        <h1>My <em>bar</em></h1>
         <p>Mark what you have · See what you can make</p>
       </div>
 
       <!-- Mode toggle: curate shelf vs. discover makeable cocktails -->
       <div class="decide-toggle" id="vault-toggle">
-        <button class="decide-toggle-btn active" data-vault-mode="shelf">My shelf</button>
-        <button class="decide-toggle-btn" data-vault-mode="make">🍸 I can make</button>
+        <button class="decide-toggle-btn active" data-vault-mode="shelf">In my bar</button>
+        <button class="decide-toggle-btn" data-vault-mode="make">🍸 Ready to make</button>
       </div>
 
       <!-- My shelf: ingredient inventory -->
       <div id="vault-shelf-panel">
         <div class="bar-filter-row">
           <button class="bar-filter-btn active" data-bar-filter="all">All <span class="bf-badge" id="bf-count-all">–</span></button>
-          <button class="bar-filter-btn" data-bar-filter="available">✅ Available <span class="bf-badge" id="bf-count-available">–</span></button>
-          <button class="bar-filter-btn" data-bar-filter="need">🛒 Need <span class="bf-badge" id="bf-count-need">–</span></button>
+          <button class="bar-filter-btn" data-bar-filter="available">✅ In stock <span class="bf-badge" id="bf-count-available">–</span></button>
+          <button class="bar-filter-btn" data-bar-filter="need">🛒 Missing <span class="bf-badge" id="bf-count-need">–</span></button>
         </div>
         <div class="section" style="margin-top:16px">
-          <div id="bar-sections"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading vault…</div></div>
+          <div id="bar-sections"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading your bar…</div></div>
         </div>
       </div>
 
@@ -104,7 +104,7 @@
 
     <!-- ══ COCKTAILS ══ -->
     <div class="screen" id="screen-cocktails">
-      <div class="page-header"><h1>Cocktails</h1><p>Filter by base spirit — tap any card for full recipe</p></div>
+      <div class="page-header"><h1>Cocktails</h1><p>Search or filter by spirit, then tap for the recipe</p></div>
       <div class="search-wrap">
         <input class="search-input" type="search" id="cocktail-search" placeholder="Search cocktails…" autocomplete="off">
       </div>
@@ -117,7 +117,7 @@
 
     <!-- ══ MOCKTAILS (zero-proof) ══ -->
     <div class="screen" id="screen-mocktails">
-      <div class="page-header"><h1>Mocktails</h1><p>Zero-proof — tap any card for the recipe</p></div>
+      <div class="page-header"><h1>Mocktails</h1><p>Zero-proof. Search or filter, then tap for the recipe</p></div>
       <div class="search-wrap">
         <input class="search-input" type="search" id="mocktail-search" placeholder="Search mocktails…" autocomplete="off">
       </div>
@@ -130,7 +130,7 @@
 
     <!-- ══ DECIDE ══ -->
     <div class="screen" id="screen-decide">
-      <div class="page-header"><h1>What should I<br><em>drink?</em></h1><p>Pick a path below.</p></div>
+      <div class="page-header"><h1>What should I<br><em>drink?</em></h1><p>Set the mood, or snap your shelf.</p></div>
 
       <!-- Mode toggle: manual mood picker vs. photograph-your-shelf -->
       <div class="decide-toggle" id="decide-toggle">
@@ -143,12 +143,12 @@
       <div style="padding:14px 16px 0">
         <div class="decide-label">Mood</div>
         <div class="mood-grid" id="mood-grid">
-          <button class="mood-btn" data-mood="Celebratory"><span class="m-em">🥳</span><span class="m-lbl">Party</span></button>
-          <button class="mood-btn" data-mood="Relaxed"><span class="m-em">😌</span><span class="m-lbl">Chill</span></button>
-          <button class="mood-btn" data-mood="Adventurous"><span class="m-em">🤩</span><span class="m-lbl">Bold</span></button>
+          <button class="mood-btn" data-mood="Party"><span class="m-em">🥳</span><span class="m-lbl">Festive</span></button>
+          <button class="mood-btn" data-mood="Chill"><span class="m-em">😌</span><span class="m-lbl">Chill</span></button>
+          <button class="mood-btn" data-mood="Bold"><span class="m-em">🤩</span><span class="m-lbl">Bold</span></button>
           <button class="mood-btn" data-mood="Romantic"><span class="m-em">💫</span><span class="m-lbl">Romantic</span></button>
           <button class="mood-btn" data-mood="Cosy"><span class="m-em">🍂</span><span class="m-lbl">Cosy</span></button>
-          <button class="mood-btn" data-mood="Refreshed"><span class="m-em">🌊</span><span class="m-lbl">Fresh</span></button>
+          <button class="mood-btn" data-mood="Fresh"><span class="m-em">🌊</span><span class="m-lbl">Fresh</span></button>
           <button class="mood-btn" data-mood="Energised"><span class="m-em">⚡</span><span class="m-lbl">Energised</span></button>
           <button class="mood-btn" data-mood="Curious"><span class="m-em">🧐</span><span class="m-lbl">Curious</span></button>
         </div>
@@ -176,12 +176,12 @@
       </div>
 
       <div style="padding:16px 16px 0">
-        <div class="decide-label">Time of Day</div>
+        <div class="decide-label">Time of day</div>
         <div class="tod-grid" id="tod-grid">
           <button class="tod-btn" data-tod="Morning"><span class="t-em">🌅</span><span class="t-lbl">Morning</span></button>
           <button class="tod-btn" data-tod="Afternoon"><span class="t-em">☀️</span><span class="t-lbl">Afternoon</span></button>
           <button class="tod-btn on" data-tod="Evening"><span class="t-em">🌆</span><span class="t-lbl">Evening</span></button>
-          <button class="tod-btn" data-tod="Late night"><span class="t-em">🌙</span><span class="t-lbl">Late Night</span></button>
+          <button class="tod-btn" data-tod="Late night"><span class="t-em">🌙</span><span class="t-lbl">Late night</span></button>
         </div>
       </div>
 
@@ -189,11 +189,12 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="20" height="20">
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
         </svg>
-        Generate My Drinks
+        Find my drinks
       </button>
 
       <div id="results-area">
-        <div class="section-title" style="margin:16px 16px 12px">Your picks</div>
+        <div class="section-title" id="results-title" style="margin:16px 16px 12px">Three to try</div>
+        <div class="results-note" id="results-note" style="display:none"></div>
         <div id="results-list" style="padding:0 16px"></div>
       </div>
       </div><!-- /decide-mood-panel -->
@@ -201,11 +202,11 @@
       <!-- ── By photo: photograph your shelf, Claude identifies ingredients ── -->
       <div id="decide-photo-panel" style="display:none; position:relative">
 
-        <!-- Shown when no API key is configured (local/dev, or before first deploy) -->
+        <!-- Shown when the photo proxy isn't available (local/dev) -->
         <div class="decide-snap-unavailable" id="decide-snap-unavailable" style="display:none">
           <div class="cam-setup-icon">📷</div>
-          <div class="cam-setup-title">Photo suggestions unavailable</div>
-          <div class="cam-setup-sub">The AI photo feature isn't configured right now. Use "By mood" above to pick a drink.</div>
+          <div class="cam-setup-title">Photo scan is offline</div>
+          <div class="cam-setup-sub">Use <strong>By mood</strong> to pick a drink instead.</div>
         </div>
 
         <!-- Camera UI -->
@@ -219,26 +220,27 @@
                 <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
                 <circle cx="12" cy="13" r="4"/>
               </svg>
-              <div class="cam-placeholder-text">Tap to photograph your bar shelf</div>
+              <div class="cam-placeholder-text">Snap your bar shelf</div>
             </div>
             <button class="cam-snap-btn" id="cam-snap-btn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                 <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
                 <circle cx="12" cy="13" r="4"/>
               </svg>
-              <span id="cam-snap-label">Take Photo</span>
+              <span id="cam-snap-label">Take photo</span>
             </button>
           </div>
+          <div class="cam-privacy-note">Your photo is sent to Anthropic's Claude only to identify bottles.</div>
 
           <button class="cam-analyse-btn" id="cam-analyse-btn" style="display:none">
             <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="18" height="18">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
             </svg>
-            Analyse with Claude
+            Identify my bottles
           </button>
 
           <div class="cam-loading" id="cam-loading" style="display:none">
-            <div class="loader"><div class="dots"><span></span><span></span><span></span></div> Claude is identifying ingredients…</div>
+            <div class="loader"><div class="dots"><span></span><span></span><span></span></div> Identifying your bottles…</div>
           </div>
 
           <div class="cam-error" id="cam-error" style="display:none"></div>
@@ -246,7 +248,7 @@
           <div id="cam-results-area" style="display:none">
             <div class="cam-ing-section">
               <div class="cam-section-hd">
-                <span class="cam-section-label">📸 Identified Ingredients</span>
+                <span class="cam-section-label">📸 Spotted in your photo</span>
                 <button class="cam-edit-btn" id="cam-edit-toggle">Edit</button>
               </div>
               <div class="cam-chips-wrap" id="cam-chips-wrap"></div>
@@ -260,9 +262,9 @@
 
             <div class="cam-elevate-section" id="cam-elevate-section" style="display:none">
               <div class="cam-section-hd">
-                <span class="cam-section-label">🚀 Elevate Your Bar</span>
+                <span class="cam-section-label">🛒 Best next buys</span>
               </div>
-              <div class="cam-elevate-sub">Add these ingredients to unlock the most new cocktails</div>
+              <div class="cam-elevate-sub">Each one unlocks the most new cocktails.</div>
               <div id="cam-elevate-list"></div>
             </div>
           </div>
@@ -285,7 +287,7 @@
         <path d="M9 10L12 16L15 10Z" stroke-linejoin="round" stroke-linecap="round"/>
         <line x1="12" y1="16" x2="12" y2="18.5" stroke-linecap="round"/>
       </svg>
-      <span>My Vault</span>
+      <span>My bar</span>
     </button>
     <button id="nav-decide" data-screen="decide">
       <div id="nav-decide-inner">
@@ -314,7 +316,7 @@
 <div id="modal-overlay">
   <div id="modal">
     <div class="modal-handle"></div>
-    <button class="modal-close" id="modal-close-btn">✕</button>
+    <button class="modal-close" id="modal-close-btn" aria-label="Close recipe">✕</button>
     <div class="modal-header">
       <div class="modal-tag" id="modal-tag"></div>
       <div class="modal-name" id="modal-name"></div>
@@ -348,8 +350,8 @@
 
 <!-- Update banner: shown when a new app version is ready (outside #app so it isn't clipped) -->
 <div id="update-banner" class="update-banner hidden">
-  <span>A new version is available.</span>
-  <button id="btn-update-reload" type="button">Refresh</button>
+  <span>A new version is ready.</span>
+  <button id="btn-update-reload" type="button">Update</button>
 </div>
 
 <script src="app.js"></script>

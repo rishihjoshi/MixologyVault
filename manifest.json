@@ -1,10 +1,10 @@
 {
   "id": "./",
   "scope": "./",
-  "lang": "en",
+  "lang": "en-GB",
   "name": "Mixology Vault",
   "short_name": "MixVault",
-  "description": "Your personal cocktail vault, powered by what's in your bar.",
+  "description": "Know what you can pour tonight, from the bottles you already own.",
   "start_url": "./index.html",
   "display": "standalone",
   "display_override": ["standalone"],

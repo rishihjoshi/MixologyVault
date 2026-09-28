@@ -58,10 +58,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing image data' });
     }
     if (base64.length > 5_500_000) {
-      return res.status(413).json({ error: 'Image too large — use a smaller photo' });
+      return res.status(413).json({ error: 'Photo too large — use one under 5 MB' });
     }
     if (!/^image\/(jpeg|png|webp|gif)$/.test(mediaType || '')) {
-      return res.status(400).json({ error: 'Unsupported image type' });
+      return res.status(400).json({ error: 'Unsupported photo format — use a JPG or PNG' });
     }
 
     // Counted only after validation, so rejected requests don't use up quota.
