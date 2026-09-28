@@ -95,7 +95,7 @@ export default async function handler(req, res) {
     const body = await r.text();
     res.setHeader('content-type', 'application/json');
     return res.status(r.status).send(body);
-  } catch (e) {
+  } catch {
     return res.status(500).json({ error: 'Proxy error' });
   }
 }

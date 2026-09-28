@@ -311,6 +311,13 @@ test.describe('cardHTML()', () => {
     expect(html).toContain('data-id="7"');
     expect(html).toContain('pour-in');
   });
+
+  test('escapes a malicious id so it cannot break out of data-id', async ({ page }) => {
+    const html = await call(page, 'cardHTML',
+      { id: '"><img src=x onerror=alert(1)>', name: 'Negroni' }, '');
+    expect(html).toContain('data-id="&quot;&gt;&lt;img src=x onerror=alert(1)&gt;"');
+    expect(html).not.toContain('<img src=x');
+  });
 });
 
 // ── mocktailToCard() — normalize a raw mocktail record ───

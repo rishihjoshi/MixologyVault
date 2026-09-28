@@ -1,5 +1,5 @@
 // Release ritual: bump CACHE_NAME here AND APP_VERSION in app.js together.
-const CACHE_NAME = 'mixvault-v7';
+const CACHE_NAME = 'mixvault-v8';
 const STATIC_ASSETS = [
   './index.html',
   './app.js',
@@ -10,9 +10,6 @@ const STATIC_ASSETS = [
   './cocktails.json',
   './ingredients.json',
   './mocktails.json',
-];
-const CDN_ASSETS = [
-  'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap',
 ];
 
 self.addEventListener('install', e => {

@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '2.2.2';
+const APP_VERSION = '2.2.3';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -43,11 +43,11 @@ let ingredientOverrides = {};
       }
       ingredientOverrides = safe;
     }
-  } catch (e) {}
+  } catch {}
 })();
 
 function saveOverrides() {
-  try { localStorage.setItem('mv_ing_overrides', JSON.stringify(ingredientOverrides)); } catch (e) {}
+  try { localStorage.setItem('mv_ing_overrides', JSON.stringify(ingredientOverrides)); } catch {}
 }
 
 function getIngStatus(ing) {
@@ -165,8 +165,8 @@ function normaliseSpiritKey(b) {
 // ── CARD HTML ─────────────────────────────────────────────
 function cardHTML(c, extraClass) {
   const isFav = favourites.has(c.id);
-  return `<div class="drink-card ${extraClass || ''}" data-id="${c.id}">
-    <button class="fav-btn ${isFav ? 'on' : ''}" data-id="${c.id}" aria-label="Favourite">${isFav ? '❤️' : '🤍'}</button>
+  return `<div class="drink-card ${extraClass || ''}" data-id="${esc(c.id)}">
+    <button class="fav-btn ${isFav ? 'on' : ''}" data-id="${esc(c.id)}" aria-label="Favourite">${isFav ? '❤️' : '🤍'}</button>
     <div class="dc-name">${esc(c.name)}</div>
     ${c.baseSpirit  ? `<div class="dc-eyebrow">${esc(c.baseSpirit)}</div>` : ''}
     ${c.description ? `<div class="dc-desc">${esc(c.description)}</div>`  : ''}
@@ -272,7 +272,7 @@ function renderBar() {
       <div class="pill-grid">
         ${items.map(ing => {
           const isHave = getIngStatus(ing) === 'have';
-          return `<button class="pill ${isHave ? 'have' : 'need-it'}" data-ing-id="${ing.id}"
+          return `<button class="pill ${isHave ? 'have' : 'need-it'}" data-ing-id="${esc(ing.id)}"
             aria-label="${esc(ing.item)}: ${isHave ? 'available' : 'needed'}">
             <div class="pill-dot"></div>
             <span class="pill-name">${esc(ing.item)}</span>
@@ -784,7 +784,7 @@ async function camCallClaude(base64, mediaType) {
   });
   if (!resp.ok) {
     let msg = `Error ${resp.status}`;
-    try { const j = await resp.json(); msg = j.error?.message || j.error || msg; } catch (_) {}
+    try { const j = await resp.json(); msg = j.error?.message || j.error || msg; } catch {}
     throw new Error(msg);
   }
   return resp.json();
@@ -802,7 +802,7 @@ function camParseIngredients(apiResp) {
     return arr
       .filter(x => typeof x === 'string' && x.trim().length > 1 && x.trim().length < 80)
       .map(x => x.trim());
-  } catch (_) {
+  } catch {
     return [];
   }
 }
