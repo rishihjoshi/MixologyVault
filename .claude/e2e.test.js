@@ -15,6 +15,7 @@ const sw     = fs.readFileSync(path.join(ROOT, 'sw.js'),      'utf8');
 const styles = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
 const cocktails   = JSON.parse(fs.readFileSync(path.join(ROOT, 'cocktails.json'),   'utf8'));
 const ingredients = JSON.parse(fs.readFileSync(path.join(ROOT, 'ingredients.json'), 'utf8'));
+const mocktails   = JSON.parse(fs.readFileSync(path.join(ROOT, 'mocktails.json'),   'utf8'));
 
 // ── PWA Shell Structure ───────────────────────────────────────────────────
 console.log('PWA shell structure');
@@ -35,7 +36,8 @@ console.log('CSP security');
 assert('CSP meta tag present',          html.includes('Content-Security-Policy'));
 assert('script-src self only',          html.includes("script-src 'self'"));
 assert('no unsafe-inline in script-src', !html.match(/script-src[^;]*unsafe-inline/));
-assert('connect-src anthropic',         html.includes('https://api.anthropic.com'));
+assert('connect-src vercel proxy',      /connect-src[^;]*https:\/\/mixology-vault\.vercel\.app/.test(html));
+assert('no direct anthropic in CSP',    !html.includes('api.anthropic.com'));
 assert('frame-ancestors none',          html.includes("frame-ancestors 'none'"));
 assert('object-src none',               html.includes("object-src 'none'"));
 assert('default-src self',              html.includes("default-src 'self'"));
@@ -54,16 +56,16 @@ assert('no onsubmit=',  !html.includes('onsubmit='));
 
 // ── Five-screen navigation structure ─────────────────────────────────────
 console.log('Five-screen navigation');
-const screens = ['home','bar','cocktails','decide','lab'];
-const labScreens = ['home','bar','cocktails','decide','lab'];
-labScreens.forEach(s => {
+const screens = ['home','bar','cocktails','mocktails','decide'];
+screens.forEach(s => {
   assert('screen-' + s + ' exists',         html.includes('id="screen-' + s + '"'));
   assert('nav data-screen=' + s,            html.includes('data-screen="' + s + '"'));
 });
 assert('nav element present',               html.includes('id="nav"'));
 assert('5 nav buttons with data-screen',    (html.match(/data-screen="/g) || []).length >= 5);
 assert('home screen is active by default',  html.includes('class="screen active" id="screen-home"'));
-assert('no screen-ai (replaced by lab)',    !html.includes('id="screen-ai"'));
+assert('no screen-ai',                      !html.includes('id="screen-ai"'));
+assert('no screen-lab (removed)',           !html.includes('id="screen-lab"') && !html.includes('id="nb-lab"'));
 
 // ── Home screen flows ─────────────────────────────────────────────────────
 console.log('Home screen flows');
@@ -104,33 +106,45 @@ assert('tod-grid present',              html.includes('id="tod-grid"'));
 assert('spirit-btns present',           html.includes('id="decide-spirits"'));
 assert('gen-btn wired in js',           appjs.includes("getElementById('gen-btn')"));
 
-// ── Vault Lab screen ──────────────────────────────────────────────────────
-console.log('Vault Lab screen');
-assert('screen-lab exists',             html.includes('id="screen-lab"'));
-assert('lab-cats div',                  html.includes('id="lab-cats"'));
-assert('lab-action-bar div',            html.includes('id="lab-action-bar"'));
-assert('lab-sel-count span',            html.includes('id="lab-sel-count"'));
-assert('lab-clear-btn present',         html.includes('id="lab-clear-btn"'));
-assert('lab-chips-wrap div',            html.includes('id="lab-chips-wrap"'));
-assert('lab-results div',               html.includes('id="lab-results"'));
-assert('nb-lab nav button',             html.includes('id="nb-lab"'));
-assert('VALID_SCREENS includes lab',    appjs.includes("'lab'"));
+// ── Mocktails screen (replaced the Vault Lab tab) ─────────────────────────
+console.log('Mocktails screen');
+assert('screen-mocktails exists',       html.includes('id="screen-mocktails"'));
+assert('nb-mocktails nav button',       html.includes('id="nb-mocktails" data-screen="mocktails"'));
+assert('mocktail-search input',         html.includes('id="mocktail-search"'));
+assert('mocktail-filter-row div',       html.includes('id="mocktail-filter-row"'));
+assert('mocktail-count div',            html.includes('id="mocktail-count"'));
+assert('mocktail-list div',             html.includes('id="mocktail-list"'));
+assert('VALID_SCREENS includes mocktails', /VALID_SCREENS\s*=\s*new Set\([^)]*'mocktails'/.test(appjs));
+assert('VALID_SCREENS excludes lab',    !/VALID_SCREENS\s*=\s*new Set\([^)]*'lab'/.test(appjs));
 assert('no AI in VALID_SCREENS',        !appjs.includes("'ai'"));
-assert('labSelectedIds state',          appjs.includes('labSelectedIds'));
+assert('reads mocktails.json',          appjs.includes("fetch(DATA_BASE + 'mocktails.json')"));
+assert('loadMocktails defined',         appjs.includes('function loadMocktails'));
+assert('mocktailToCard defined',        appjs.includes('function mocktailToCard'));
+assert('renderMocktails defined',       appjs.includes('function renderMocktails'));
+assert('buildMocktailFilterChips defined', appjs.includes('function buildMocktailFilterChips'));
+assert('mocktail-search wired',         appjs.includes("getElementById('mocktail-search')"));
+assert('mocktail-list wired',           appjs.includes("getElementById('mocktail-list')"));
+assert('#mocktails deep link',          appjs.includes("hash === '#mocktails'"));
+
+// ── Makeable-cocktail engine (My Vault "I can make" + camera) ────────────
+console.log('Makeable-cocktail engine');
+assert('vault-make-results div',        html.includes('id="vault-make-results"'));
 assert('labBuildKeys defined',          appjs.includes('function labBuildKeys'));
 assert('labScoreCocktail defined',      appjs.includes('function labScoreCocktail'));
-assert('buildLabCatTabs defined',       appjs.includes('function buildLabCatTabs'));
-assert('renderLabChips defined',        appjs.includes('function renderLabChips'));
-assert('renderLabResults defined',      appjs.includes('function renderLabResults'));
-assert('clearLabSelection defined',     appjs.includes('function clearLabSelection'));
 assert('labCardHTML defined',           appjs.includes('function labCardHTML'));
-assert('labChipHTML defined',           appjs.includes('function labChipHTML'));
 assert('LAB_SPIRIT_GRAD defined',       appjs.includes('LAB_SPIRIT_GRAD'));
 assert('year-strip in labBuildKeys',    appjs.includes('years?|yr|year'));
-assert('lab-cats event wired',          appjs.includes("getElementById('lab-cats')"));
-assert('lab-chips-wrap event wired',    appjs.includes("getElementById('lab-chips-wrap')"));
-assert('lab-results event wired',       appjs.includes("getElementById('lab-results')"));
-assert('lab-clear-btn event wired',     appjs.includes("getElementById('lab-clear-btn')"));
+assert('renderVaultMake defined',       appjs.includes('function renderVaultMake'));
+assert('vault-make-results wired',      appjs.includes("getElementById('vault-make-results')"));
+
+// ── Photo analysis via Vercel proxy ──────────────────────────────────────
+console.log('Photo analysis proxy');
+assert('CAM_PROXY_URL is Vercel proxy', appjs.includes("CAM_PROXY_URL = 'https://mixology-vault.vercel.app/api/analyze'"));
+assert('camera fetches via proxy',      appjs.includes('fetch(CAM_PROXY_URL'));
+assert('cam-analyse-btn wired',         appjs.includes("getElementById('cam-analyse-btn')"));
+assert('no direct anthropic call',      !appjs.includes('api.anthropic.com'));
+assert('no browser API key header',     !appjs.includes('x-api-key') && !appjs.includes('anthropic-dangerous-direct-browser-access'));
+assert('sw bypasses proxy origin',      sw.includes("'mixology-vault.vercel.app'"));
 
 // ── Modal flow ─────────────────────────────────────────────────────────────
 console.log('Modal flow');
@@ -149,10 +163,16 @@ assert('nav delegation wired',          appjs.includes("getElementById('nav')?.a
 
 // ── Data integrity ────────────────────────────────────────────────────────
 console.log('Data integrity');
-assert('94 cocktails loaded',           cocktails.length === 94);
-assert('28 ingredients loaded',         ingredients.length === 28);
-assert('no duplicate cocktail IDs',     new Set(cocktails.map(c=>c.id)).size === 94);
-assert('no duplicate ingredient IDs',   new Set(ingredients.map(i=>i.id)).size === 28);
+// Counts are derived from the JSON files so adding drinks doesn't break tests.
+console.log(`  (${cocktails.length} cocktails, ${mocktails.length} mocktails, ${ingredients.length} ingredients)`);
+assert('cocktails loaded',              cocktails.length > 0);
+assert('mocktails loaded',              mocktails.length > 0);
+assert('ingredients loaded',            ingredients.length > 0);
+assert('no duplicate cocktail IDs',     new Set(cocktails.map(c=>c.id)).size === cocktails.length);
+assert('no duplicate mocktail IDs',     new Set(mocktails.map(m=>m.id)).size === mocktails.length);
+assert('no duplicate ingredient IDs',   new Set(ingredients.map(i=>i.id)).size === ingredients.length);
+assert('all mocktails have recipe',     mocktails.every(m => typeof m.recipe === 'string' && m.recipe.length > 0));
+assert('all mocktails have ingredients',mocktails.every(m => Array.isArray(m.ingredients) && m.ingredients.length > 0));
 assert('all cocktails have recipe',     cocktails.every(c => typeof c.recipe === 'string' && c.recipe.length > 0));
 assert('all cocktails have ingredients',cocktails.every(c => Array.isArray(c.ingredients) && c.ingredients.length > 0));
 assert('old-fashioned cheery typo fixed', (() => {
