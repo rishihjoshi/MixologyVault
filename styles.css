@@ -261,7 +261,7 @@ body {
       rgba(9,9,9,0.72) 55%,
       rgba(9,9,9,0.96) 100%
     ),
-    url('./HeroImage.png') center top / cover no-repeat;
+    url('./HeroImage.jpg') center top / cover no-repeat;
 }
 /* Amber glow accent over the hero image */
 #hero::before {

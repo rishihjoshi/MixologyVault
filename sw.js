@@ -1,12 +1,12 @@
 // Release ritual: bump CACHE_NAME here AND APP_VERSION in app.js together.
-const CACHE_NAME = 'mixvault-v10';
+const CACHE_NAME = 'mixvault-v11';
 const STATIC_ASSETS = [
   './index.html',
   './app.js',
   './styles.css',
   './manifest.json',
   './AppIcon.png',
-  './HeroImage.png',
+  './HeroImage.jpg',
   './cocktails.json',
   './ingredients.json',
   './mocktails.json',

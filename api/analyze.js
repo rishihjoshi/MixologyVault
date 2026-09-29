@@ -49,6 +49,17 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'POST only' });
   }
 
+  // Origin gate: the app is served cross-origin (GitHub Pages → Vercel), so a
+  // real browser request ALWAYS carries an Origin header the browser sets and
+  // scripts can't forge. Reject anything that doesn't match. CORS alone only
+  // restrains browsers; this rejects casual non-browser abuse of the API key.
+  // It is not airtight (a raw client can spoof the header) — the hard cost
+  // ceiling remains the spend limit on the Anthropic Console workspace.
+  const origin = req.headers.origin;
+  if (origin && origin !== ALLOWED_ORIGIN) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) return res.status(503).json({ error: 'Server not configured' });
 

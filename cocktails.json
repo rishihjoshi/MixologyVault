@@ -267,7 +267,7 @@
     "history": "A classic Scotch cocktail developed as part of traditional bar culture.",
     "description": "A balanced scotch-based cocktail made with simple, well-rounded ingredients.",
     "recipe": "Add all ingredients to shaker with ice. Shake vigorously 15 sec. Strain into rocks glass over ice. Garnish with lemon wheel and cherry if available.",
-    "mood": "Cozy"
+    "mood": "Cosy"
   },
   {
     "id": "old-fashioned",
@@ -294,7 +294,7 @@
     "history": "One of the earliest documented cocktails, dating to the early 19th century. The name emerged in the 1880s to distinguish it from newer, more elaborate drinks - literally the \"old-fashioned\" way to mix whisky.",
     "description": "The original cocktail - a spirit-forward pour of whisky softened by a whisper of sugar and bitters over a large cube.",
     "recipe": "Add syrup and bitters to mixing glass. Add whisky and ice. Stir 30 sec. Strain over large ice cube in rocks glass. Garnish with orange or lemon peel or cherry.",
-    "mood": "Cozy"
+    "mood": "Cosy"
   },
   {
     "id": "penicillin",
@@ -753,7 +753,7 @@
     "history": "A classic Vodka cocktail developed as part of traditional bar culture.",
     "description": "A balanced vodka-based cocktail made with simple, well-rounded ingredients.",
     "recipe": "Build ingredients over ice in rocks glass. Stir gently. Garnish with lemon peel.",
-    "mood": "Cozy"
+    "mood": "Cosy"
   },
   {
     "id": "amaretto-old-fashioned",
@@ -864,7 +864,7 @@
     "history": "A classic Scotch cocktail developed as part of traditional bar culture.",
     "description": "A balanced scotch-based cocktail made with simple, well-rounded ingredients.",
     "recipe": "Shake with ice. Strain into rocks glass over ice. Garnish with lemon peel.",
-    "mood": "Cozy"
+    "mood": "Cosy"
   },
   {
     "id": "negroni",
@@ -950,7 +950,7 @@
     "history": "Rum-vermouth cocktails predate Prohibition and were common in port cities where rum was more accessible than whiskey, making this a natural Caribbean adaptation of the Manhattan.",
     "description": "A rich, spirit-forward cocktail showcasing aged rum’s molasses depth softened by herbal vermouth and warming bitters.",
     "recipe": "Add all ingredients to a mixing glass with ice. Stir for 30 seconds until well chilled. Strain into a chilled coupe or martini glass. Garnish with expressed lime peel.",
-    "mood": "Cozy"
+    "mood": "Cosy"
   },
   {
     "id": "kingston-highball",
@@ -2101,7 +2101,7 @@
     "history": "Created in 1927 by Erskine Gwynne, an American writer living in Paris who ran a literary magazine called 'Boulevardier'. A whisky-forward cousin of the Negroni that swaps gin for whiskey.",
     "description": "A Negroni with backbone — Monkey Shoulder's honeyed malt adds a warming, spiced depth to Campari's bitter edge. Note: Classic spec uses bourbon + sweet vermouth; this Scotch + Dolin Dry version is softer and more floral.",
     "recipe": "Add all ingredients to a mixing glass with ice. Stir for 30 seconds until well chilled. Strain into a rocks glass over a large ice cube. Express an orange peel over the drink and garnish.",
-    "mood": "Cozy"
+    "mood": "Cosy"
   },
   {
     "id": "old-pal",
@@ -2367,7 +2367,7 @@
     "baseSpirit": "Whisky",
     "tags": [
       "Hot Drink",
-      "Cozy"
+      "Cosy"
     ],
     "ingredients": [
       "Red Breast 12 Irish Whiskey",
@@ -2390,7 +2390,7 @@
     "history": "Hot Toddies have been served in Scotland and Ireland since at least the 1780s as both a social drink and a cold remedy. The name likely comes from 'toddy', a fermented palm-sap drink from India brought back by British soldiers.",
     "description": "The ultimate cold-weather cocktail — Red Breast's orchard-fruit warmth amplified by hot water, with lemon to cut through and demerara to round out. Traditional cold cure, traditional soul warmer.",
     "recipe": "Warm a heatproof mug with hot water, then empty. Add whiskey, demerara syrup, and lemon juice. Top with hot (not boiling) water. Stir once. Garnish with a lemon wheel studded with cloves and a cinnamon stick if available.",
-    "mood": "Cozy"
+    "mood": "Cosy"
   },
   {
     "id": "mamie-taylor",
@@ -2709,7 +2709,7 @@
     "history": "A modern whisky sour variation that emerged in the 2010s — St-Germain replaces or supplements the simple syrup, adding floral complexity to Red Breast's natural orchard-fruit character.",
     "description": "A whisky sour with romance — Red Breast's creamy pot-still fruit meets elderflower honey and bright lemon, with demerara adding warmth. Sophisticated and easy-drinking.",
     "recipe": "Add all ingredients to a shaker with ice. Shake hard 15 seconds. Strain into a rocks glass over fresh ice. Garnish with a lemon wheel and a dash of Angostura on top.",
-    "mood": "Cozy"
+    "mood": "Cosy"
   },
   {
     "id": "vodka-elderflower-fizz",

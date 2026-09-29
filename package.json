@@ -1,12 +1,14 @@
 {
   "name": "mixology-vault",
-  "version": "2.0.0",
+  "version": "2.5.0",
   "private": true,
   "description": "Know what you can pour tonight, from the bottles you already own.",
   "scripts": {
     "serve": "npx serve . -p 3333 --no-clipboard",
     "test": "playwright test",
-    "test:headed": "playwright test --headed"
+    "test:headed": "playwright test --headed",
+    "test:api": "node --test \"api/*.test.mjs\"",
+    "test:all": "npm run test:api && npm test"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1"
