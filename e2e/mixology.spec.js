@@ -210,3 +210,36 @@ test.describe('Brand-voice pass: Decide, favourites, home stats', () => {
     await expect(page.locator('body')).not.toContainText('configured');
   });
 });
+
+test.describe('Assets & accessibility', () => {
+  test('optimised hero image is served and the old PNG is gone', async ({ page }) => {
+    const jpg = await page.request.get('/HeroImage.jpg');
+    expect(jpg.status()).toBe(200);
+    // Old 2 MB PNG was removed and replaced by the ~150 KB JPEG.
+    const oldPng = await page.request.get('/HeroImage.png');
+    expect(oldPng.status()).toBe(404);
+  });
+
+  test('removed dead files return 404', async ({ page }) => {
+    for (const path of ['/icon.svg', '/new-icon.svg']) {
+      const res = await page.request.get(path);
+      expect(res.status(), `${path} should be gone`).toBe(404);
+    }
+  });
+
+  test('manifest icons are 512x512 and the referenced icon loads', async ({ page }) => {
+    const manifest = await (await page.request.get('/manifest.json')).json();
+    expect(manifest.icons.length).toBeGreaterThan(0);
+    for (const icon of manifest.icons) {
+      expect(icon.sizes).toBe('512x512');
+    }
+    const icon = await page.request.get('/' + manifest.icons[0].src);
+    expect(icon.status()).toBe(200);
+  });
+
+  test('viewport allows pinch-zoom (WCAG 1.4.4)', async ({ page }) => {
+    const content = await page.locator('meta[name="viewport"]').getAttribute('content');
+    expect(content).not.toContain('user-scalable=no');
+    expect(content).not.toContain('maximum-scale');
+  });
+});

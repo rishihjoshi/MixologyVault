@@ -287,10 +287,45 @@ test.describe('camBuildIngObjects()', () => {
   });
 });
 
+// ── normaliseMood() — British spelling + legacy data shim ─
+test.describe('normaliseMood()', () => {
+  test('maps legacy "Cozy" → "Cosy"', async ({ page }) => {
+    expect(await call(page, 'normaliseMood', 'Cozy')).toBe('Cosy');
+  });
+
+  test('leaves other moods untouched', async ({ page }) => {
+    expect(await call(page, 'normaliseMood', 'Party')).toBe('Party');
+    expect(await call(page, 'normaliseMood', 'Cosy')).toBe('Cosy');
+  });
+
+  test('null / empty → empty string', async ({ page }) => {
+    expect(await call(page, 'normaliseMood', null)).toBe('');
+    expect(await call(page, 'normaliseMood', '')).toBe('');
+  });
+
+  test('no live cocktail keeps the legacy "Cozy" spelling', async ({ page }) => {
+    const stray = await page.evaluate(() =>
+      allCocktails.filter(c => c.mood === 'Cozy').map(c => c.id));
+    expect(stray).toEqual([]);
+  });
+});
+
 // ── camAvailable() — availability gate (proxy configured + online) ────
 test.describe('camAvailable()', () => {
   test('true — proxy is configured and the (headless) browser is online', async ({ page }) => {
     expect(await call(page, 'camAvailable')).toBe(true);
+  });
+
+  test('false when the browser is offline', async ({ page }) => {
+    const result = await page.evaluate(() => {
+      const desc = Object.getOwnPropertyDescriptor(Navigator.prototype, 'onLine');
+      Object.defineProperty(navigator, 'onLine', { get: () => false, configurable: true });
+      const out = camAvailable();
+      // Restore so we don't leak the override into other assertions.
+      if (desc) Object.defineProperty(Navigator.prototype, 'onLine', desc);
+      return out;
+    });
+    expect(result).toBe(false);
   });
 
   test('CAM_PROXY_URL points at the Vercel proxy endpoint', async ({ page }) => {

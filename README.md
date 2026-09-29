@@ -34,7 +34,11 @@ npm install            # dev-only: Playwright
 npm run serve          # serves the site at http://localhost:3333
 npm test               # runs the Playwright e2e suite (auto-starts the server)
 npm run test:headed    # same, with a visible browser
+npm run test:api       # runs the Vercel proxy handler tests (node:test, no browser)
+npm run test:all       # test:api then the Playwright suite
 ```
+
+First run only: `npx playwright install chromium` to fetch the browser binary.
 
 The photo-scan feature calls the live Vercel proxy, whose CORS/Origin gate only allows the
 production origin — so **photo scan won't work from `localhost`**. Everything else works
