@@ -2896,5 +2896,182 @@
     "description": "A Margarita with a slow, smoky warmth — Añejo’s oak and vanilla meet Ancho Reyes’ dried-chile heat, with Cointreau and lime keeping it bright.",
     "recipe": "Rim a rocks glass with salt. Add all ingredients to a shaker with ice. Shake hard 12–15 seconds. Strain into the glass over fresh ice. Garnish with a lime wheel.",
     "mood": "Party"
+  },
+  {
+    "id": "daiquiri",
+    "name": "Daiquiri",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Classic",
+      "Sour"
+    ],
+    "ingredients": [
+      "Rum",
+      "Fresh Lime Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "15 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "0.5 oz"
+    ],
+    "history": "A Cuban classic from the 1890s, named after a beach near Santiago de Cuba.",
+    "description": "The purest expression of rum, lime, and sugar — bright, clean, and balanced.",
+    "recipe": "Add all ingredients to a shaker with ice. Shake hard until well chilled. Double-strain into a chilled coupe. Garnish with a lime wheel.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "whiskey-sour",
+    "name": "Whiskey Sour",
+    "baseSpirit": "Bourbon",
+    "tags": [
+      "Classic",
+      "Sour"
+    ],
+    "ingredients": [
+      "Bourbon",
+      "Fresh Lemon Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "22.5 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "0.75 oz"
+    ],
+    "history": "A sour documented since the 1860s; Jerry Thomas printed an early recipe in 1862.",
+    "description": "Bourbon squared up by fresh lemon and a little sugar — the benchmark sour.",
+    "recipe": "Add bourbon, lemon, and syrup to a shaker with ice (for a silky foam, add an egg white and dry-shake first). Shake well and strain over fresh ice in a rocks glass. Garnish with a lemon wheel and a cherry.",
+    "mood": "Bold"
+  },
+  {
+    "id": "manhattan",
+    "name": "Manhattan",
+    "baseSpirit": "Bourbon",
+    "tags": [
+      "Classic",
+      "Spirit-Forward"
+    ],
+    "ingredients": [
+      "Bourbon",
+      "Sweet Vermouth",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "2 dashes"
+    ],
+    "history": "Born in New York in the 1870s, one of the original vermouth cocktails.",
+    "description": "Whiskey and sweet vermouth laced with bitters — elegant and spirit-forward.",
+    "recipe": "Stir bourbon, sweet vermouth, and bitters with ice until well chilled. Strain into a chilled coupe. Garnish with a cherry.",
+    "mood": "Cosy"
+  },
+  {
+    "id": "southside",
+    "name": "Southside",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Classic",
+      "Refreshing"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Fresh Lemon Juice",
+      "Simple Syrup",
+      "Mint"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "Handful"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "Handful"
+    ],
+    "history": "A Prohibition-era favourite claimed by both Chicago's South Side and New York's 21 Club.",
+    "description": "A minty gin sour — the crisp, spirit-forward cousin of the Mojito.",
+    "recipe": "Lightly muddle the mint with the syrup in a shaker. Add gin, lemon, and ice. Shake hard and double-strain into a chilled coupe. Garnish with a mint leaf.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "gin-rickey",
+    "name": "Gin Rickey",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Highball",
+      "Refreshing"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Fresh Lime Juice",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "30 ml",
+      "Top"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "1 oz",
+      "Top"
+    ],
+    "history": "A Washington, D.C. drink of the 1880s, first made with bourbon before gin took over.",
+    "description": "Dry, fizzy, and unsweetened — gin and fresh lime lengthened with soda.",
+    "recipe": "Build gin and lime juice over ice in a highball glass. Top with soda and stir gently. Garnish with a lime wedge.",
+    "mood": "Fresh"
+  },
+  {
+    "id": "corpse-reviver-no-2",
+    "name": "Corpse Reviver No. 2",
+    "baseSpirit": "Gin",
+    "tags": [
+      "Classic",
+      "Citrus"
+    ],
+    "ingredients": [
+      "Empress 1908 Gin",
+      "Cointreau",
+      "Vermouth",
+      "Fresh Lemon Juice",
+      "Anise Bitters"
+    ],
+    "measurementsMl": [
+      "22.5 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "22.5 ml",
+      "1 dash"
+    ],
+    "measurementsOz": [
+      "0.75 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "0.75 oz",
+      "1 dash"
+    ],
+    "history": "From Harry Craddock's 1930 Savoy Cocktail Book, which warned that four in swift succession will 'unrevive the corpse.'",
+    "description": "Equal parts gin, orange, and aromatised wine over an anise whisper — bright and complex.",
+    "recipe": "Rinse a chilled coupe with anise bitters (or absinthe) and discard the excess. Shake gin, Cointreau, vermouth, and lemon with ice. Double-strain into the glass. Garnish with an orange twist.",
+    "mood": "Curious"
   }
 ]

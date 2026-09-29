@@ -310,6 +310,33 @@ test.describe('normaliseMood()', () => {
   });
 });
 
+// ── Cocktail catalog integrity ───────────────────────────
+test.describe('cocktail catalog', () => {
+  test('core classics are present', async ({ page }) => {
+    const names = await page.evaluate(() => allCocktails.map(c => c.name));
+    for (const classic of ['Daiquiri', 'Whiskey Sour', 'Manhattan', 'Southside', 'Gin Rickey', 'Corpse Reviver No. 2']) {
+      expect(names, `missing ${classic}`).toContain(classic);
+    }
+  });
+
+  test('every cocktail has aligned measurement arrays and a unique id', async ({ page }) => {
+    const problems = await page.evaluate(() => {
+      const seen = new Set();
+      const bad = [];
+      for (const c of allCocktails) {
+        const n = c.ingredients ? c.ingredients.split('\n').filter(Boolean).length : 0;
+        const ml = c.measML ? c.measML.split('\n').length : 0;
+        const oz = c.measOz ? c.measOz.split('\n').length : 0;
+        if (n && (ml !== n || oz !== n)) bad.push(c.id + ' (measurement mismatch)');
+        if (seen.has(c.id)) bad.push(c.id + ' (duplicate id)');
+        seen.add(c.id);
+      }
+      return bad;
+    });
+    expect(problems).toEqual([]);
+  });
+});
+
 // ── camAvailable() — availability gate (proxy configured + online) ────
 test.describe('camAvailable()', () => {
   test('true — proxy is configured and the (headless) browser is online', async ({ page }) => {
