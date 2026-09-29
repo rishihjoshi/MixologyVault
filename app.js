@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '2.4.0';
+const APP_VERSION = '2.5.0';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -838,7 +838,10 @@ let camEditMode       = false;
 let camCurrentFile    = null;
 let camPreviewURL     = null;
 
-function camHasKey() { return !!CAM_PROXY_URL; }
+// The proxy is always configured, so the only reason photo scan can't work is
+// no network. navigator.onLine is a best-effort hint; camRunAnalysis still
+// handles a live fetch failure with the "couldn't reach" message either way.
+function camAvailable() { return !!CAM_PROXY_URL && navigator.onLine; }
 
 let camErrorTimer = null;
 function camShowError(msg) {
@@ -1107,9 +1110,9 @@ async function camRunAnalysis() {
 }
 
 function camInit() {
-  // No API key configured (local/dev, or before first deploy injects it):
-  // show a graceful notice and skip wiring the capture UI.
-  if (!camHasKey()) {
+  // Offline: show a graceful notice and skip wiring the capture UI, since the
+  // photo can't reach the analysis proxy without a network.
+  if (!camAvailable()) {
     const unavail = document.getElementById('decide-snap-unavailable');
     const main    = document.getElementById('cam-main');
     if (unavail) unavail.style.display = '';
@@ -1300,6 +1303,11 @@ async function init() {
 function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
 
+  // Was the page already controlled by a worker when we registered? If not, this
+  // is a first visit — the initial controllerchange (from the new worker calling
+  // clients.claim) is expected and must NOT trigger a reload.
+  const hadController = !!navigator.serviceWorker.controller;
+
   const showUpdateBanner = () => {
     document.getElementById('update-banner')?.classList.remove('hidden');
   };
@@ -1326,7 +1334,9 @@ function registerServiceWorker() {
 
   let reloading = false;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (reloading) return;
+    // Skip the first-visit claim; only reload when an existing controller is
+    // replaced by an updated worker (the real "new version activated" case).
+    if (!hadController || reloading) return;
     reloading = true;
     window.location.reload();
   });

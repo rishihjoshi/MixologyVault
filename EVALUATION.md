@@ -1,5 +1,10 @@
 # Mixology Vault — Audit & Evaluation
 
+> **⚠️ Historical, point-in-time record.** This document describes the **v2.0.0** release
+> (2026-07-15) and mentions files that no longer exist (e.g. `config.js`). It is kept for
+> history and is **not** the current source of truth. For how the app works today, see
+> [`README.md`](./README.md).
+
 _Date: 2026-07-15 · Version: 2.0.0 · Scope: `claude/mixology-vault-audit-fe7db2`_
 
 ## 1. Executive summary

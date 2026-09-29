@@ -16,13 +16,13 @@
   "icons": [
     {
       "src": "AppIcon.png",
-      "sizes": "1087x1087",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
       "src": "AppIcon.png",
-      "sizes": "1087x1087",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
@@ -33,14 +33,14 @@
       "short_name": "Decide",
       "description": "Jump straight to the drink picker",
       "url": "./index.html#decide",
-      "icons": [{ "src": "AppIcon.png", "sizes": "1087x1087" }]
+      "icons": [{ "src": "AppIcon.png", "sizes": "512x512" }]
     },
     {
       "name": "Mocktails",
       "short_name": "Mocktails",
       "description": "Browse zero-proof drinks",
       "url": "./index.html#mocktails",
-      "icons": [{ "src": "AppIcon.png", "sizes": "1087x1087" }]
+      "icons": [{ "src": "AppIcon.png", "sizes": "512x512" }]
     }
   ]
 }

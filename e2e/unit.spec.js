@@ -287,10 +287,10 @@ test.describe('camBuildIngObjects()', () => {
   });
 });
 
-// ── camHasKey() — availability gate (now proxy-based) ────
-test.describe('camHasKey()', () => {
-  test('true — the photo feature is available via the configured proxy', async ({ page }) => {
-    expect(await call(page, 'camHasKey')).toBe(true);
+// ── camAvailable() — availability gate (proxy configured + online) ────
+test.describe('camAvailable()', () => {
+  test('true — proxy is configured and the (headless) browser is online', async ({ page }) => {
+    expect(await call(page, 'camAvailable')).toBe(true);
   });
 
   test('CAM_PROXY_URL points at the Vercel proxy endpoint', async ({ page }) => {
