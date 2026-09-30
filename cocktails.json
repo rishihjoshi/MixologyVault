@@ -132,7 +132,8 @@
     ],
     "garnishes": [
       "Lemon twist",
-      "Green olive"
+      "Green olive",
+      "Lime twist"
     ],
     "mood": "Bold"
   },
@@ -3616,7 +3617,8 @@
     "description": "A Margarita with a slow, smoky warmth — Añejo’s oak and vanilla meet Ancho Reyes’ dried-chile heat, with Cointreau and lime keeping it bright.",
     "recipe": "Rim a rocks glass with salt. Add all ingredients to a shaker with ice. Shake hard 12–15 seconds. Strain into the glass over fresh ice. Garnish with a lime wheel.",
     "glasses": [
-      "Rocks"
+      "Rocks",
+      "Coupe"
     ],
     "garnishes": [
       "Salt rim & lime wheel",

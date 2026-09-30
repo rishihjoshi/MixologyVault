@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '3.1.0';
+const APP_VERSION = '3.2.0';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -126,8 +126,17 @@ const DRINK_PHOTOS = {
   'classic-margarita': 'assets/img/classic-margarita.jpg',
   'cosmopolitan':      'assets/img/cosmopolitan.jpg',
   'mojito':            'assets/img/virgin-mojito.jpg',
+  'gin-martini':       'assets/img/gin-martini.jpg',
+  'penicillin':        'assets/img/penicillin.jpg',
+  'mimosa':            'assets/img/mimosa.jpg',
+  'clover-club-pomegranate': 'assets/img/clover-club-pomegranate.jpg',
+  'rosita':            'assets/img/rosita.jpg',
+  'elderflower-negroni': 'assets/img/elderflower-negroni.jpg',
+  'hugo-spritz':       'assets/img/hugo-spritz.jpg',
+  'spicy-ancho-margarita': 'assets/img/spicy-ancho-margarita.jpg',
   'virgin-mojito':     'assets/img/virgin-mojito.jpg',
   'shirley-temple':    'assets/img/shirley-temple.jpg',
+  'virgin-margarita':  'assets/img/virgin-margarita.jpg',
 };
 
 // Placeholder glass silhouettes, chosen from the drink's preferred glass

@@ -64,8 +64,8 @@ test.describe('Snap feature relocated into Decide', () => {
 });
 
 test.describe('Version functionality', () => {
-  test('visible version label reads v3.1.0', async ({ page }) => {
-    await expect(page.locator('#app-version')).toHaveText('v3.1.0');
+  test('visible version label reads v3.2.0', async ({ page }) => {
+    await expect(page.locator('#app-version')).toHaveText('v3.2.0');
   });
 
   test('update banner exists and starts hidden', async ({ page }) => {
@@ -111,7 +111,7 @@ test.describe('Core flows unaffected', () => {
     await page.evaluate(() => openModal('gin-martini'));
     await expect(page.locator('#serve-wrap')).toBeVisible();
     await expect(page.locator('#modal-glass')).toHaveText('Martini or Nick & Nora or Coupe');
-    await expect(page.locator('#modal-garnish')).toHaveText('Lemon twist or Green olive');
+    await expect(page.locator('#modal-garnish')).toHaveText('Lemon twist or Green olive or Lime twist');
   });
 
   test('an ungarnished drink says "None"', async ({ page }) => {
@@ -415,6 +415,12 @@ test.describe('v3 Stitch redesign', () => {
     for (const src of await page.evaluate(() => [...new Set(Object.values(DRINK_PHOTOS))])) {
       expect((await page.request.get('/' + src)).status(), src).toBe(200);
     }
+  });
+
+  test('every photo is keyed to a real cocktail or mocktail id', async ({ page }) => {
+    const orphans = await page.evaluate(() =>
+      Object.keys(DRINK_PHOTOS).filter(id => !findDrink(id)));
+    expect(orphans).toEqual([]);
   });
 
   test('recipe sheet flags ingredients that are not in the bar', async ({ page }) => {
