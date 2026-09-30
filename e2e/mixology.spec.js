@@ -64,8 +64,8 @@ test.describe('Snap feature relocated into Decide', () => {
 });
 
 test.describe('Version functionality', () => {
-  test('visible version label reads v3.0.1', async ({ page }) => {
-    await expect(page.locator('#app-version')).toHaveText('v3.0.1');
+  test('visible version label reads v3.1.0', async ({ page }) => {
+    await expect(page.locator('#app-version')).toHaveText('v3.1.0');
   });
 
   test('update banner exists and starts hidden', async ({ page }) => {
@@ -105,6 +105,19 @@ test.describe('Core flows unaffected', () => {
     await expect(firstCard).toBeVisible();
     await firstCard.click();
     await expect(page.locator('#modal-overlay')).toHaveClass(/open/);
+  });
+
+  test('recipe sheet shows the glass and garnish options', async ({ page }) => {
+    await page.evaluate(() => openModal('gin-martini'));
+    await expect(page.locator('#serve-wrap')).toBeVisible();
+    await expect(page.locator('#modal-glass')).toHaveText('Martini or Nick & Nora or Coupe');
+    await expect(page.locator('#modal-garnish')).toHaveText('Lemon twist or Green olive');
+  });
+
+  test('an ungarnished drink says "None"', async ({ page }) => {
+    await page.evaluate(() => openModal('naked-famous-home-bar-edit'));
+    await expect(page.locator('#modal-glass')).toHaveText('Coupe');
+    await expect(page.locator('#modal-garnish')).toHaveText('None');
   });
 
   test('Mocktails tab lists drinks, search filters, and a card opens the modal', async ({ page }) => {
