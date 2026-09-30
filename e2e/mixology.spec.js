@@ -237,6 +237,34 @@ test.describe('Assets & accessibility', () => {
     expect(icon.status()).toBe(200);
   });
 
+  test('vercel.json sends the security headers and mirrors the meta CSP', async ({ page }) => {
+    const fs = require('fs');
+    const path = require('path');
+    const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'vercel.json'), 'utf8'));
+    const pages = cfg.headers.find(h => h.source === '/((?!api/).*)');
+    const api   = cfg.headers.find(h => h.source === '/api/(.*)');
+    const get = (rule, key) => rule.headers.find(h => h.key === key)?.value;
+
+    expect(get(pages, 'X-Frame-Options')).toBe('DENY');
+    expect(get(pages, 'X-Content-Type-Options')).toBe('nosniff');
+    expect(get(pages, 'Referrer-Policy')).toBe('no-referrer');
+    // HSTS is left to Vercel's default (max-age=63072000; includeSubDomains; preload).
+    expect(get(pages, 'Strict-Transport-Security')).toBeUndefined();
+    expect(get(api, 'Content-Security-Policy')).toContain("default-src 'none'");
+    expect(get(api, 'Cache-Control')).toBe('no-store');
+
+    // Every directive in the page's <meta> CSP must appear verbatim in the header CSP.
+    const norm = csp => csp.split(';').map(d => d.trim().replace(/\s+/g, ' ')).filter(Boolean);
+    const header = norm(get(pages, 'Content-Security-Policy'));
+    const meta = norm(await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content'));
+    for (const d of meta) expect(header, `header CSP missing: ${d}`).toContain(d);
+    expect(header).toContain("frame-ancestors 'none'");
+
+    // Header-only directives were removed from <meta> (browsers ignore them there).
+    expect(meta.some(d => d.startsWith('frame-ancestors'))).toBe(false);
+    await expect(page.locator('meta[http-equiv="X-Frame-Options"]')).toHaveCount(0);
+  });
+
   test('viewport does not use viewport-fit=cover (iOS PWA bottom-gap regression)', async ({ page }) => {
     const content = await page.locator('meta[name="viewport"]').getAttribute('content');
     expect(content).not.toContain('viewport-fit');
