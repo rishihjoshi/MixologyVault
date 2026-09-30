@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '3.0.1';
+const APP_VERSION = '3.1.0';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -130,13 +130,18 @@ const DRINK_PHOTOS = {
   'shirley-temple':    'assets/img/shirley-temple.jpg',
 };
 
-// Placeholder glass silhouettes, chosen from the drink's tags.
+// Placeholder glass silhouettes, chosen from the drink's preferred glass
+// (falling back to its tags/name when the data has no glass).
 const GLASS_SVG = {
   coupe:    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10h28c0 9-6 15-14 15S10 19 10 10z"/><path d="M24 25v13M17 38h14"/></svg>',
   rocks:    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14h24l-2.5 22a2 2 0 01-2 1.8H16.5a2 2 0 01-2-1.8z"/><rect x="18" y="22" width="10" height="9" rx="2"/></svg>',
   highball: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 8h18l-1.8 31a2 2 0 01-2 1.9h-10.4a2 2 0 01-2-1.9z"/><path d="M26 8l4-5h4"/><path d="M16 18h16"/></svg>',
 };
 function glassFor(c) {
+  const g = ((c.glasses || [])[0] || '').toLowerCase();
+  if (/rocks|julep|mug/.test(g)) return 'rocks';
+  if (/highball|collins|wine|copa|flute|toddy/.test(g)) return 'highball';
+  if (g) return 'coupe';
   const t = (c.tag || '').toLowerCase();
   if (/highball|collins|fizz|mule|spritz|sparkling|refreshing|cooler/.test(t + ' ' + (c.name || '').toLowerCase())) return 'highball';
   if (/spirit-forward|old fashioned/.test(t + ' ' + (c.name || '').toLowerCase())) return 'rocks';
@@ -212,6 +217,8 @@ async function loadCocktails() {
       measML:      (c.measurementsMl  || []).join('\n'),
       measOz:      (c.measurementsOz  || []).join('\n'),
       steps:       c.recipe      || '',
+      glasses:     c.glasses     || [],
+      garnishes:   c.garnishes   || [],
       history:     c.history     || '',
       description: c.description || '',
       mood:        normaliseMood(c.mood),
@@ -236,6 +243,8 @@ function mocktailToCard(m) {
     measML:      (m.measurementsMl  || []).join('\n'),
     measOz:      (m.measurementsOz  || []).join('\n'),
     steps:       m.recipe      || '',
+    glasses:     m.glasses     || [],
+    garnishes:   m.garnishes   || [],
     history:     m.history     || '',
     description: m.description || '',
     mood:        normaliseMood(m.mood),
@@ -644,12 +653,29 @@ function openModal(id) {
       : `${r.matched} of ${r.total} ingredients in your bar.`}</span>`;
 
   renderModalIngredients(c);
+  renderModalServe(c);
   renderModalSteps(c);
 
   const overlay = document.getElementById('modal-overlay');
   overlay.classList.add('open');
   document.getElementById('modal').scrollTop = 0;
   document.getElementById('modal-close-btn')?.focus({ preventScroll: true });
+}
+
+// Pure: the "Coupe or Martini" line for a list of options. Empty → fallback.
+function serveOptionsHTML(opts, fallback) {
+  if (!opts || opts.length === 0) return `<span class="serve-none">${esc(fallback)}</span>`;
+  return opts.map(esc).join('<span class="serve-or"> or </span>');
+}
+
+// Glass & garnish: first option is the classic serve, the rest are alternatives.
+function renderModalServe(c) {
+  const wrap = document.getElementById('serve-wrap');
+  const hasData = (c.glasses || []).length > 0 || (c.garnishes || []).length > 0;
+  wrap.style.display = hasData ? 'block' : 'none';
+  if (!hasData) return;
+  document.getElementById('modal-glass').innerHTML   = serveOptionsHTML(c.glasses, 'Any');
+  document.getElementById('modal-garnish').innerHTML = serveOptionsHTML(c.garnishes, 'None');
 }
 
 function renderModalIngredients(c) {

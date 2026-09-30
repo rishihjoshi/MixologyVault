@@ -335,6 +335,48 @@ test.describe('cocktail catalog', () => {
     });
     expect(problems).toEqual([]);
   });
+
+  test('every cocktail and mocktail lists at least one glass and a garnish array', async ({ page }) => {
+    const bad = await page.evaluate(() => [...allCocktails, ...allMocktails]
+      .filter(d => !Array.isArray(d.glasses) || d.glasses.length === 0 || !Array.isArray(d.garnishes)
+        || [...d.glasses, ...d.garnishes].some(v => typeof v !== 'string' || !v.trim()))
+      .map(d => d.id));
+    expect(bad).toEqual([]);
+  });
+});
+
+// ── serveOptionsHTML() — glass / garnish options line ────
+test.describe('serveOptionsHTML()', () => {
+  test('joins options with "or"', async ({ page }) => {
+    const html = await call(page, 'serveOptionsHTML', ['Coupe', 'Rocks'], 'Any');
+    expect(html).toBe('Coupe<span class="serve-or"> or </span>Rocks');
+  });
+
+  test('empty or missing list shows the fallback', async ({ page }) => {
+    expect(await call(page, 'serveOptionsHTML', [], 'None')).toBe('<span class="serve-none">None</span>');
+    expect(await call(page, 'serveOptionsHTML', undefined, 'Any')).toBe('<span class="serve-none">Any</span>');
+  });
+
+  test('escapes option text', async ({ page }) => {
+    const html = await call(page, 'serveOptionsHTML', ['<img src=x>'], 'Any');
+    expect(html).toBe('&lt;img src=x&gt;');
+  });
+});
+
+// ── glassFor() — placeholder silhouette ──────────────────
+test.describe('glassFor()', () => {
+  test('uses the preferred glass when the data has one', async ({ page }) => {
+    expect(await call(page, 'glassFor', { glasses: ['Rocks', 'Coupe'] })).toBe('rocks');
+    expect(await call(page, 'glassFor', { glasses: ['Copper mug'] })).toBe('rocks');
+    expect(await call(page, 'glassFor', { glasses: ['Collins'] })).toBe('highball');
+    expect(await call(page, 'glassFor', { glasses: ['Wine glass'] })).toBe('highball');
+    expect(await call(page, 'glassFor', { glasses: ['Nick & Nora'] })).toBe('coupe');
+  });
+
+  test('falls back to tags/name without glass data', async ({ page }) => {
+    expect(await call(page, 'glassFor', { name: 'Gin Fizz', tag: '' })).toBe('highball');
+    expect(await call(page, 'glassFor', { name: 'Tuxedo', tag: '' })).toBe('coupe');
+  });
 });
 
 // ── camAvailable() — availability gate (proxy configured + online) ────
@@ -412,6 +454,15 @@ test.describe('mocktailToCard()', () => {
     expect(c.ingredients).toBe('Lime\nMint\nSoda');
     expect(c.measML).toBe('30 ml\n\n90 ml');
     expect(c.steps).toBe('1. Muddle\n2. Top with soda');
+  });
+
+  test('carries glasses / garnishes through, defaulting to empty arrays', async ({ page }) => {
+    const c = await call(page, 'mocktailToCard', { ...raw, glasses: ['Highball'], garnishes: ['Mint sprig'] });
+    expect(c.glasses).toEqual(['Highball']);
+    expect(c.garnishes).toEqual(['Mint sprig']);
+    const bare = await call(page, 'mocktailToCard', { id: 'x', name: 'Bare' });
+    expect(bare.glasses).toEqual([]);
+    expect(bare.garnishes).toEqual([]);
   });
 
   test('missing fields default to empty strings', async ({ page }) => {

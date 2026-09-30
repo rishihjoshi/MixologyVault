@@ -381,12 +381,20 @@ body[data-screen="decide"] #nav-decide { color: var(--amber); }
   background: linear-gradient(180deg, rgba(15,14,13,0) 45%, rgba(24,22,20,.9) 100%);
 }
 
-/* Placeholder: tinted smoked glass + glass silhouette */
+/* Placeholder: speakeasy bar backdrop (hero image, cropped to the candles and
+   bulbs on its left — never the drink in its centre) + spirit tint + glass silhouette */
 .ph {
-  display: grid; place-items: center; color: rgba(229,169,60,.55);
+  position: relative; overflow: hidden; isolation: isolate;
+  display: grid; place-items: center; color: rgba(229,169,60,.7);
+  background: var(--ph-a, #2A2218);
+}
+.ph::before {
+  content: ''; position: absolute; inset: -8px; z-index: -1;
   background:
-    radial-gradient(circle at 50% 45%, rgba(229,169,60,.16) 0%, transparent 55%),
-    linear-gradient(145deg, var(--ph-a, #2A2218) 0%, #151311 100%);
+    radial-gradient(circle at 50% 45%, rgba(229,169,60,.18) 0%, transparent 55%),
+    linear-gradient(145deg, color-mix(in srgb, var(--ph-a, #2A2218) 55%, transparent) 0%, rgba(21,19,17,.75) 100%),
+    url('./HeroImage.jpg') 15% 35% / 260% auto no-repeat;
+  filter: blur(2px) brightness(.8);
 }
 .ph svg { width: 56px; height: 56px; filter: drop-shadow(0 0 12px rgba(229,169,60,.3)); }
 .card.compact .ph svg { width: 44px; height: 44px; }
@@ -759,6 +767,14 @@ body[data-screen="decide"] #nav-decide { color: var(--amber); }
 .ing-none { font-size: 13px; color: var(--muted); }
 
 .modal-text { font-size: 15px; line-height: 1.7; color: var(--text-2); }
+
+.serve-list { display: flex; flex-direction: column; }
+.serve-row { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--stroke); }
+.serve-row:last-child { border-bottom: 0; }
+.serve-row dt { flex: 0 0 72px; font-size: 13px; color: var(--muted); }
+.serve-row dd { flex: 1; min-width: 0; font-size: 15px; }
+.serve-or { color: var(--muted); font-size: 13px; }
+.serve-none { color: var(--muted); }
 
 .step-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
 .step-item { display: flex; gap: 14px; align-items: flex-start; }
