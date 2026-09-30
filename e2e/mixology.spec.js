@@ -64,8 +64,8 @@ test.describe('Snap feature relocated into Decide', () => {
 });
 
 test.describe('Version functionality', () => {
-  test('visible version label reads v2.6.0', async ({ page }) => {
-    await expect(page.locator('#app-version')).toHaveText('v2.6.0');
+  test('visible version label reads v3.0.0', async ({ page }) => {
+    await expect(page.locator('#app-version')).toHaveText('v3.0.0');
   });
 
   test('update banner exists and starts hidden', async ({ page }) => {
@@ -241,5 +241,151 @@ test.describe('Assets & accessibility', () => {
     const content = await page.locator('meta[name="viewport"]').getAttribute('content');
     expect(content).not.toContain('user-scalable=no');
     expect(content).not.toContain('maximum-scale');
+  });
+});
+
+test.describe('v3 Stitch redesign', () => {
+  const stockAll = async page => {
+    await page.evaluate(() => {
+      const ov = {};
+      for (const ing of allIngredients) ov[ing.id] = 'have';
+      localStorage.setItem('mv_ing_overrides', JSON.stringify(ov));
+    });
+    await page.reload();
+    await expect(page.locator('#screen-home')).toHaveClass(/active/);
+  };
+  const stockNone = async page => {
+    await page.evaluate(() => {
+      const ov = {};
+      for (const ing of allIngredients) ov[ing.id] = 'need';
+      localStorage.setItem('mv_ing_overrides', JSON.stringify(ov));
+    });
+    await page.reload();
+    await expect(page.locator('#screen-home')).toHaveClass(/active/);
+  };
+
+  test('cards show "Can make now" when everything is in stock', async ({ page }) => {
+    await stockAll(page);
+    await page.locator('#nb-cocktails').click();
+    const first = page.locator('#cocktail-list .drink-card').first();
+    await expect(first.locator('.status-pill.can')).toHaveText('Can make now');
+    await expect(first.locator('.dc-ledger')).toHaveClass(/full/);
+  });
+
+  test('cards show no stock status when the bar is empty', async ({ page }) => {
+    await stockNone(page);
+    await page.locator('#nb-cocktails').click();
+    await expect(page.locator('#cocktail-list .drink-card').first()).toBeVisible();
+    await expect(page.locator('#cocktail-list .status-pill')).toHaveCount(0);
+  });
+
+  test('toggling a bar ingredient updates card status without a reload', async ({ page }) => {
+    await stockAll(page);
+    await page.locator('#nb-bar').click();
+    const pill = page.locator('.pill[data-ing-id]').first();
+    await expect(pill).toHaveAttribute('aria-checked', 'true');
+    await pill.click();
+    await expect(pill).toHaveAttribute('aria-checked', 'false');
+    await page.locator('#nb-cocktails').click();
+    await expect(page.locator('#cocktail-list .status-pill.miss1, #cocktail-list .status-pill.missn').first()).toBeVisible();
+  });
+
+  test('"See what I can make" switches My bar to Ready to make', async ({ page }) => {
+    await stockAll(page);
+    await page.locator('#nb-bar').click();
+    await expect(page.locator('#pour-ready')).not.toHaveText('0');
+    await page.locator('#pour-card-cta').click();
+    await expect(page.locator('#vault-make-panel')).toBeVisible();
+    await expect(page.locator('[data-vault-mode="make"]')).toHaveClass(/active/);
+  });
+
+  test('Ready now shows a preview and "Show all" reveals every row', async ({ page }) => {
+    await stockAll(page);
+    await page.locator('#nb-bar').click();
+    await page.locator('[data-vault-mode="make"]').click();
+    const ready = page.locator('#vault-make-results [data-section="ready"]');
+    const total = Number(await ready.locator('.lab-sec-count').textContent());
+    expect(total).toBeGreaterThan(12);
+    await expect(ready.locator('.lab-cocktail-card')).toHaveCount(12);
+    const btn = ready.locator('[data-show-all="ready"]');
+    await expect(btn).toHaveText(`Show all ${total}`);
+    await btn.click();
+    await expect(ready.locator('.lab-cocktail-card')).toHaveCount(total);
+    await expect(ready.locator('[data-show-all]')).toHaveCount(0);
+    // Leaving My bar collapses it again.
+    await page.locator('#nb-home').click();
+    await page.locator('#nb-bar').click();
+    await expect(ready.locator('.lab-cocktail-card')).toHaveCount(12);
+  });
+
+  test('empty Ready to make offers a way back to the shelf', async ({ page }) => {
+    await stockNone(page);
+    await page.locator('#nb-bar').click();
+    await page.locator('[data-vault-mode="make"]').click();
+    await page.locator('#vault-make-results [data-goto-shelf]').click();
+    await expect(page.locator('#vault-shelf-panel')).toBeVisible();
+  });
+
+  test('search clear button empties the search and restores the list', async ({ page }) => {
+    await page.locator('#nb-cocktails').click();
+    const total = await page.locator('#cocktail-list .drink-card').count();
+    await page.locator('#cocktail-search').fill('negroni');
+    const clear = page.locator('.search-clear[data-clear="cocktail-search"]');
+    await expect(clear).toBeVisible();
+    await clear.click();
+    await expect(page.locator('#cocktail-search')).toHaveValue('');
+    await expect(clear).toBeHidden();
+    await expect(page.locator('#cocktail-list .drink-card')).toHaveCount(total);
+  });
+
+  test('only whitelisted drinks get a photo; others get a placeholder', async ({ page }) => {
+    const withPhoto = await page.evaluate(() => cardHTML({ id: 'negroni', name: 'Negroni' }, ''));
+    expect(withPhoto).toContain('src="assets/img/negroni.jpg"');
+    const without = await page.evaluate(() => cardHTML({ id: 'not-a-drink', name: 'X' }, ''));
+    expect(without).not.toContain('<img');
+    expect(without).toContain('class="dc-media ph');
+    const proto = await page.evaluate(() => cardHTML({ id: '__proto__', name: 'X' }, ''));
+    expect(proto).not.toContain('<img');
+    for (const src of await page.evaluate(() => [...new Set(Object.values(DRINK_PHOTOS))])) {
+      expect((await page.request.get('/' + src)).status(), src).toBe(200);
+    }
+  });
+
+  test('recipe sheet flags ingredients that are not in the bar', async ({ page }) => {
+    await stockAll(page);
+    await page.locator('#nb-bar').click();
+    await page.locator('.pill[data-ing-id]').first().click();   // one bottle out of stock
+    await page.locator('#nb-cocktails').click();
+    const partial = page.locator('#cocktail-list .drink-card:has(.status-pill.miss1)').first();
+    await partial.click();
+    await expect(page.locator('#modal-overlay')).toHaveClass(/open/);
+    await expect(page.locator('#modal-ingredients tr.missing').first()).toBeVisible();
+    await expect(page.locator('#modal-status .status-pill.miss1')).toBeVisible();
+  });
+
+  test('method steps use Roman numerals', async ({ page }) => {
+    await page.locator('#nb-cocktails').click();
+    await page.locator('#cocktail-search').fill('boulevardier');
+    await page.locator('#cocktail-list .drink-card').first().click();
+    await expect(page.locator('#modal-steps .step-num').first()).toHaveText('I');
+  });
+
+  test('desktop shows the nav as a left rail', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    const nav = await page.locator('#nav').boundingBox();
+    expect(nav.x).toBe(0);
+    expect(nav.height).toBeGreaterThan(700);
+    await expect(page.locator('.rail-brand')).toBeVisible();
+  });
+
+  test('phone shows the nav as a bottom bar', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const nav = await page.locator('#nav').boundingBox();
+    expect(nav.y + nav.height).toBeGreaterThan(830);
+    await expect(page.locator('.rail-brand')).toBeHidden();
+  });
+
+  test('photo privacy note names no AI model', async ({ page }) => {
+    await expect(page.locator('.cam-privacy-note')).not.toContainText('Claude');
   });
 });

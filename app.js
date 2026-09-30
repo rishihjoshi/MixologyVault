@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '2.6.0';
+const APP_VERSION = '3.0.0';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -103,15 +103,80 @@ const CAT_META = {
 };
 
 const SPIRIT_FILTERS = [
-  { key: 'all',     label: 'All',     icon: '🍸' },
-  { key: 'gin',     label: 'Gin',     icon: '🌸' },
-  { key: 'whisky',  label: 'Whisky',  icon: '🥃' },
-  { key: 'tequila', label: 'Tequila', icon: '🌵' },
-  { key: 'rum',     label: 'Rum',     icon: '🏝️' },
-  { key: 'vodka',   label: 'Vodka',   icon: '🫙' },
-  { key: 'other',   label: 'Other',   icon: '✨' },
-  { key: 'fav',     label: 'Favourites', icon: '❤️' },
+  { key: 'all',     label: 'All'     },
+  { key: 'gin',     label: 'Gin'     },
+  { key: 'whisky',  label: 'Whisky'  },
+  { key: 'tequila', label: 'Tequila' },
+  { key: 'rum',     label: 'Rum'     },
+  { key: 'vodka',   label: 'Vodka'   },
+  { key: 'other',   label: 'Other'   },
+  { key: 'fav',     label: '♥ Favourites' },
 ];
+
+// ── DRINK PHOTOS ─────────────────────────────────────────
+// Only drinks with a photo of that exact drink get one; everything else gets
+// a glass-shaped placeholder, so a card never shows the wrong drink.
+// Paths are a fixed whitelist — never built from data.
+const DRINK_PHOTOS = {
+  'boulevardier':      'assets/img/boulevardier.jpg',
+  'negroni':           'assets/img/negroni.jpg',
+  'old-fashioned':     'assets/img/old-fashioned.jpg',
+  'daiquiri':          'assets/img/daiquiri.jpg',
+  'gimlet':            'assets/img/gimlet.jpg',
+  'classic-margarita': 'assets/img/classic-margarita.jpg',
+  'cosmopolitan':      'assets/img/cosmopolitan.jpg',
+  'mojito':            'assets/img/virgin-mojito.jpg',
+  'virgin-mojito':     'assets/img/virgin-mojito.jpg',
+  'shirley-temple':    'assets/img/shirley-temple.jpg',
+};
+
+// Placeholder glass silhouettes, chosen from the drink's tags.
+const GLASS_SVG = {
+  coupe:    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10h28c0 9-6 15-14 15S10 19 10 10z"/><path d="M24 25v13M17 38h14"/></svg>',
+  rocks:    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14h24l-2.5 22a2 2 0 01-2 1.8H16.5a2 2 0 01-2-1.8z"/><rect x="18" y="22" width="10" height="9" rx="2"/></svg>',
+  highball: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 8h18l-1.8 31a2 2 0 01-2 1.9h-10.4a2 2 0 01-2-1.9z"/><path d="M26 8l4-5h4"/><path d="M16 18h16"/></svg>',
+};
+function glassFor(c) {
+  const t = (c.tag || '').toLowerCase();
+  if (/highball|collins|fizz|mule|spritz|sparkling|refreshing|cooler/.test(t + ' ' + (c.name || '').toLowerCase())) return 'highball';
+  if (/spirit-forward|old fashioned/.test(t + ' ' + (c.name || '').toLowerCase())) return 'rocks';
+  return 'coupe';
+}
+
+// Card media: the whitelisted photo, or a tinted glass placeholder.
+function mediaHTML(c, cls) {
+  // hasOwn: a data id like "__proto__" must never resolve to a prototype.
+  const photo = Object.hasOwn(DRINK_PHOTOS, c.id) ? DRINK_PHOTOS[c.id] : null;
+  if (photo) return `<div class="${cls} has-photo"><img src="${photo}" alt="" loading="lazy" decoding="async"></div>`;
+  const tint = c.isMocktail ? 'mock' : (c.spiritKey || 'other');
+  return `<div class="${cls} ph ph-${tint}" aria-hidden="true">${GLASS_SVG[glassFor(c)]}</div>`;
+}
+
+// ── STOCK STATUS (from My bar) ───────────────────────────
+function inStockIngs() {
+  return allIngredients.filter(i => getIngStatus(i) === 'have');
+}
+
+// Score a drink against the bar; null when there's nothing to score against.
+function drinkStock(c, haves) {
+  if (!haves || !haves.length) return null;
+  return labScoreCocktail(c, haves);
+}
+
+// Status pill: "Can make now" / "Missing 1" / "Missing N".
+function statusPillHTML(r) {
+  if (!r) return '';
+  const missing = r.total - r.matched;
+  if (missing === 0) return '<span class="status-pill can"><span class="dot"></span>Can make now</span>';
+  return `<span class="status-pill ${missing === 1 ? 'miss1' : 'missn'}">Missing ${missing}</span>`;
+}
+
+// "Negroni · Campari · Sweet vermouth" — first few ingredient names.
+function ingredientLine(c, n) {
+  return splitLines(c.ingredients).slice(0, n || 3).join(' · ');
+}
+
+const HEART_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 7.9 3.6 4.5 7 4.5c2 0 3.6 1.1 5 2.9 1.4-1.8 3-2.9 5-2.9 3.4 0 5.6 3.4 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>';
 
 // ── LOCAL JSON LOADERS ───────────────────────────────────
 async function loadIngredients() {
@@ -206,18 +271,28 @@ function normaliseSpiritKey(b) {
 }
 
 // ── CARD HTML ─────────────────────────────────────────────
-function cardHTML(c, extraClass) {
+// haves: optional pre-computed in-stock list (saves re-filtering per card).
+function cardHTML(c, extraClass, haves) {
   const isFav = favourites.has(c.id);
-  return `<div class="drink-card ${extraClass || ''}" data-id="${esc(c.id)}">
-    <button class="fav-btn ${isFav ? 'on' : ''}" data-id="${esc(c.id)}" aria-label="${isFav ? 'Remove from favourites' : 'Add to favourites'}">${isFav ? '❤️' : '🤍'}</button>
-    <div class="dc-name">${esc(c.name)}</div>
-    ${c.baseSpirit  ? `<div class="dc-eyebrow">${esc(c.baseSpirit)}</div>` : ''}
-    ${c.description ? `<div class="dc-desc">${esc(c.description)}</div>`  : ''}
-    <div class="dc-tags">
-      ${c.baseSpirit ? `<span class="dc-base">${esc(c.baseSpirit)}</span>` : ''}
-      ${c.tag        ? `<span class="tag">${esc(c.tag)}</span>`           : ''}
+  const r     = drinkStock(c, haves || inStockIngs());
+  const line  = ingredientLine(c);
+  return `<article class="drink-card card ${extraClass || ''}" data-id="${esc(c.id)}" tabindex="0">
+    <div class="dc-media-wrap">
+      ${mediaHTML(c, 'dc-media')}
+      <div class="dc-status">${statusPillHTML(r)}</div>
+      <button class="fav-btn ${isFav ? 'on' : ''}" type="button" data-id="${esc(c.id)}" aria-label="${isFav ? 'Remove from favourites' : 'Add to favourites'}">${HEART_SVG}</button>
     </div>
-  </div>`;
+    <div class="dc-body">
+      ${c.baseSpirit ? `<div class="dc-eyebrow">${esc(c.baseSpirit)}</div>` : ''}
+      <h3 class="dc-name">${esc(c.name)}</h3>
+      ${line          ? `<div class="dc-line">${esc(line)}</div>` : ''}
+      ${c.description ? `<div class="dc-desc">${esc(c.description)}</div>` : ''}
+      <div class="dc-foot">
+        ${c.tag ? `<span class="tag">${esc(c.tag)}</span>` : '<span></span>'}
+        ${r ? `<span class="dc-ledger${r.matched === r.total ? ' full' : ''}">${r.matched}/${r.total} ingredients</span>` : ''}
+      </div>
+    </div>
+  </article>`;
 }
 
 function esc(s) {
@@ -246,20 +321,32 @@ function wireCardArea(el) {
     const card = e.target.closest('.drink-card');
     if (card) openModal(card.dataset.id);
   });
+  // Cards are focusable (tabindex=0): Enter/Space opens the recipe.
+  el.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    if (e.target.closest('.fav-btn')) return;
+    const card = e.target.closest('.drink-card');
+    if (card && e.target === card) { e.preventDefault(); openModal(card.dataset.id); }
+  });
 }
 
 // ── RENDER HOME ───────────────────────────────────────────
-function renderHome() {
+let featuredId = null;
+// keepPick: re-render with the same featured drink (e.g. after a stock change).
+function renderHome(keepPick) {
+  const haves = inStockIngs();
   // Featured pick
   if (allCocktails.length > 0) {
-    const pick = allCocktails[Math.floor(Math.random() * allCocktails.length)];
-    document.getElementById('featured-card').innerHTML = cardHTML(pick, 'hero-size featured');
+    const kept = keepPick === true && allCocktails.find(c => c.id === featuredId);
+    const pick = kept || allCocktails[Math.floor(Math.random() * allCocktails.length)];
+    featuredId = pick.id;
+    document.getElementById('featured-card').innerHTML = cardHTML(pick, 'hero-size featured', haves);
   }
 
-  // Signature cocktails
+  // Signature cocktails (horizontal carousel)
   const sigs  = allCocktails.filter(c => (c.tag || '').toLowerCase().includes('signature'));
   const sigEl = document.getElementById('home-signatures');
-  sigEl.innerHTML = sigs.slice(0, 3).map(c => cardHTML(c, 'featured')).join('');
+  sigEl.innerHTML = sigs.slice(0, 6).map(c => cardHTML(c, 'compact', haves)).join('');
   const sigSection = document.getElementById('home-signatures-section');
   if (sigSection) sigSection.style.display = sigs.length ? '' : 'none';
 
@@ -305,34 +392,41 @@ function renderBar() {
   const ORDER   = ['spirits','liqueurs','bitters','juices','syrups','garnishes','wine','top up'];
   const allKeys = [...new Set([...ORDER, ...Object.keys(groups)])];
 
+  // Owned counts per category come from the full list, not the filtered view.
+  const ownedIn = key => allIngredients.filter(i => i.category.toLowerCase() === key && getIngStatus(i) === 'have').length;
+  const totalIn = key => allIngredients.filter(i => i.category.toLowerCase() === key).length;
+
   let html = '';
   for (const key of allKeys) {
     if (!groups[key]?.length) continue;
     const meta  = CAT_META[key] || { icon: '📦', label: key, cls: 'cat-spirits' };
     const items = groups[key];
-    html += `<div class="bar-category ${meta.cls}">
+    html += `<section class="bar-category ${meta.cls}">
       <div class="cat-header">
-        <div class="cat-icon">${meta.icon}</div>
-        <div class="cat-label">${meta.label}</div>
-        <div class="cat-count">${items.length} item${items.length !== 1 ? 's' : ''}</div>
+        <span class="cat-icon" aria-hidden="true">${meta.icon}</span>
+        <h3 class="cat-label">${meta.label}</h3>
+        <span class="cat-count">${ownedIn(key)} of ${totalIn(key)} owned</span>
       </div>
       <div class="pill-grid">
         ${items.map(ing => {
           const isHave = getIngStatus(ing) === 'have';
-          return `<button class="pill ${isHave ? 'have' : 'need-it'}" data-ing-id="${esc(ing.id)}"
-            aria-label="${esc(ing.item)}: ${isHave ? 'in stock' : 'missing'}">
-            <div class="pill-dot"></div>
-            <span class="pill-name">${esc(ing.item)}</span>
-            ${ing.brand ? `<span class="pill-brand">· ${esc(ing.brand)}</span>` : ''}
-            <span class="pill-chk">${isHave ? '✓' : '+'}</span>
+          return `<button class="pill ${isHave ? 'have' : 'need-it'}" type="button" data-ing-id="${esc(ing.id)}"
+            role="switch" aria-checked="${isHave}" aria-label="${esc(ing.item)}: ${isHave ? 'in stock' : 'missing'}">
+            <span class="pill-text">
+              <span class="pill-name">${esc(ing.item)}</span>
+              <span class="pill-brand">${ing.brand ? esc(ing.brand) : (isHave ? 'In stock' : 'Not in stock')}</span>
+            </span>
+            <span class="pill-switch" aria-hidden="true"><span class="pill-knob"></span></span>
           </button>`;
         }).join('')}
       </div>
-    </div>`;
+    </section>`;
   }
 
+  renderPourCard();
+
   if (!html) {
-    container.innerHTML = '<div class="empty"><div class="ei">📦</div>No ingredients match this filter.</div>';
+    container.innerHTML = '<div class="empty"><div class="empty-icon">📦</div><div class="empty-sub">No ingredients match this filter.</div></div>';
     return;
   }
 
@@ -347,19 +441,51 @@ function renderBar() {
       ingredientOverrides[id] = getIngStatus(ing) === 'have' ? 'need' : 'have';
       saveOverrides();
       renderHomeStats();
-      pill.style.transform = 'scale(0.93)';
-      setTimeout(() => { pill.style.transform = ''; renderBar(); }, 130);
+      // Flip the switch immediately; re-render once the knob has moved.
+      const isHave = ingredientOverrides[id] === 'have';
+      pill.classList.toggle('have', isHave);
+      pill.classList.toggle('need-it', !isHave);
+      pill.setAttribute('aria-checked', String(isHave));
+      setTimeout(() => { renderBar(); refreshStockViews(); }, 180);
     });
   });
+}
+
+// "What can you pour tonight?" summary on My bar.
+function stockSummary() {
+  const haves = inStockIngs();
+  if (!haves.length) return { ready: 0, missingOne: 0 };
+  let ready = 0, missingOne = 0;
+  for (const c of allCocktails) {
+    const r = labScoreCocktail(c, haves);
+    if (!r) continue;
+    if (r.matched === r.total) ready++;
+    else if (r.total - r.matched === 1) missingOne++;
+  }
+  return { ready, missingOne };
+}
+
+function renderPourCard() {
+  const { ready, missingOne } = stockSummary();
+  const r = document.getElementById('pour-ready');
+  const m = document.getElementById('pour-missing');
+  if (r) r.textContent = ready;
+  if (m) m.textContent = missingOne;
+}
+
+// Stock changed: refresh every view that shows "Can make now" status.
+function refreshStockViews() {
+  renderHome(true);
+  renderCocktails(activeFilter, document.getElementById('cocktail-search')?.value);
+  renderMocktails(mocktailFilter, document.getElementById('mocktail-search')?.value);
+  if (vaultMode === 'make') renderVaultMake();
 }
 
 // ── RENDER COCKTAILS ──────────────────────────────────────
 function buildFilterChips() {
   const row = document.getElementById('filter-row');
   row.innerHTML = SPIRIT_FILTERS.map(f =>
-    `<button class="filter-chip ${f.key === 'all' ? 'active' : ''}" data-filter="${f.key}">
-      <span class="chip-icon">${f.icon}</span>${f.label}
-    </button>`).join('');
+    `<button class="filter-chip chip ${f.key === 'all' ? 'active' : ''}" type="button" data-filter="${f.key}">${f.label}</button>`).join('');
 
   row.addEventListener('click', e => {
     const chip = e.target.closest('.filter-chip');
@@ -394,10 +520,19 @@ function renderCocktails(filterKey, search) {
   document.getElementById('cocktail-count').textContent = `${list.length} ${noun}${list.length !== 1 ? 's' : ''}`;
 
   const empty = fav && !q
-    ? '<div class="empty"><div class="ei">🤍</div>No favourites yet. Tap 🤍 on any drink to save it here.</div>'
-    : '<div class="empty"><div class="ei">🍸</div>No cocktails match. Try another spirit or search.</div>';
-  const el = document.getElementById('cocktail-list');
-  el.innerHTML = list.length === 0 ? empty : list.map(c => cardHTML(c)).join('');
+    ? emptyHTML('♡', 'No favourites yet', 'Tap the heart on any drink to save it here.')
+    : emptyHTML('🍸', 'No cocktails match', 'Try another spirit or search.');
+  const el    = document.getElementById('cocktail-list');
+  const haves = inStockIngs();
+  el.innerHTML = list.length === 0 ? empty : list.map(c => cardHTML(c, '', haves)).join('');
+}
+
+function emptyHTML(icon, title, sub) {
+  return `<div class="empty">
+    <div class="empty-icon">${icon}</div>
+    <div class="empty-title">${esc(title)}</div>
+    <div class="empty-sub">${esc(sub)}</div>
+  </div>`;
 }
 
 // ── RENDER MOCKTAILS (zero-proof) ─────────────────────────
@@ -418,9 +553,7 @@ function buildMocktailFilterChips() {
   if (!row) return;
   const chips = ['all', ...mocktailTags()];
   row.innerHTML = chips.map(t =>
-    `<button class="filter-chip ${t === 'all' ? 'active' : ''}" data-mfilter="${esc(t)}">
-      <span class="chip-icon">${t === 'all' ? '✦' : '🌿'}</span>${t === 'all' ? 'All' : esc(t)}
-    </button>`).join('');
+    `<button class="filter-chip chip ${t === 'all' ? 'active' : ''}" type="button" data-mfilter="${esc(t)}">${t === 'all' ? 'All' : esc(t)}</button>`).join('');
 
   row.addEventListener('click', e => {
     const chip = e.target.closest('.filter-chip');
@@ -443,10 +576,11 @@ function renderMocktails(filterKey, search) {
 
   document.getElementById('mocktail-count').textContent = `${list.length} mocktail${list.length !== 1 ? 's' : ''}`;
 
-  const el = document.getElementById('mocktail-list');
+  const el    = document.getElementById('mocktail-list');
+  const haves = inStockIngs();
   el.innerHTML = list.length === 0
-    ? '<div class="empty"><div class="ei">🍹</div>No mocktails match. Try another filter or search.</div>'
-    : list.map(m => cardHTML(m)).join('');
+    ? emptyHTML('🍹', 'No mocktails match', 'Try another filter or search.')
+    : list.map(m => cardHTML(m, '', haves)).join('');
 }
 
 // ── FAVOURITES ────────────────────────────────────────────
@@ -454,18 +588,17 @@ function renderMocktails(filterKey, search) {
 //      Passing the event and using e.currentTarget gives the
 //      delegated container, which would wipe all its innerHTML.
 function toggleFav(btn, id) {
-  if (favourites.has(id)) {
-    favourites.delete(id);
-    btn.textContent = '🤍';
-    btn.classList.remove('on');
-    btn.setAttribute('aria-label', 'Add to favourites');
-  } else {
-    favourites.add(id);
-    btn.textContent = '❤️';
-    btn.classList.add('on');
-    btn.setAttribute('aria-label', 'Remove from favourites');
-    btn.style.transform = 'scale(1.4)';
-    setTimeout(() => { btn.style.transform = ''; }, 300);
+  const nowFav = !favourites.has(id);
+  if (nowFav) favourites.add(id); else favourites.delete(id);
+  // The same drink can be on screen twice (e.g. tonight's pick + the list).
+  document.querySelectorAll('.fav-btn').forEach(b => {
+    if (b.dataset.id !== String(id)) return;
+    b.classList.toggle('on', nowFav);
+    b.setAttribute('aria-label', nowFav ? 'Remove from favourites' : 'Add to favourites');
+  });
+  if (nowFav) {
+    btn.classList.add('pop');
+    setTimeout(() => btn.classList.remove('pop'), 300);
   }
   saveFavourites();
   document.getElementById('count-favourites').textContent = favourites.size;
@@ -500,40 +633,61 @@ function openModal(id) {
   document.getElementById('unit-oz').classList.add('on');
   document.getElementById('unit-ml').classList.remove('on');
 
+  // Header photo (or glass placeholder) + stock status against My bar
+  document.getElementById('modal-media').innerHTML =
+    mediaHTML(c, 'modal-media-img') + '<div class="modal-handle"></div>';
+  const r = drinkStock(c, inStockIngs());
+  const missing = r ? r.total - r.matched : 0;
+  document.getElementById('modal-status').innerHTML = !r ? '' :
+    `${statusPillHTML(r)}<span class="modal-status-text">${missing === 0
+      ? 'Everything you need is in your bar.'
+      : `${r.matched} of ${r.total} ingredients in your bar.`}</span>`;
+
   renderModalIngredients(c);
   renderModalSteps(c);
 
-  document.getElementById('modal-overlay').classList.add('open');
+  const overlay = document.getElementById('modal-overlay');
+  overlay.classList.add('open');
+  document.getElementById('modal').scrollTop = 0;
+  document.getElementById('modal-close-btn')?.focus({ preventScroll: true });
 }
 
 function renderModalIngredients(c) {
   const tbl       = document.getElementById('modal-ingredients');
   const ingLines  = splitLines(c.ingredients);
   const measLines = splitLines(activeUnit === 'ml' ? c.measML : c.measOz);
+  const haves     = inStockIngs();
 
   if (!ingLines.length) {
-    tbl.innerHTML = '<tr><td colspan="2" style="color:var(--muted);font-size:13px;padding:8px 0">See recipe steps below</td></tr>';
+    tbl.innerHTML = '<tr><td colspan="2" class="ing-none">See the method below</td></tr>';
     return;
   }
-  tbl.innerHTML = ingLines.map((ing, i) => `<tr>
-    <td class="ing-meas">${esc(measLines[i] || '')}</td>
-    <td class="ing-name">${esc(ing)}</td>
-  </tr>`).join('');
+  // Owned ingredients at full strength; missing ones dimmed (only once the
+  // bar has something in it — otherwise everything would look missing).
+  tbl.innerHTML = ingLines.map((ing, i) => {
+    const owned = !haves.length || haves.some(h => labIngMatchesLine(h, ing));
+    return `<tr class="${owned ? 'owned' : 'missing'}">
+      <td class="ing-name">${esc(ing)}${owned ? '' : '<span class="ing-flag">Not in bar</span>'}</td>
+      <td class="ing-meas">${esc(measLines[i] || '')}</td>
+    </tr>`;
+  }).join('');
 }
+
+const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV'];
 
 function renderModalSteps(c) {
   const ol = document.getElementById('modal-steps');
   if (!c.steps) {
-    ol.innerHTML = '<li class="step-item"><div class="step-text" style="color:var(--muted)">No steps recorded.</div></li>';
+    ol.innerHTML = '<li class="step-item"><div class="step-text muted">No steps recorded.</div></li>';
     return;
   }
-  const steps = c.steps.split('\n').map(s => s.replace(/^\s*\d+[\.\)]\s*/, '').trim()).filter(Boolean);
+  const steps = c.steps.split('\n').map(s => s.replace(/^\s*\d+[.)]\s*/, '').trim()).filter(Boolean);
   if (!steps.length) {
-    ol.innerHTML = '<li class="step-item"><div class="step-text" style="color:var(--muted)">See ingredients above.</div></li>';
+    ol.innerHTML = '<li class="step-item"><div class="step-text muted">See ingredients above.</div></li>';
     return;
   }
   ol.innerHTML = steps.map((s, i) => `<li class="step-item">
-    <div class="step-num">${i + 1}</div>
+    <div class="step-num" aria-hidden="true">${ROMAN[i] || i + 1}</div>
     <div class="step-text">${esc(s)}</div>
   </li>`).join('');
 }
@@ -568,6 +722,19 @@ function switchScreen(id, btn) {
   const sc = document.getElementById('screen-' + id);
   if (sc) sc.classList.add('active');
   if (btn?.classList) btn.classList.add('active');
+  document.getElementById('scroll-area').scrollTop = 0;
+  document.body.dataset.screen = id;
+  if (id !== 'bar' && makeShowAll.size) { makeShowAll.clear(); if (vaultMode === 'make') renderVaultMake(); }
+}
+
+function setVaultMode(mode) {
+  if (mode !== 'shelf' && mode !== 'make') return;
+  vaultMode = mode;
+  document.querySelectorAll('#vault-toggle .decide-toggle-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.vaultMode === vaultMode));
+  document.getElementById('vault-shelf-panel').style.display = vaultMode === 'shelf' ? '' : 'none';
+  document.getElementById('vault-make-panel').style.display  = vaultMode === 'make'  ? '' : 'none';
+  if (vaultMode === 'make') renderVaultMake();
   document.getElementById('scroll-area').scrollTop = 0;
 }
 
@@ -638,9 +805,10 @@ function generateDrinks() {
   ra.style.display = 'block';
   const rl = document.getElementById('results-list');
   rl.innerHTML = '';
+  const haves = inStockIngs();
   picks.forEach((c, i) => {
     const wrap = document.createElement('div');
-    wrap.innerHTML = cardHTML(c, 'pour-in');
+    wrap.innerHTML = cardHTML(c, 'pour-in', haves);
     const card = wrap.firstElementChild;
     if (!card) return;
     card.style.animationDelay = `${i * 0.12}s`;
@@ -669,17 +837,7 @@ function decideScore(c, mood, sweet, tod) {
   return s;
 }
 
-// ── MAKEABLE-COCKTAIL ENGINE (My Vault "I can make" + camera) ─────
-// Spirit-keyed gradient colours for the card accent strip
-const LAB_SPIRIT_GRAD = {
-  gin:     'linear-gradient(160deg, #7c3aed 0%, #a78bfa 100%)',
-  whisky:  'linear-gradient(160deg, #c8850a 0%, #f0a830 100%)',
-  tequila: 'linear-gradient(160deg, #16a34a 0%, #4ade80 100%)',
-  rum:     'linear-gradient(160deg, #9f1239 0%, #e11d48 100%)',
-  vodka:   'linear-gradient(160deg, #0284c7 0%, #38bdf8 100%)',
-  other:   'linear-gradient(160deg, #3f3f3f 0%, #6b6b6b 100%)',
-};
-
+// ── MAKEABLE-COCKTAIL ENGINE (My bar "Ready to make" + camera) ─────
 // ── Fuzzy ingredient matching ─────────────────────────────
 // Builds an array of lowercase search keys for an ingredient from ingredients.json.
 // Strategy: full name + brand (year/parenthetical stripped) so that cocktail
@@ -690,7 +848,7 @@ function labBuildKeys(ing) {
   keys.push(ing.item.toLowerCase().trim());
   if (ing.brand) {
     const b = ing.brand
-      .replace(/\s*[\(\[].*/, '')                      // strip "(Costco)", "[Dry/Blanc]"
+      .replace(/\s*[([].*/, '')                      // strip "(Costco)", "[Dry/Blanc]"
       .replace(/\s+\d+\s*(years?|yr|year)\b.*/i, '')   // strip " 12 Year", " 12 years"
       .trim().toLowerCase();
     if (b.length >= 3) keys.push(b);
@@ -727,13 +885,14 @@ function renderVaultMake() {
   const el = document.getElementById('vault-make-results');
   if (!el) return;
 
-  const haves = allIngredients.filter(i => getIngStatus(i) === 'have');
+  const haves = inStockIngs();
 
   if (haves.length === 0) {
     el.innerHTML = `<div class="lab-empty">
-      <div class="lab-empty-icon">🧪</div>
-      <div class="lab-empty-title">Nothing in stock yet</div>
-      <div class="lab-empty-sub">Mark what you own in <strong>In my bar</strong> to see every cocktail you can make right now.</div>
+      <div class="empty-icon glow">🧪</div>
+      <div class="empty-title">Nothing in stock yet</div>
+      <div class="empty-sub">Mark what you own in <strong>In my bar</strong> to see every cocktail you can make right now.</div>
+      <button class="btn-secondary" type="button" data-goto-shelf>Go to In my bar</button>
     </div>`;
     return;
   }
@@ -746,66 +905,65 @@ function renderVaultMake() {
 
   if (scored.length === 0) {
     el.innerHTML = `<div class="lab-empty">
-      <div class="lab-empty-icon">🥃</div>
-      <div class="lab-empty-title">No matches yet</div>
-      <div class="lab-empty-sub">Mark a few more staples in stock — even one extra can unlock a dozen cocktails.</div>
+      <div class="empty-icon glow">🥃</div>
+      <div class="empty-title">No matches yet</div>
+      <div class="empty-sub">Mark a few more staples in stock — even one extra can unlock a dozen cocktails.</div>
+      <button class="btn-secondary" type="button" data-goto-shelf>Go to In my bar</button>
     </div>`;
     return;
   }
 
-  const perfect = scored.filter(x => x.r.score === 1);
-  const partial = scored.filter(x => x.r.score < 1);
+  const perfect = scored.filter(x => x.r.matched === x.r.total);
+  const oneAway = scored.filter(x => x.r.total - x.r.matched === 1);
+  const further = scored.filter(x => x.r.total - x.r.matched > 1);
 
-  let html = `<div class="lab-results-hd">
-    <span class="lab-results-count">${scored.length} cocktail${scored.length !== 1 ? 's' : ''} within reach</span>
-    ${perfect.length ? `<span class="lab-perfect-badge">${perfect.length} ready to make</span>` : ''}
+  let html = `<div class="summary-strip">
+    <span class="sum-item can"><span class="dot"></span>${perfect.length} ready now</span>
+    <span class="sum-sep">·</span>
+    <span class="sum-item miss"><span class="dot"></span>${oneAway.length} missing one</span>
   </div>`;
 
-  if (perfect.length) {
-    html += `<div class="lab-result-section">
-      <div class="lab-sec-label">✓ Ready to make</div>
-      <div class="lab-card-list">${perfect.map(x => labCardHTML(x.c, x.r)).join('')}</div>
+  // Each section shows its first few rows; "Show all" expands it until the
+  // user leaves My bar (makeShowAll is reset in switchScreen).
+  const section = (key, label, items, limit) => {
+    if (!items.length) return '';
+    const expanded = makeShowAll.has(key) || items.length <= limit;
+    const shown    = expanded ? items : items.slice(0, limit);
+    return `<div class="lab-result-section" data-section="${key}">
+      <div class="lab-sec-label">${label}<span class="lab-sec-count">${items.length}</span></div>
+      <div class="lab-card-list">${shown.map(x => labCardHTML(x.c, x.r)).join('')}</div>
+      ${expanded ? '' : `<button class="btn-secondary btn-block show-all-btn" type="button" data-show-all="${key}">Show all ${items.length}</button>`}
     </div>`;
-  }
-  if (partial.length) {
-    html += `<div class="lab-result-section">
-      <div class="lab-sec-label">◐ Almost there</div>
-      <div class="lab-card-list">${partial.slice(0, 18).map(x => labCardHTML(x.c, x.r)).join('')}</div>
-    </div>`;
-  }
+  };
+
+  html += section('ready',   'Ready now',       perfect, MAKE_PREVIEW.ready);
+  html += section('oneAway', 'One bottle away', oneAway, MAKE_PREVIEW.oneAway);
+  html += section('further', 'Almost there',    further, MAKE_PREVIEW.further);
 
   el.innerHTML = html;
 }
 
-function labCardHTML(cocktail, result) {
-  const perfect = result.score === 1;
-  const grad    = LAB_SPIRIT_GRAD[cocktail.spiritKey] || LAB_SPIRIT_GRAD.other;
-  const diff    = result.total <= 2 ? 'Quick' : result.total <= 4 ? 'Moderate' : 'Advanced';
-  const diffCls = result.total <= 2 ? 'diff-easy' : result.total <= 4 ? 'diff-medium' : 'diff-hard';
-  const pct     = Math.round(result.score * 100);
-  const missing = result.detail.filter(d => !d.hit).map(d => d.line);
-  const missingNote = !perfect && missing.length
-    ? `<div class="lab-card-missing">Missing: ${esc(missing.slice(0,2).join(', '))}${missing.length > 2 ? '…' : ''}</div>`
-    : '';
+// Rows shown per "Ready to make" section before "Show all".
+const MAKE_PREVIEW = { ready: 12, oneAway: 8, further: 8 };
+const makeShowAll  = new Set();
 
-  return `<div class="lab-cocktail-card${perfect ? ' perfect' : ''}" data-id="${esc(cocktail.id)}">
-    <div class="lab-card-strip" style="background:${grad}"></div>
+// Compact row: thumbnail · name · what's missing · status pill · ledger.
+function labCardHTML(cocktail, result, extraClass) {
+  const missing = result.detail.filter(d => !d.hit).map(d => d.line);
+  const sub = missing.length
+    ? `<div class="lab-card-missing">Need: ${esc(missing.slice(0, 2).join(', '))}${missing.length > 2 ? '…' : ''}</div>`
+    : `<div class="lab-card-spirit">${esc(ingredientLine(cocktail) || cocktail.baseSpirit)}</div>`;
+
+  return `<div class="lab-cocktail-card${missing.length ? '' : ' perfect'} ${extraClass || ''}" data-id="${esc(cocktail.id)}" tabindex="0" role="button">
+    ${mediaHTML(cocktail, 'lab-thumb')}
     <div class="lab-card-body">
       <div class="lab-card-top">
         <div class="lab-card-name">${esc(cocktail.name)}</div>
-        <div class="lab-card-badge${perfect ? ' badge-perfect' : ' badge-partial'}">
-          ${perfect ? '✓' : `${result.matched}/${result.total}`}
-        </div>
+        ${statusPillHTML(result)}
       </div>
-      ${cocktail.baseSpirit ? `<div class="lab-card-spirit">${esc(cocktail.baseSpirit)}</div>` : ''}
-      ${cocktail.description ? `<div class="lab-card-desc">${esc(cocktail.description)}</div>` : ''}
-      <div class="lab-card-footer">
-        <span class="lab-diff ${diffCls}">${diff}</span>
-        <div class="lab-match-bar"><div class="lab-match-fill" style="width:${pct}%"></div></div>
-        <span class="lab-match-pct">${pct}%</span>
-      </div>
-      ${missingNote}
+      ${sub}
     </div>
+    <div class="lab-card-badge">${result.matched}/${result.total}</div>
   </div>`;
 }
 
@@ -975,28 +1133,15 @@ function camRenderResults() {
     return;
   }
 
+  // Rows carry .drink-card so the delegated click handler opens the recipe.
   let html = '';
   if (perfect.length) {
-    html += `<div class="lab-results-hd"><span class="lab-rh-badge rh-can">✓ Ready to make</span><span class="lab-rh-count">${perfect.length}</span></div>`;
-    html += `<div class="lab-cards-grid">` + perfect.map(({ c }) => cardHTML(c, 'pour-in')).join('') + `</div>`;
+    html += `<div class="lab-sec-label">You can make<span class="lab-sec-count">${perfect.length}</span></div>`;
+    html += `<div class="lab-card-list">` + perfect.map(({ c, r }) => labCardHTML(c, r, 'drink-card')).join('') + `</div>`;
   }
   if (partial.length) {
-    html += `<div class="lab-results-hd" style="margin-top:18px"><span class="lab-rh-badge rh-almost">◐ Almost there</span><span class="lab-rh-count">${partial.length}</span></div>`;
-    html += `<div class="lab-cards-grid">` + partial.slice(0, 20).map(({ c, r }) => {
-      const pct = Math.round(r.score * 100);
-      const grad = LAB_SPIRIT_GRAD[c.spiritKey] || LAB_SPIRIT_GRAD.other;
-      return `<div class="lab-cocktail-card drink-card" data-id="${esc(String(c.id))}">
-        <div class="lcc-accent" style="background:${grad}"></div>
-        <div class="lcc-body">
-          <div class="lcc-name">${esc(c.name)}</div>
-          <div class="lcc-spirit">${esc(c.baseSpirit)}</div>
-          <div class="lcc-bar">
-            <div class="lcc-fill" style="width:${pct}%;background:${grad}"></div>
-          </div>
-          <div class="lcc-pct">${pct}% matched</div>
-        </div>
-      </div>`;
-    }).join('') + `</div>`;
+    html += `<div class="lab-sec-label">Almost there<span class="lab-sec-count">${partial.length}</span></div>`;
+    html += `<div class="lab-card-list">` + partial.slice(0, 20).map(({ c, r }) => labCardHTML(c, r, 'drink-card')).join('') + `</div>`;
   }
   el.innerHTML = html;
   camRenderElevation(partial);
@@ -1022,7 +1167,7 @@ function camRenderElevation(partial) {
   listEl.innerHTML = top3.map(([name, count]) =>
     `<div class="cam-elevate-item">
       <span class="cam-elevate-name">${esc(name)}</span>
-      <span class="cam-elevate-count">+${count} cocktail${count > 1 ? 's' : ''}</span>
+      <span class="cam-elevate-count">Unlocks +${count} cocktail${count > 1 ? 's' : ''}</span>
     </div>`
   ).join('');
   secEl.style.display = '';
@@ -1157,6 +1302,7 @@ function camInit() {
 
 // ── INIT ──────────────────────────────────────────────────
 async function init() {
+  document.body.dataset.screen = 'home';
   setGreeting();
   wireDecide();
   buildFilterChips();
@@ -1187,7 +1333,7 @@ async function init() {
   document.getElementById('home-cta')?.addEventListener('click', () => switchScreen('decide', null));
 
   // Shuffle tonight's pick
-  document.getElementById('shuffle-btn')?.addEventListener('click', renderHome);
+  document.getElementById('shuffle-btn')?.addEventListener('click', () => renderHome(false));
 
   // Generate drinks (Decide screen)
   document.getElementById('gen-btn')?.addEventListener('click', generateDrinks);
@@ -1203,22 +1349,46 @@ async function init() {
     document.getElementById('decide-photo-panel').style.display = mode === 'photo' ? '' : 'none';
   });
 
-  // ── My Vault: shelf / "I can make" toggle ─────────────────
+  // ── My bar: "In my bar" / "Ready to make" toggle ──────────
   document.getElementById('vault-toggle')?.addEventListener('click', e => {
     const btn = e.target.closest('[data-vault-mode]');
-    if (!btn) return;
-    vaultMode = btn.dataset.vaultMode;
-    document.querySelectorAll('#vault-toggle .decide-toggle-btn').forEach(b =>
-      b.classList.toggle('active', b.dataset.vaultMode === vaultMode));
-    document.getElementById('vault-shelf-panel').style.display = vaultMode === 'shelf' ? '' : 'none';
-    document.getElementById('vault-make-panel').style.display  = vaultMode === 'make'  ? '' : 'none';
-    if (vaultMode === 'make') renderVaultMake();
+    if (btn) setVaultMode(btn.dataset.vaultMode);
   });
+  document.getElementById('pour-card-cta')?.addEventListener('click', () => setVaultMode('make'));
 
-  // "I can make" result cards → open recipe modal (delegated)
-  document.getElementById('vault-make-results')?.addEventListener('click', e => {
+  // "Ready to make" rows → open recipe modal (delegated); empty state → shelf
+  const makeResults = document.getElementById('vault-make-results');
+  makeResults?.addEventListener('click', e => {
+    if (e.target.closest('[data-goto-shelf]')) { setVaultMode('shelf'); return; }
+    const showAll = e.target.closest('[data-show-all]');
+    if (showAll) {
+      const key = showAll.dataset.showAll;
+      makeShowAll.add(key);
+      renderVaultMake();
+      // Keep focus on the newly revealed rows for keyboard users.
+      makeResults.querySelector(`[data-section="${CSS.escape(key)}"] .lab-cocktail-card:nth-child(${MAKE_PREVIEW[key] + 1})`)?.focus({ preventScroll: true });
+      return;
+    }
     const card = e.target.closest('.lab-cocktail-card[data-id]');
     if (card) openModal(card.dataset.id);
+  });
+  makeResults?.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const card = e.target.closest('.lab-cocktail-card[data-id]');
+    if (card && e.target === card) { e.preventDefault(); openModal(card.dataset.id); }
+  });
+
+  // Search inputs: show a clear (×) button while there's text
+  document.querySelectorAll('.search-clear[data-clear]').forEach(btn => {
+    const input = document.getElementById(btn.dataset.clear);
+    if (!input) return;
+    input.addEventListener('input', () => { btn.hidden = !input.value; });
+    btn.addEventListener('click', () => {
+      input.value = '';
+      btn.hidden = true;
+      input.dispatchEvent(new Event('input'));
+      input.focus();
+    });
   });
 
   // Bottom nav — delegate all nav-button clicks via data-screen attribute

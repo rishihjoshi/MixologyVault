@@ -18,195 +18,265 @@
 <meta name="apple-mobile-web-app-title" content="MixVault">
 <meta name="application-name" content="MixVault">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#090909">
+<meta name="theme-color" content="#0F0E0D">
 <meta name="description" content="Know what you can pour tonight, from the bottles you already own.">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <title>Mixology Vault</title>
 <link rel="manifest" href="./manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="./AppIcon.png">
 <link rel="apple-touch-icon" href="./AppIcon.png">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div id="app">
+
+  <!-- ══ NAV: bottom bar on phones/tablets, left rail on desktop ══ -->
+  <nav id="nav" aria-label="Main">
+    <div class="rail-brand" aria-hidden="true">
+      <img src="./AppIcon.png" alt="" draggable="false">
+      <span>Mixology <em>Vault</em></span>
+    </div>
+    <button class="nav-btn active" id="nb-home" data-screen="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="nav-btn" id="nb-bar" data-screen="bar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6M10 2v4.5L7.5 9.5A3 3 0 007 11v9a2 2 0 002 2h6a2 2 0 002-2v-9a3 3 0 00-.5-1.5L14 6.5V2"/><path d="M7 14h10"/></svg>
+      <span>My bar</span>
+    </button>
+    <button id="nav-decide" data-screen="decide" aria-label="Decide">
+      <div id="nav-decide-inner">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.2L21 9l-5 4.4L17.5 20 12 16.6 6.5 20 8 13.4 3 9l6.6-.8z"/></svg>
+      </div>
+      <span>Decide</span>
+    </button>
+    <button class="nav-btn" id="nb-cocktails" data-screen="cocktails">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-8 9z"/><path d="M12 13v7M8 20h8"/></svg>
+      <span>Cocktails</span>
+    </button>
+    <button class="nav-btn" id="nb-mocktails" data-screen="mocktails">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10l-1.2 13a1 1 0 01-1 .9H9.2a1 1 0 01-1-.9z"/><path d="M13 7l2-5h3"/><path d="M8 12h8"/></svg>
+      <span>Mocktails</span>
+    </button>
+  </nav>
+
   <div id="scroll-area">
 
     <!-- ══ HOME ══ -->
-    <div class="screen active" id="screen-home">
-      <div id="hero">
-        <div id="hero-greet">Good evening</div>
-        <div class="hero-brand-mark" id="hero-brand-mark">
-          <img src="./AppIcon.png" class="vault-icon" id="vault-hero-icon" alt="" draggable="false">
+    <section class="screen active" id="screen-home">
+      <header id="hero">
+        <div class="hero-inner">
+          <div class="hero-top">
+            <button class="hero-brand-mark" id="hero-brand-mark" type="button" aria-label="Mixology Vault">
+              <img src="./AppIcon.png" class="vault-icon" id="vault-hero-icon" alt="" draggable="false">
+            </button>
+            <div class="eyebrow" id="hero-greet">Good evening</div>
+          </div>
+          <h1 class="hero-title">Mixology<br><em>Vault</em></h1>
+          <p id="hero-sub">Know what you can pour tonight, from the bottles you already own.</p>
         </div>
-        <h1>Mixology<br><em>Vault</em></h1>
-        <p id="hero-sub">Know what you can pour tonight, from the bottles you already own.</p>
+      </header>
+
+      <div class="home-body">
         <div class="stats-row">
-          <div class="stat-pill stat-pill--link" data-screen="bar" data-nav-btn="nb-bar"><div class="stat-num" id="count-ingredients">–</div><div class="stat-lbl">In your bar</div></div>
-          <div class="stat-pill stat-pill--link" data-screen="cocktails" data-nav-btn="nb-cocktails"><div class="stat-num" id="count-cocktails">–</div><div class="stat-lbl">Cocktails</div></div>
-          <div class="stat-pill stat-pill--link" data-screen="cocktails" data-nav-btn="nb-cocktails" data-filter-fav="1"><div class="stat-num" id="count-favourites">0</div><div class="stat-lbl">Favourites</div></div>
+          <button class="stat-pill stat-pill--link" type="button" data-screen="bar" data-nav-btn="nb-bar"><span class="stat-lbl">In your bar</span><span class="stat-num" id="count-ingredients">–</span></button>
+          <button class="stat-pill stat-pill--link" type="button" data-screen="cocktails" data-nav-btn="nb-cocktails"><span class="stat-lbl">Cocktails</span><span class="stat-num" id="count-cocktails">–</span></button>
+          <button class="stat-pill stat-pill--link" type="button" data-screen="cocktails" data-nav-btn="nb-cocktails" data-filter-fav="1"><span class="stat-lbl">Favourites</span><span class="stat-num" id="count-favourites">0</span></button>
         </div>
-      </div>
 
-      <button id="home-cta">
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        What should I drink right now?
-      </button>
+        <button id="home-cta" class="btn-primary btn-block" type="button">
+          <span>What should I drink right now?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
 
-      <div class="section">
-        <div class="section-hd">
-          <div class="section-title">Tonight's pick</div>
-          <button class="section-action" id="shuffle-btn">Shuffle ✦</button>
+        <div class="section">
+          <div class="section-hd">
+            <h2 class="section-title">Tonight's pick</h2>
+            <button class="section-action" id="shuffle-btn" type="button">Shuffle ✦</button>
+          </div>
+          <div id="featured-card"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading…</div></div>
         </div>
-        <div id="featured-card"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading…</div></div>
-      </div>
 
-      <div class="section" id="home-signatures-section">
-        <div class="section-hd"><div class="section-title">Signature cocktails</div></div>
-        <div id="home-signatures"><div class="loader"><div class="dots"><span></span><span></span><span></span></div></div></div>
-      </div>
+        <div class="section" id="home-signatures-section">
+          <div class="section-hd"><h2 class="section-title">Signature cocktails</h2></div>
+          <div id="home-signatures" class="h-scroll"><div class="loader"><div class="dots"><span></span><span></span><span></span></div></div></div>
+        </div>
 
-      <div class="app-version-line">Mixology Vault <span id="app-version"></span> · Please drink responsibly</div>
-    </div>
+        <div class="app-version-line">Mixology Vault <span id="app-version"></span> · Please drink responsibly</div>
+      </div>
+    </section>
 
     <!-- ══ MY BAR ══ -->
-    <div class="screen" id="screen-bar">
+    <section class="screen" id="screen-bar">
       <div class="page-header">
+        <div class="eyebrow">Your inventory</div>
         <h1>My <em>bar</em></h1>
         <p>Mark what you have · See what you can make</p>
       </div>
 
-      <!-- Mode toggle: curate shelf vs. discover makeable cocktails -->
-      <div class="decide-toggle" id="vault-toggle">
-        <button class="decide-toggle-btn active" data-vault-mode="shelf">In my bar</button>
-        <button class="decide-toggle-btn" data-vault-mode="make">🍸 Ready to make</button>
+      <div class="seg-toggle" id="vault-toggle">
+        <button class="decide-toggle-btn active" type="button" data-vault-mode="shelf">In my bar</button>
+        <button class="decide-toggle-btn" type="button" data-vault-mode="make">🍸 Ready to make</button>
       </div>
 
-      <!-- My shelf: ingredient inventory -->
+      <!-- In my bar: ingredient inventory -->
       <div id="vault-shelf-panel">
-        <div class="bar-filter-row">
-          <button class="bar-filter-btn active" data-bar-filter="all">All <span class="bf-badge" id="bf-count-all">–</span></button>
-          <button class="bar-filter-btn" data-bar-filter="available">✅ In stock <span class="bf-badge" id="bf-count-available">–</span></button>
-          <button class="bar-filter-btn" data-bar-filter="need">🛒 Missing <span class="bf-badge" id="bf-count-need">–</span></button>
+        <div class="pour-card" id="pour-card">
+          <div class="pour-card-glow" aria-hidden="true"></div>
+          <h2 class="pour-card-title">What can you pour tonight?</h2>
+          <p class="pour-card-sub">Based on the bottles, juices and syrups you've marked in stock.</p>
+          <div class="pour-metrics">
+            <div class="pour-metric">
+              <span class="pour-metric-num" id="pour-ready">–</span>
+              <span class="pour-metric-lbl ready">Ready to pour</span>
+            </div>
+            <div class="pour-metric">
+              <span class="pour-metric-num" id="pour-missing">–</span>
+              <span class="pour-metric-lbl missing">Missing one</span>
+            </div>
+          </div>
+          <button class="btn-primary btn-block" id="pour-card-cta" type="button">
+            <span>See what I can make</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
         </div>
-        <div class="section" style="margin-top:16px">
-          <div id="bar-sections"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading your bar…</div></div>
+
+        <div class="chip-row bar-filter-row">
+          <button class="bar-filter-btn chip active" type="button" data-bar-filter="all">All <span class="bf-badge" id="bf-count-all">–</span></button>
+          <button class="bar-filter-btn chip" type="button" data-bar-filter="available">In stock <span class="bf-badge" id="bf-count-available">–</span></button>
+          <button class="bar-filter-btn chip" type="button" data-bar-filter="need">Missing <span class="bf-badge" id="bf-count-need">–</span></button>
         </div>
+        <div id="bar-sections"><div class="loader"><div class="dots"><span></span><span></span><span></span></div> Loading your bar…</div></div>
       </div>
 
-      <!-- I can make: cocktails scored from available ingredients -->
+      <!-- Ready to make: cocktails scored from available ingredients -->
       <div id="vault-make-panel" style="display:none">
         <div class="lab-results" id="vault-make-results"></div>
       </div>
-    </div>
+    </section>
 
     <!-- ══ COCKTAILS ══ -->
-    <div class="screen" id="screen-cocktails">
-      <div class="page-header"><h1>Cocktails</h1><p>Search or filter by spirit, then tap for the recipe</p></div>
-      <div class="search-wrap">
-        <input class="search-input" type="search" id="cocktail-search" placeholder="Search cocktails…" autocomplete="off">
+    <section class="screen" id="screen-cocktails">
+      <div class="page-header">
+        <div class="eyebrow">The archive</div>
+        <h1>Cocktails</h1>
+        <p>Search or filter by spirit, then tap for the recipe</p>
       </div>
-      <div class="filter-row" id="filter-row"></div>
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input class="search-input" type="search" id="cocktail-search" placeholder="Search cocktails…" autocomplete="off" aria-label="Search cocktails">
+        <button class="search-clear" type="button" data-clear="cocktail-search" aria-label="Clear search" hidden>×</button>
+      </div>
+      <div class="chip-row filter-row" id="filter-row"></div>
       <div class="cocktail-count" id="cocktail-count"></div>
-      <div id="cocktail-list" style="padding:4px 16px 0">
+      <div id="cocktail-list" class="card-grid">
         <div class="loader"><div class="dots"><span></span><span></span><span></span></div></div>
       </div>
-    </div>
+    </section>
 
     <!-- ══ MOCKTAILS (zero-proof) ══ -->
-    <div class="screen" id="screen-mocktails">
-      <div class="page-header"><h1>Mocktails</h1><p>Zero-proof. Search or filter, then tap for the recipe</p></div>
-      <div class="search-wrap">
-        <input class="search-input" type="search" id="mocktail-search" placeholder="Search mocktails…" autocomplete="off">
+    <section class="screen" id="screen-mocktails">
+      <div class="page-header">
+        <div class="eyebrow">Zero-proof</div>
+        <h1>Mocktails</h1>
+        <p>Zero-proof. Search or filter, then tap for the recipe</p>
       </div>
-      <div class="filter-row" id="mocktail-filter-row"></div>
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input class="search-input" type="search" id="mocktail-search" placeholder="Search mocktails…" autocomplete="off" aria-label="Search mocktails">
+        <button class="search-clear" type="button" data-clear="mocktail-search" aria-label="Clear search" hidden>×</button>
+      </div>
+      <div class="chip-row filter-row" id="mocktail-filter-row"></div>
       <div class="cocktail-count" id="mocktail-count"></div>
-      <div id="mocktail-list" style="padding:4px 16px 0">
+      <div id="mocktail-list" class="card-grid">
         <div class="loader"><div class="dots"><span></span><span></span><span></span></div></div>
       </div>
-    </div>
+    </section>
 
     <!-- ══ DECIDE ══ -->
-    <div class="screen" id="screen-decide">
-      <div class="page-header"><h1>What should I<br><em>drink?</em></h1><p>Set the mood, or snap your shelf.</p></div>
+    <section class="screen" id="screen-decide">
+      <div class="page-header">
+        <div class="eyebrow">Decide your pour</div>
+        <h1>What should I <em>drink?</em></h1>
+        <p>Set the mood, or snap your shelf.</p>
+      </div>
 
       <!-- Mode toggle: manual mood picker vs. photograph-your-shelf -->
-      <div class="decide-toggle" id="decide-toggle">
-        <button class="decide-toggle-btn active" data-decide-mode="mood">By mood</button>
-        <button class="decide-toggle-btn" data-decide-mode="photo">📷 By photo</button>
+      <div class="seg-toggle" id="decide-toggle">
+        <button class="decide-toggle-btn active" type="button" data-decide-mode="mood">By mood</button>
+        <button class="decide-toggle-btn" type="button" data-decide-mode="photo">📷 By photo</button>
       </div>
 
       <!-- ── By mood: manual picker ── -->
       <div id="decide-mood-panel">
-      <div style="padding:14px 16px 0">
-        <div class="decide-label">Mood</div>
-        <div class="mood-grid" id="mood-grid">
-          <button class="mood-btn" data-mood="Party"><span class="m-em">🥳</span><span class="m-lbl">Festive</span></button>
-          <button class="mood-btn" data-mood="Chill"><span class="m-em">😌</span><span class="m-lbl">Chill</span></button>
-          <button class="mood-btn" data-mood="Bold"><span class="m-em">🤩</span><span class="m-lbl">Bold</span></button>
-          <button class="mood-btn" data-mood="Romantic"><span class="m-em">💫</span><span class="m-lbl">Romantic</span></button>
-          <button class="mood-btn" data-mood="Cosy"><span class="m-em">🍂</span><span class="m-lbl">Cosy</span></button>
-          <button class="mood-btn" data-mood="Fresh"><span class="m-em">🌊</span><span class="m-lbl">Fresh</span></button>
-          <button class="mood-btn" data-mood="Energised"><span class="m-em">⚡</span><span class="m-lbl">Energised</span></button>
-          <button class="mood-btn" data-mood="Curious"><span class="m-em">🧐</span><span class="m-lbl">Curious</span></button>
+        <div class="panel">
+          <div class="decide-label">Current vibe</div>
+          <div class="chip-wrap" id="mood-grid">
+            <button class="mood-btn chip" type="button" data-mood="Party"><span class="m-em">🥳</span><span class="m-lbl">Festive</span></button>
+            <button class="mood-btn chip" type="button" data-mood="Chill"><span class="m-em">😌</span><span class="m-lbl">Chill</span></button>
+            <button class="mood-btn chip" type="button" data-mood="Bold"><span class="m-em">🤩</span><span class="m-lbl">Bold</span></button>
+            <button class="mood-btn chip" type="button" data-mood="Romantic"><span class="m-em">💫</span><span class="m-lbl">Romantic</span></button>
+            <button class="mood-btn chip" type="button" data-mood="Cosy"><span class="m-em">🍂</span><span class="m-lbl">Cosy</span></button>
+            <button class="mood-btn chip" type="button" data-mood="Fresh"><span class="m-em">🌊</span><span class="m-lbl">Fresh</span></button>
+            <button class="mood-btn chip" type="button" data-mood="Energised"><span class="m-em">⚡</span><span class="m-lbl">Energised</span></button>
+            <button class="mood-btn chip" type="button" data-mood="Curious"><span class="m-em">🧐</span><span class="m-lbl">Curious</span></button>
+          </div>
         </div>
-      </div>
 
-      <div style="padding:16px 16px 0">
-        <div class="decide-label">Spirit</div>
-        <div class="spirit-btns" id="decide-spirits">
-          <button class="spirit-btn" data-spirit="any">Any</button>
-          <button class="spirit-btn" data-spirit="gin">Gin</button>
-          <button class="spirit-btn" data-spirit="whisky">Whisky</button>
-          <button class="spirit-btn" data-spirit="tequila">Tequila</button>
-          <button class="spirit-btn" data-spirit="rum">Rum</button>
-          <button class="spirit-btn" data-spirit="vodka">Vodka</button>
+        <div class="panel">
+          <div class="decide-label">Spirit of choice</div>
+          <div class="chip-wrap" id="decide-spirits">
+            <button class="spirit-btn chip" type="button" data-spirit="any">Any</button>
+            <button class="spirit-btn chip" type="button" data-spirit="gin">Gin</button>
+            <button class="spirit-btn chip" type="button" data-spirit="whisky">Whisky</button>
+            <button class="spirit-btn chip" type="button" data-spirit="tequila">Tequila</button>
+            <button class="spirit-btn chip" type="button" data-spirit="rum">Rum</button>
+            <button class="spirit-btn chip" type="button" data-spirit="vodka">Vodka</button>
+          </div>
         </div>
-      </div>
 
-      <div style="padding:16px 16px 0">
-        <div class="decide-label">Sweetness</div>
-        <div class="slider-row">
-          <span style="font-size:12px;color:var(--muted)">Dry</span>
-          <input class="decide-slider" type="range" min="1" max="3" value="2" id="sweet-slider" step="1">
-          <span class="slider-val" id="sweet-val">Medium</span>
+        <div class="panel">
+          <div class="decide-label-row">
+            <div class="decide-label">Dry vs. sweet</div>
+            <span class="slider-val" id="sweet-val">Medium</span>
+          </div>
+          <input class="decide-slider" type="range" min="1" max="3" value="2" id="sweet-slider" step="1" aria-label="Sweetness">
+          <div class="slider-ends"><span>Dry / bitter</span><span>Sweet</span></div>
         </div>
-      </div>
 
-      <div style="padding:16px 16px 0">
-        <div class="decide-label">Time of day</div>
-        <div class="tod-grid" id="tod-grid">
-          <button class="tod-btn" data-tod="Morning"><span class="t-em">🌅</span><span class="t-lbl">Morning</span></button>
-          <button class="tod-btn" data-tod="Afternoon"><span class="t-em">☀️</span><span class="t-lbl">Afternoon</span></button>
-          <button class="tod-btn on" data-tod="Evening"><span class="t-em">🌆</span><span class="t-lbl">Evening</span></button>
-          <button class="tod-btn" data-tod="Late night"><span class="t-em">🌙</span><span class="t-lbl">Late night</span></button>
+        <div class="panel">
+          <div class="decide-label">Time of day</div>
+          <div class="tod-grid" id="tod-grid">
+            <button class="tod-btn" type="button" data-tod="Morning"><span class="t-em">🌅</span><span class="t-lbl">Morning</span></button>
+            <button class="tod-btn" type="button" data-tod="Afternoon"><span class="t-em">☀️</span><span class="t-lbl">Afternoon</span></button>
+            <button class="tod-btn on" type="button" data-tod="Evening"><span class="t-em">🌆</span><span class="t-lbl">Evening</span></button>
+            <button class="tod-btn" type="button" data-tod="Late night"><span class="t-em">🌙</span><span class="t-lbl">Late night</span></button>
+          </div>
         </div>
-      </div>
 
-      <button id="gen-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="20" height="20">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-        </svg>
-        Find my drinks
-      </button>
+        <button id="gen-btn" class="btn-primary btn-block" type="button">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.2L21 9l-5 4.4L17.5 20 12 16.6 6.5 20 8 13.4 3 9l6.6-.8z"/></svg>
+          Find my drinks
+        </button>
 
-      <div id="results-area">
-        <div class="section-title" id="results-title" style="margin:16px 16px 12px">Three to try</div>
-        <div class="results-note" id="results-note" style="display:none"></div>
-        <div id="results-list" style="padding:0 16px"></div>
-      </div>
+        <div id="results-area">
+          <div class="section-hd"><h2 class="section-title" id="results-title">Tonight's recommendations</h2></div>
+          <div class="results-note" id="results-note" style="display:none"></div>
+          <div id="results-list" class="card-grid"></div>
+        </div>
       </div><!-- /decide-mood-panel -->
 
-      <!-- ── By photo: photograph your shelf, Claude identifies ingredients ── -->
-      <div id="decide-photo-panel" style="display:none; position:relative">
+      <!-- ── By photo: photograph your shelf, AI identifies ingredients ── -->
+      <div id="decide-photo-panel" style="display:none">
 
-        <!-- Shown when the photo proxy isn't available (local/dev) -->
+        <!-- Shown when the photo service can't be reached (offline) -->
         <div class="decide-snap-unavailable" id="decide-snap-unavailable" style="display:none">
-          <div class="cam-setup-icon">📷</div>
-          <div class="cam-setup-title">Photo scan is offline</div>
-          <div class="cam-setup-sub">Use <strong>By mood</strong> to pick a drink instead.</div>
+          <div class="empty-icon">📷</div>
+          <div class="empty-title">Photo scan is offline</div>
+          <div class="empty-sub">Use <strong>By mood</strong> to pick a drink instead.</div>
         </div>
 
         <!-- Camera UI -->
@@ -216,13 +286,14 @@
             <input type="file" id="cam-file-input" accept="image/*" capture="environment" style="display:none" aria-label="Take photo or choose image">
             <img class="cam-preview-img" id="cam-preview-img" alt="Selected photo" style="display:none">
             <div class="cam-placeholder" id="cam-placeholder">
-              <svg class="cam-placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <svg class="cam-placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
                 <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
                 <circle cx="12" cy="13" r="4"/>
               </svg>
               <div class="cam-placeholder-text">Snap your bar shelf</div>
+              <div class="cam-placeholder-sub">Labels facing the camera, good light</div>
             </div>
-            <button class="cam-snap-btn" id="cam-snap-btn">
+            <button class="cam-snap-btn" id="cam-snap-btn" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                 <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
                 <circle cx="12" cy="13" r="4"/>
@@ -230,12 +301,13 @@
               <span id="cam-snap-label">Take photo</span>
             </button>
           </div>
-          <div class="cam-privacy-note">Mixology Vault never saves your photo. It's sent to Anthropic's Claude only to identify bottles; Anthropic deletes it within 30 days and doesn't use it for training.</div>
+          <div class="cam-privacy-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+            <span>Mixology Vault never saves your photo. It's sent to Anthropic's AI service only to identify bottles; Anthropic deletes it within 30 days and doesn't use it for training.</span>
+          </div>
 
-          <button class="cam-analyse-btn" id="cam-analyse-btn" style="display:none">
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="18" height="18">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-            </svg>
+          <button class="cam-analyse-btn btn-primary btn-block" id="cam-analyse-btn" type="button" style="display:none">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.2L21 9l-5 4.4L17.5 20 12 16.6 6.5 20 8 13.4 3 9l6.6-.8z"/></svg>
             Identify my bottles
           </button>
 
@@ -243,27 +315,25 @@
             <div class="loader"><div class="dots"><span></span><span></span><span></span></div> Identifying your bottles…</div>
           </div>
 
-          <div class="cam-error" id="cam-error" style="display:none"></div>
+          <div class="cam-error" id="cam-error" role="alert" style="display:none"></div>
 
           <div id="cam-results-area" style="display:none">
-            <div class="cam-ing-section">
-              <div class="cam-section-hd">
-                <span class="cam-section-label">📸 Spotted in your photo</span>
-                <button class="cam-edit-btn" id="cam-edit-toggle">Edit</button>
+            <div class="panel cam-ing-section">
+              <div class="section-hd">
+                <h2 class="section-title">📸 Spotted in your photo</h2>
+                <button class="section-action cam-edit-btn" id="cam-edit-toggle" type="button">Edit</button>
               </div>
               <div class="cam-chips-wrap" id="cam-chips-wrap"></div>
               <div class="cam-add-row" id="cam-add-row" style="display:none">
-                <input class="cam-add-input" id="cam-add-input" type="text" placeholder="Add ingredient…" autocomplete="off">
-                <button class="cam-add-confirm" id="cam-add-confirm">Add</button>
+                <input class="cam-add-input search-input" id="cam-add-input" type="text" placeholder="Add ingredient…" autocomplete="off" aria-label="Add ingredient">
+                <button class="cam-add-confirm btn-primary" id="cam-add-confirm" type="button">Add</button>
               </div>
             </div>
 
             <div id="cam-cocktail-results"></div>
 
-            <div class="cam-elevate-section" id="cam-elevate-section" style="display:none">
-              <div class="cam-section-hd">
-                <span class="cam-section-label">🛒 Best next buys</span>
-              </div>
+            <div class="panel cam-elevate-section" id="cam-elevate-section" style="display:none">
+              <div class="section-hd"><h2 class="section-title">🛒 Best next buys</h2></div>
               <div class="cam-elevate-sub">Each one unlocks the most new cocktails.</div>
               <div id="cam-elevate-list"></div>
             </div>
@@ -271,79 +341,50 @@
 
         </div><!-- /cam-main -->
       </div><!-- /decide-photo-panel -->
-    </div>
+    </section>
 
   </div><!-- /scroll-area -->
-
-  <!-- ══ BOTTOM NAV ══ -->
-  <nav id="nav">
-    <button class="nav-btn active" id="nb-home" data-screen="home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
-      <span>Home</span>
-    </button>
-    <button class="nav-btn" id="nb-bar" data-screen="bar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M12 2L22 12L12 22L2 12Z" stroke-linejoin="round"/>
-        <path d="M9 10L12 16L15 10Z" stroke-linejoin="round" stroke-linecap="round"/>
-        <line x1="12" y1="16" x2="12" y2="18.5" stroke-linecap="round"/>
-      </svg>
-      <span>My bar</span>
-    </button>
-    <button id="nav-decide" data-screen="decide">
-      <div id="nav-decide-inner">
-        <svg viewBox="0 0 24 24"><path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10zm0-18a8 8 0 100 16A8 8 0 0012 4zm1 11v2h-2v-2h2zm0-8v6h-2V7h2z"/></svg>
-      </div>
-      <span>Decide</span>
-    </button>
-    <button class="nav-btn" id="nb-cocktails" data-screen="cocktails">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 3l4 8 4-8M5 8h14l-2 10H7L5 8zM12 18v3M9 21h6"/></svg>
-      <span>Cocktails</span>
-    </button>
-    <button class="nav-btn" id="nb-mocktails" data-screen="mocktails">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 4h12l-1.5 8.5a4.5 4.5 0 01-4.5 3.5 4.5 4.5 0 01-4.5-3.5z"/>
-        <line x1="12" y1="16" x2="12" y2="21"/>
-        <line x1="9" y1="21" x2="15" y2="21"/>
-        <path d="M14.5 4l2-2" opacity=".6"/>
-      </svg>
-      <span>Mocktails</span>
-    </button>
-  </nav>
-
 </div><!-- /app -->
 
-<!-- ══ COCKTAIL MODAL (outside #app so it's not clipped by overflow:hidden) ══ -->
+<!-- ══ RECIPE SHEET (outside #app so it's not clipped by overflow:hidden) ══ -->
 <div id="modal-overlay">
-  <div id="modal">
-    <div class="modal-handle"></div>
-    <button class="modal-close" id="modal-close-btn" aria-label="Close recipe">✕</button>
+  <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-name">
+    <div class="modal-media" id="modal-media">
+      <div class="modal-handle"></div>
+    </div>
+    <button class="modal-close" id="modal-close-btn" type="button" aria-label="Close recipe">✕</button>
     <div class="modal-header">
       <div class="modal-tag" id="modal-tag"></div>
-      <div class="modal-name" id="modal-name"></div>
+      <h2 class="modal-name" id="modal-name"></h2>
       <div class="modal-base">
         <span class="modal-base-label">Base spirit:&nbsp;</span>
         <span class="modal-base-value" id="modal-base"></span>
       </div>
-    </div>
-    <div class="unit-toggle">
-      <button class="unit-btn on" id="unit-oz">oz</button>
-      <button class="unit-btn" id="unit-ml">ml</button>
+      <div class="modal-status" id="modal-status"></div>
     </div>
     <div class="modal-section">
-      <div class="modal-section-label">Ingredients</div>
+      <div class="modal-section-hd">
+        <div class="modal-section-label">Ingredients</div>
+        <div class="unit-toggle">
+          <button class="unit-btn on" id="unit-oz" type="button">oz</button>
+          <button class="unit-btn" id="unit-ml" type="button">ml</button>
+        </div>
+      </div>
       <table class="ing-table" id="modal-ingredients"></table>
     </div>
     <div class="modal-section" id="desc-wrap">
-      <div class="modal-section-label">Description</div>
+      <div class="modal-section-label">Tasting notes</div>
       <div class="modal-text" id="modal-description"></div>
     </div>
-    <div class="modal-section" id="hist-wrap">
-      <div class="modal-section-label">History</div>
-      <div class="modal-history" id="modal-history"></div>
-    </div>
     <div class="modal-section">
-      <div class="modal-section-label">Recipe</div>
+      <div class="modal-section-label">Method</div>
       <ol class="step-list" id="modal-steps"></ol>
+    </div>
+    <div class="modal-section" id="hist-wrap">
+      <div class="modal-note">
+        <div class="modal-section-label">From the archive</div>
+        <div class="modal-history" id="modal-history"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -352,12 +393,13 @@
      app.js hides it at load for visitors who already confirmed. -->
 <div id="age-gate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-title">
   <div class="age-gate-card" id="age-gate-ask">
-    <img src="./AppIcon.png" class="age-gate-icon" alt="" draggable="false">
+    <div class="age-gate-emblem"><img src="./AppIcon.png" class="age-gate-icon" alt="" draggable="false"></div>
+    <div class="age-gate-badge">Members only</div>
     <h2 class="age-gate-title" id="age-gate-title">Are you 21 or older?</h2>
     <p class="age-gate-sub">Mixology Vault features alcoholic drinks. You must be of legal drinking age (21+) to enter.</p>
-    <button class="age-gate-yes" id="age-gate-yes" type="button">I'm 21 or older</button>
-    <button class="age-gate-no" id="age-gate-no" type="button">I'm under 21</button>
-    <p class="age-gate-fine">Please drink responsibly.</p>
+    <button class="age-gate-yes btn-primary btn-block" id="age-gate-yes" type="button">I'm 21 or older</button>
+    <button class="age-gate-no btn-secondary btn-block" id="age-gate-no" type="button">I'm under 21</button>
+    <p class="age-gate-fine">Please drink responsibly</p>
   </div>
   <div class="age-gate-card" id="age-gate-denied" hidden>
     <div class="age-gate-emoji">🍹</div>
@@ -367,7 +409,7 @@
 </div>
 
 <!-- Update banner: shown when a new app version is ready (outside #app so it isn't clipped) -->
-<div id="update-banner" class="update-banner hidden">
+<div id="update-banner" class="update-banner hidden" role="status">
   <span>A new version is ready.</span>
   <button id="btn-update-reload" type="button">Update</button>
 </div>
