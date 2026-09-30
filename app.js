@@ -145,7 +145,8 @@ function glassFor(c) {
 
 // Card media: the whitelisted photo, or a tinted glass placeholder.
 function mediaHTML(c, cls) {
-  const photo = DRINK_PHOTOS[c.id];
+  // hasOwn: a data id like "__proto__" must never resolve to a prototype.
+  const photo = Object.hasOwn(DRINK_PHOTOS, c.id) ? DRINK_PHOTOS[c.id] : null;
   if (photo) return `<div class="${cls} has-photo"><img src="${photo}" alt="" loading="lazy" decoding="async"></div>`;
   const tint = c.isMocktail ? 'mock' : (c.spiritKey || 'other');
   return `<div class="${cls} ph ph-${tint}" aria-hidden="true">${GLASS_SVG[glassFor(c)]}</div>`;
@@ -680,7 +681,7 @@ function renderModalSteps(c) {
     ol.innerHTML = '<li class="step-item"><div class="step-text muted">No steps recorded.</div></li>';
     return;
   }
-  const steps = c.steps.split('\n').map(s => s.replace(/^\s*\d+[\.\)]\s*/, '').trim()).filter(Boolean);
+  const steps = c.steps.split('\n').map(s => s.replace(/^\s*\d+[.)]\s*/, '').trim()).filter(Boolean);
   if (!steps.length) {
     ol.innerHTML = '<li class="step-item"><div class="step-text muted">See ingredients above.</div></li>';
     return;
@@ -847,7 +848,7 @@ function labBuildKeys(ing) {
   keys.push(ing.item.toLowerCase().trim());
   if (ing.brand) {
     const b = ing.brand
-      .replace(/\s*[\(\[].*/, '')                      // strip "(Costco)", "[Dry/Blanc]"
+      .replace(/\s*[([].*/, '')                      // strip "(Costco)", "[Dry/Blanc]"
       .replace(/\s+\d+\s*(years?|yr|year)\b.*/i, '')   // strip " 12 Year", " 12 years"
       .trim().toLowerCase();
     if (b.length >= 3) keys.push(b);

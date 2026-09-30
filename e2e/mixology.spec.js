@@ -344,6 +344,8 @@ test.describe('v3 Stitch redesign', () => {
     const without = await page.evaluate(() => cardHTML({ id: 'not-a-drink', name: 'X' }, ''));
     expect(without).not.toContain('<img');
     expect(without).toContain('class="dc-media ph');
+    const proto = await page.evaluate(() => cardHTML({ id: '__proto__', name: 'X' }, ''));
+    expect(proto).not.toContain('<img');
     for (const src of await page.evaluate(() => [...new Set(Object.values(DRINK_PHOTOS))])) {
       expect((await page.request.get('/' + src)).status(), src).toBe(200);
     }
