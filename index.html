@@ -12,7 +12,10 @@
   object-src 'none';
   frame-ancestors 'none';
 ">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- No viewport-fit=cover: on iOS standalone PWAs it leaves a blank strip under the
+     app and pushes sheets under the status bar (fixed in 5f3e00a, regressed in #22).
+     Pinch-zoom stays allowed (WCAG 1.4.4). -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="MixVault">
@@ -349,10 +352,11 @@
 <!-- ══ RECIPE SHEET (outside #app so it's not clipped by overflow:hidden) ══ -->
 <div id="modal-overlay">
   <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-name">
+    <!-- First child + position:sticky keeps ✕ reachable while the sheet scrolls -->
+    <button class="modal-close" id="modal-close-btn" type="button" aria-label="Close recipe">✕</button>
     <div class="modal-media" id="modal-media">
       <div class="modal-handle"></div>
     </div>
-    <button class="modal-close" id="modal-close-btn" type="button" aria-label="Close recipe">✕</button>
     <div class="modal-header">
       <div class="modal-tag" id="modal-tag"></div>
       <h2 class="modal-name" id="modal-name"></h2>
