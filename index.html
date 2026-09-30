@@ -10,8 +10,9 @@
   connect-src 'self' https://mixology-vault.vercel.app;
   img-src 'self' data: blob:;
   object-src 'none';
-  frame-ancestors 'none';
 ">
+<!-- frame-ancestors / X-Frame-Options only work as HTTP headers (ignored in <meta>);
+     they're sent from vercel.json. Keep this CSP in sync with the one there. -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -21,7 +22,6 @@
 <meta name="theme-color" content="#0F0E0D">
 <meta name="description" content="Know what you can pour tonight, from the bottles you already own.">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="X-Frame-Options" content="DENY">
 <title>Mixology Vault</title>
 <link rel="manifest" href="./manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">

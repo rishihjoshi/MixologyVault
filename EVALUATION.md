@@ -43,7 +43,7 @@ Photo analysis posts `{ base64, mediaType }` to `https://mixology-vault.vercel.a
 3. **Rotate** by updating the Vercel env var and redeploying the function — no app change, and the key never touches the browser.
 
 ### 3.3 Standing posture (unchanged, verified healthy)
-- **CSP** remains strict: `default-src 'self'`, `script-src 'self'` (no inline JS), `connect-src` limited to `'self'` and `https://mixology-vault.vercel.app` (the proxy), `object-src 'none'`, `frame-ancestors 'none'`.
+- **CSP** remains strict: `default-src 'self'`, `script-src 'self'` (no inline JS), `connect-src` limited to `'self'` and `https://mixology-vault.vercel.app` (the proxy), `object-src 'none'`. `frame-ancestors 'none'` and the other security headers are sent as HTTP headers from `vercel.json` (they're ignored in a `<meta>` tag).
 - **Output escaping:** user/AI-derived strings pass through `esc()` before insertion; identified-ingredient chips and cocktail cards are escaped.
 - **No inline handlers:** all events are wired via delegation in `init()` (consistent with prior security commits #7/#8).
 - **Prototype-pollution guard** on `mv_ing_overrides` parsing is retained.

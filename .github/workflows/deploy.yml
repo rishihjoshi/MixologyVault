@@ -41,6 +41,7 @@ jobs:
             --exclude 'EVALUATION.md' \
             --exclude 'api' \
             --exclude '.vercelignore' \
+            --exclude 'vercel.json' \
             ./ _site/
 
       - name: Setup Pages
