@@ -64,8 +64,8 @@ test.describe('Snap feature relocated into Decide', () => {
 });
 
 test.describe('Version functionality', () => {
-  test('visible version label reads v3.0.0', async ({ page }) => {
-    await expect(page.locator('#app-version')).toHaveText('v3.0.0');
+  test('visible version label reads v3.0.1', async ({ page }) => {
+    await expect(page.locator('#app-version')).toHaveText('v3.0.1');
   });
 
   test('update banner exists and starts hidden', async ({ page }) => {
@@ -263,6 +263,31 @@ test.describe('Assets & accessibility', () => {
     // Header-only directives were removed from <meta> (browsers ignore them there).
     expect(meta.some(d => d.startsWith('frame-ancestors'))).toBe(false);
     await expect(page.locator('meta[http-equiv="X-Frame-Options"]')).toHaveCount(0);
+  });
+
+  test('viewport does not use viewport-fit=cover (iOS PWA bottom-gap regression)', async ({ page }) => {
+    const content = await page.locator('meta[name="viewport"]').getAttribute('content');
+    expect(content).not.toContain('viewport-fit');
+  });
+
+  test('recipe sheet leaves room above it and its close button stays reachable', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.locator('#nb-cocktails').click();
+    await page.locator('#cocktail-search').fill('margarita');
+    await page.locator('#cocktail-list .drink-card').first().click();
+    // Measure after the slide-up animation settles.
+    await page.locator('#modal').evaluate(el => Promise.all(el.getAnimations().map(a => a.finished)));
+    const sheet = await page.locator('#modal').boundingBox();
+    expect(sheet.y).toBeGreaterThanOrEqual(48);           // clear of the status bar
+    expect(sheet.y + sheet.height).toBeCloseTo(844, 0);   // reaches the bottom — no gap
+    // Scroll to the end of the recipe: ✕ must still be on screen and close the sheet.
+    await page.locator('#modal').evaluate(el => { el.scrollTop = el.scrollHeight; });
+    const close = page.locator('#modal-close-btn');
+    const box = await close.boundingBox();
+    expect(box.y).toBeGreaterThanOrEqual(sheet.y);
+    expect(box.y + box.height).toBeLessThanOrEqual(sheet.y + 80);
+    await close.click();
+    await expect(page.locator('#modal-overlay')).not.toHaveClass(/open/);
   });
 
   test('viewport allows pinch-zoom (WCAG 1.4.4)', async ({ page }) => {
