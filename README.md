@@ -23,6 +23,7 @@ API key never touches the browser.
 | `cocktails.json`, `mocktails.json`, `ingredients.json` | Data |
 | `sw.js`, `manifest.json` | Service worker + PWA manifest |
 | `AppIcon.png`, `HeroImage.jpg` | App icon and hero background |
+| `assets/img/` | Drink photos (only drinks listed in `DRINK_PHOTOS` in `app.js` get one) |
 | `api/analyze.js` | Vercel serverless proxy for photo analysis (holds the Anthropic key) |
 | `e2e/` | Playwright end-to-end tests |
 | `.github/workflows/deploy.yml` | GitHub Pages deploy |

@@ -1,6 +1,6 @@
 {
   "name": "mixology-vault",
-  "version": "2.6.0",
+  "version": "3.0.0",
   "private": true,
   "description": "Know what you can pour tonight, from the bottles you already own.",
   "scripts": {
