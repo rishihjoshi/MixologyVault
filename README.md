@@ -59,8 +59,9 @@ Two independent pieces:
    Anthropic Console workspace that owns the key — set one.**
 
 **Security headers.** `vercel.json` sends CSP (with `frame-ancestors 'none'`),
-`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` and HSTS
-for everything Vercel serves, plus a locked-down CSP and `no-store` for `/api/*`.
+`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy` and `Permissions-Policy`
+for everything Vercel serves (HSTS comes from Vercel's own default), plus a locked-down CSP
+and `no-store` for `/api/*`.
 GitHub Pages can't set custom headers, so the Pages copy relies on the `<meta>` CSP in
 `index.html` (which browsers can't apply `frame-ancestors`/`X-Frame-Options` from). Keep the
 two CSPs in sync — an e2e test checks this.

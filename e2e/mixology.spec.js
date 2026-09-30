@@ -248,7 +248,8 @@ test.describe('Assets & accessibility', () => {
     expect(get(pages, 'X-Frame-Options')).toBe('DENY');
     expect(get(pages, 'X-Content-Type-Options')).toBe('nosniff');
     expect(get(pages, 'Referrer-Policy')).toBe('no-referrer');
-    expect(get(pages, 'Strict-Transport-Security')).toContain('max-age=');
+    // HSTS is left to Vercel's default (max-age=63072000; includeSubDomains; preload).
+    expect(get(pages, 'Strict-Transport-Security')).toBeUndefined();
     expect(get(api, 'Content-Security-Policy')).toContain("default-src 'none'");
     expect(get(api, 'Cache-Control')).toBe('no-store');
 
