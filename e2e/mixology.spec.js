@@ -64,8 +64,8 @@ test.describe('Snap feature relocated into Decide', () => {
 });
 
 test.describe('Version functionality', () => {
-  test('visible version label reads v3.2.0', async ({ page }) => {
-    await expect(page.locator('#app-version')).toHaveText('v3.2.0');
+  test('visible version label reads v3.3.0', async ({ page }) => {
+    await expect(page.locator('#app-version')).toHaveText('v3.3.0');
   });
 
   test('update banner exists and starts hidden', async ({ page }) => {
@@ -421,6 +421,23 @@ test.describe('v3 Stitch redesign', () => {
     const orphans = await page.evaluate(() =>
       Object.keys(DRINK_PHOTOS).filter(id => !findDrink(id)));
     expect(orphans).toEqual([]);
+  });
+
+  test('every cocktail and mocktail has a photo', async ({ page }) => {
+    const missing = await page.evaluate(() =>
+      [...allCocktails, ...allMocktails].filter(d => !Object.hasOwn(DRINK_PHOTOS, d.id)).map(d => d.id));
+    expect(missing).toEqual([]);
+  });
+
+  test('shared photos never override an exact-drink photo', async ({ page }) => {
+    const info = await page.evaluate(() => {
+      const shared = Object.values(SHARED_PHOTOS).flat();
+      return { dupes: shared.filter((id, i) => shared.indexOf(id) !== i),
+               negroni: DRINK_PHOTOS['negroni'], vodkaSour: DRINK_PHOTOS['vodka-sour'] };
+    });
+    expect(info.dupes).toEqual([]);
+    expect(info.negroni).toBe('assets/img/negroni.jpg');
+    expect(info.vodkaSour).toBe('assets/img/look-rocks-pale-sour-lemon.jpg');
   });
 
   test('recipe sheet flags ingredients that are not in the bar', async ({ page }) => {
