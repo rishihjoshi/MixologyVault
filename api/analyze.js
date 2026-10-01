@@ -4,9 +4,13 @@
 // Vercel dashboard) and forwards to Claude, returning Claude's raw JSON.
 //
 // The model + prompt are pinned here so the key can't be abused for arbitrary
-// requests, and CORS is locked to the GitHub Pages origin.
+// requests, and CORS is locked to the two origins that serve the app.
 
-const ALLOWED_ORIGIN = 'https://rishihjoshi.github.io';
+const ALLOWED_ORIGINS = new Set([
+  'https://rishihjoshi.github.io',     // GitHub Pages (cross-origin)
+  'https://mixology-vault.vercel.app', // Vercel production (same-origin)
+]);
+const DEFAULT_ORIGIN = 'https://rishihjoshi.github.io';
 const MODEL  = 'claude-haiku-4-5-20251001';
 const PROMPT = 'List every alcoholic bottle, mixer, juice, syrup, or cocktail ingredient visible in this photo. Return ONLY a JSON array of ingredient name strings. Be specific about brands where visible. Example: ["Tanqueray Gin","Cointreau","Angostura Bitters"]';
 
@@ -37,7 +41,9 @@ function rateLimit(ip, now = Date.now()) {
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
+  const origin = req.headers.origin;
+  // Echo the caller's origin only when it's allowed (Vary keeps caches honest).
+  res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGINS.has(origin) ? origin : DEFAULT_ORIGIN);
   res.setHeader('Vary', 'Origin');
 
   if (req.method === 'OPTIONS') {
@@ -49,14 +55,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'POST only' });
   }
 
-  // Origin gate: the app is served cross-origin (GitHub Pages → Vercel), so a
-  // real browser request ALWAYS carries an Origin header the browser sets and
-  // scripts can't forge. Reject anything that doesn't match. CORS alone only
-  // restrains browsers; this rejects casual non-browser abuse of the API key.
+  // Origin gate: browsers attach an Origin header to every POST (cross-origin
+  // from GitHub Pages, same-origin from the Vercel deployment) and scripts can't
+  // forge it. Reject anything not on the allowlist. CORS alone only restrains
+  // browsers; this rejects casual non-browser abuse of the API key.
   // It is not airtight (a raw client can spoof the header) — the hard cost
   // ceiling remains the spend limit on the Anthropic Console workspace.
-  const origin = req.headers.origin;
-  if (origin && origin !== ALLOWED_ORIGIN) {
+  if (origin && !ALLOWED_ORIGINS.has(origin)) {
     return res.status(403).json({ error: 'Forbidden' });
   }
 

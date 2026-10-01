@@ -12,6 +12,7 @@ import assert from 'node:assert/strict';
 import handler from './analyze.js';
 
 const ALLOWED_ORIGIN = 'https://rishihjoshi.github.io';
+const VERCEL_ORIGIN  = 'https://mixology-vault.vercel.app';
 
 // Minimal Express/Vercel-style response double that records what the handler did.
 function mockRes() {
@@ -76,6 +77,25 @@ test('Origin gate: the allowed Origin passes the gate (reaches the key check)', 
   } finally {
     if (prev !== undefined) process.env.ANTHROPIC_API_KEY = prev;
   }
+});
+
+test('Origin gate: the Vercel deployment origin passes too, and CORS echoes it', async () => {
+  const prev = process.env.ANTHROPIC_API_KEY;
+  delete process.env.ANTHROPIC_API_KEY;
+  try {
+    const res = mockRes();
+    await handler(mockReq({ headers: { origin: VERCEL_ORIGIN } }), res);
+    assert.equal(res.statusCode, 503);
+    assert.equal(res.headers['access-control-allow-origin'], VERCEL_ORIGIN);
+  } finally {
+    if (prev !== undefined) process.env.ANTHROPIC_API_KEY = prev;
+  }
+});
+
+test('CORS never echoes a disallowed Origin', async () => {
+  const res = mockRes();
+  await handler(mockReq({ method: 'OPTIONS', headers: { origin: 'https://evil.example.com' } }), res);
+  assert.equal(res.headers['access-control-allow-origin'], ALLOWED_ORIGIN);
 });
 
 test('Origin gate: an absent Origin is allowed (non-browser clients w/o the header)', async () => {
