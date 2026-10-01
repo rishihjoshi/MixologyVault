@@ -64,8 +64,8 @@ test.describe('Snap feature relocated into Decide', () => {
 });
 
 test.describe('Version functionality', () => {
-  test('visible version label reads v3.3.0', async ({ page }) => {
-    await expect(page.locator('#app-version')).toHaveText('v3.3.0');
+  test('visible version label reads v3.3.1', async ({ page }) => {
+    await expect(page.locator('#app-version')).toHaveText('v3.3.1');
   });
 
   test('update banner exists and starts hidden', async ({ page }) => {
@@ -433,8 +433,11 @@ test.describe('v3 Stitch redesign', () => {
     const info = await page.evaluate(() => {
       const shared = Object.values(SHARED_PHOTOS).flat();
       return { dupes: shared.filter((id, i) => shared.indexOf(id) !== i),
-               negroni: DRINK_PHOTOS['negroni'], vodkaSour: DRINK_PHOTOS['vodka-sour'] };
+               negroni: DRINK_PHOTOS['negroni'], vodkaSour: DRINK_PHOTOS['vodka-sour'],
+               beesKnees: DRINK_PHOTOS['bee-s-knees'], tequilaOF: DRINK_PHOTOS['tequila-old-fashioned'] };
     });
+    expect(info.beesKnees).toBe('assets/img/bee-s-knees.jpg');
+    expect(info.tequilaOF).toBe('assets/img/tequila-old-fashioned.jpg');
     expect(info.dupes).toEqual([]);
     expect(info.negroni).toBe('assets/img/negroni.jpg');
     expect(info.vodkaSour).toBe('assets/img/look-rocks-pale-sour-lemon.jpg');
