@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '3.3.0';
+const APP_VERSION = '3.3.1';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -127,6 +127,8 @@ const DRINK_PHOTOS = {
   'cosmopolitan':      'assets/img/cosmopolitan.jpg',
   'mojito':            'assets/img/virgin-mojito.jpg',
   'gin-martini':       'assets/img/gin-martini.jpg',
+  'bee-s-knees':       'assets/img/bee-s-knees.jpg',
+  'tequila-old-fashioned': 'assets/img/tequila-old-fashioned.jpg',
   'penicillin':        'assets/img/penicillin.jpg',
   'mimosa':            'assets/img/mimosa.jpg',
   'clover-club-pomegranate': 'assets/img/clover-club-pomegranate.jpg',
@@ -153,13 +155,13 @@ const SHARED_PHOTOS = {
     'gin-pomegranate-collins-soda-free', 'floradora', 'pomegranate-lemonade', 'rum-punch', 'nojito-royale', 'rooh-afza-rose-cooler',
   ],
   'assets/img/look-rocks-amber-lemon-twist.jpg': [
-    'godmother', 'amaretto-old-fashioned', 'monte-carlo', 'tequila-old-fashioned', 'negroni-bianco',
+    'godmother', 'amaretto-old-fashioned', 'monte-carlo', 'negroni-bianco',
   ],
   'assets/img/look-rocks-golden-sour-lemon.jpg': [
     'irish-whiskey-sour', 'rum-sour', 'scotch-sour-cocoa-twist', 'elderflower-whisky-sour', 'scotch-amaretto-sour',
   ],
   'assets/img/look-coupe-pale-lemon-twist.jpg': [
-    'bee-s-knees', 'white-lady', 'elderflower-martini', 'corpse-reviver-no-2', 'lemon-drop',
+    'white-lady', 'elderflower-martini', 'corpse-reviver-no-2', 'lemon-drop',
   ],
   'assets/img/look-highball-ginger-lime.jpg': [
     'kingston-highball', 'scottish-mule', 'rum-cooler', 'dark-n-stormy', 'mamie-taylor',
