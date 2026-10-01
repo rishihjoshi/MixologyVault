@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '3.2.0';
+const APP_VERSION = '3.3.0';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -114,8 +114,8 @@ const SPIRIT_FILTERS = [
 ];
 
 // ── DRINK PHOTOS ─────────────────────────────────────────
-// Only drinks with a photo of that exact drink get one; everything else gets
-// a glass-shaped placeholder, so a card never shows the wrong drink.
+// Drinks with a photo of that exact drink get it; the rest share a "look" photo
+// below; anything left over gets a glass-shaped placeholder.
 // Paths are a fixed whitelist — never built from data.
 const DRINK_PHOTOS = {
   'boulevardier':      'assets/img/boulevardier.jpg',
@@ -138,6 +138,120 @@ const DRINK_PHOTOS = {
   'shirley-temple':    'assets/img/shirley-temple.jpg',
   'virgin-margarita':  'assets/img/virgin-margarita.jpg',
 };
+
+// Shared photos: one image per look (glass + drink colour + garnish), used by
+// every drink that serves that way. Exact-drink photos above take priority.
+// Paths are a fixed whitelist — never built from data.
+const SHARED_PHOTOS = {
+  'assets/img/look-highball-clear-lemon.jpg': [
+    'gin-fizz', 'vodka-collins', 'tequila-collins', 'gin-buck', 'tom-collins', 'saint-germain-cocktail', 'vodka-elderflower-fizz',
+  ],
+  'assets/img/look-coupe-amber-twist.jpg': [
+    'tequila-martini', 'blanc-manhattan-tequila', 'dark-rum-manhattan', 'bittersweet-scotch', 'gentlemans-knock', 'scotch-manhattan',
+  ],
+  'assets/img/look-highball-pink-citrus-mint.jpg': [
+    'gin-pomegranate-collins-soda-free', 'floradora', 'pomegranate-lemonade', 'rum-punch', 'nojito-royale', 'rooh-afza-rose-cooler',
+  ],
+  'assets/img/look-rocks-amber-lemon-twist.jpg': [
+    'godmother', 'amaretto-old-fashioned', 'monte-carlo', 'tequila-old-fashioned', 'negroni-bianco',
+  ],
+  'assets/img/look-rocks-golden-sour-lemon.jpg': [
+    'irish-whiskey-sour', 'rum-sour', 'scotch-sour-cocoa-twist', 'elderflower-whisky-sour', 'scotch-amaretto-sour',
+  ],
+  'assets/img/look-coupe-pale-lemon-twist.jpg': [
+    'bee-s-knees', 'white-lady', 'elderflower-martini', 'corpse-reviver-no-2', 'lemon-drop',
+  ],
+  'assets/img/look-highball-ginger-lime.jpg': [
+    'kingston-highball', 'scottish-mule', 'rum-cooler', 'dark-n-stormy', 'mamie-taylor',
+  ],
+  'assets/img/look-wine-spritz-pink.jpg': [
+    'pomegranate-spritz', 'rum-pomegranate-spritz', 'virgin-pomegranate-spritz', 'pomegranate-mint-cooler', 'rose-empress-fizz',
+  ],
+  'assets/img/look-highball-gold-lemon.jpg': [
+    'disaronno-fizz', 'rum-fizz', 'whiskey-collins', 'scotch-highball',
+  ],
+  'assets/img/look-rocks-golden-sour-cherry.jpg': [
+    'scotch-sour', 'amaretto-sour', 'whiskey-sour',
+  ],
+  'assets/img/look-rocks-red-orange-slice.jpg': [
+    'americano', 'negroni-sbagliato', 'campari-sour',
+  ],
+  'assets/img/look-coupe-golden-lime.jpg': [
+    'dark-rum-daiquiri', 'frisco-sour', 'naked-famous-home-bar-edit',
+  ],
+  'assets/img/look-highball-clear-lime.jpg': [
+    'tequila-fizz', 'lime-daisy-tequila', 'gin-rickey',
+  ],
+  'assets/img/look-highball-orange.jpg': [
+    'screwdriver', 'citrus-cooler', 'cinderella',
+  ],
+  'assets/img/look-copper-mug.jpg': [
+    'moscow-mule', 'tequila-mule', 'ginger-lime-fizz',
+  ],
+  'assets/img/look-rocks-pale-sour-lemon.jpg': [
+    'tequila-sour', 'vodka-sour',
+  ],
+  'assets/img/look-crushed-ice-mint.jpg': [
+    'whiskey-smash', 'scotch-julep',
+  ],
+  'assets/img/look-coupe-amber-cherry.jpg': [
+    'manhattan', 'rob-roy',
+  ],
+  'assets/img/look-coupe-red-lemon-twist.jpg': [
+    'old-pal', 'jasmine',
+  ],
+  'assets/img/look-highball-sunrise.jpg': [
+    'tequila-sunrise', 'garibaldi',
+  ],
+  'assets/img/look-rocks-pink-salt-rim.jpg': [
+    'pomegranate-margarita',
+  ],
+  'assets/img/look-martini-clear-lemon-twist.jpg': [
+    'vodka-martini',
+  ],
+  'assets/img/look-hot-toddy.jpg': [
+    'hot-toddy',
+  ],
+  'assets/img/look-flute-sparkling-lemon.jpg': [
+    'french-75',
+  ],
+  'assets/img/look-wine-spritz-orange-red.jpg': [
+    'campari-spritz',
+  ],
+  'assets/img/look-wine-lavender-tonic.jpg': [
+    'empress-tonic',
+  ],
+  'assets/img/look-wine-spritz-gold-lemon.jpg': [
+    'amaretto-spritz',
+  ],
+  'assets/img/old-fashioned.jpg': [
+    'godfather', 'rum-old-fashioned', 'irish-old-fashioned',
+  ],
+  'assets/img/gimlet.jpg': [
+    'vodka-gimlet', 'kamikaze', 'southside',
+  ],
+  'assets/img/classic-margarita.jpg': [
+    'elderflower-margarita',
+  ],
+  'assets/img/cosmopolitan.jpg': [
+    'pomegranate-martini',
+  ],
+  'assets/img/clover-club-pomegranate.jpg': [
+    'pomegranate-gin-sour', 'blossom-of-love',
+  ],
+  'assets/img/gin-martini.jpg': [
+    'vesper-blanc-style',
+  ],
+  'assets/img/virgin-mojito.jpg': [
+    'elderflower-collins',
+  ],
+  'assets/img/hugo-spritz.jpg': [
+    'empress-elderflower-spritz', 'empress-g-t-virgin', 'mojito-royale',
+  ],
+};
+for (const [src, ids] of Object.entries(SHARED_PHOTOS)) {
+  for (const id of ids) if (!Object.hasOwn(DRINK_PHOTOS, id)) DRINK_PHOTOS[id] = src;
+}
 
 // Placeholder glass silhouettes, chosen from the drink's preferred glass
 // (falling back to its tags/name when the data has no glass).
