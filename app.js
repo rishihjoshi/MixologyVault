@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '3.3.1';
+const APP_VERSION = '3.4.0';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -176,10 +176,10 @@ const SHARED_PHOTOS = {
     'scotch-sour', 'amaretto-sour', 'whiskey-sour',
   ],
   'assets/img/look-rocks-red-orange-slice.jpg': [
-    'americano', 'negroni-sbagliato', 'campari-sour',
+    'americano', 'negroni-sbagliato', 'campari-sour', 'bacardi-symphony',
   ],
   'assets/img/look-coupe-golden-lime.jpg': [
-    'dark-rum-daiquiri', 'frisco-sour', 'naked-famous-home-bar-edit',
+    'dark-rum-daiquiri', 'frisco-sour', 'naked-famous-home-bar-edit', 'golden-autumn',
   ],
   'assets/img/look-highball-clear-lime.jpg': [
     'tequila-fizz', 'lime-daisy-tequila', 'gin-rickey',
@@ -245,7 +245,7 @@ const SHARED_PHOTOS = {
     'vesper-blanc-style',
   ],
   'assets/img/virgin-mojito.jpg': [
-    'elderflower-collins',
+    'elderflower-collins', 'maid-in-cuba',
   ],
   'assets/img/hugo-spritz.jpg': [
     'empress-elderflower-spritz', 'empress-g-t-virgin', 'mojito-royale',
