@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '3.4.0';
+const APP_VERSION = '3.4.1';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];

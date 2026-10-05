@@ -64,8 +64,8 @@ test.describe('Snap feature relocated into Decide', () => {
 });
 
 test.describe('Version functionality', () => {
-  test('visible version label reads v3.4.0', async ({ page }) => {
-    await expect(page.locator('#app-version')).toHaveText('v3.4.0');
+  test('visible version label reads v3.4.1', async ({ page }) => {
+    await expect(page.locator('#app-version')).toHaveText('v3.4.1');
   });
 
   test('update banner exists and starts hidden', async ({ page }) => {
