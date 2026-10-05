@@ -3842,5 +3842,135 @@
       "Orange twist"
     ],
     "mood": "Curious"
+  },
+  {
+    "id": "golden-autumn",
+    "name": "Golden Autumn",
+    "baseSpirit": "Vodka",
+    "tags": [
+      "Fruity"
+    ],
+    "ingredients": [
+      "Vodka",
+      "Dry Vermouth",
+      "Green Apple Syrup",
+      "Disaronno",
+      "Fresh Lime Juice",
+      "Simple Syrup"
+    ],
+    "measurementsMl": [
+      "20 ml",
+      "20 ml",
+      "10 ml",
+      "1 barspoon",
+      "5 ml",
+      "5 ml"
+    ],
+    "measurementsOz": [
+      "0.67 oz",
+      "0.67 oz",
+      "0.33 oz",
+      "1 barspoon",
+      "1 tsp",
+      "1 tsp"
+    ],
+    "history": "Added to the IBA's official roster of New Era Drinks in 2007, a soft vodka aperitif built around orchard-apple sweetness.",
+    "description": "A gentle vodka-and-vermouth sipper lifted by tart green apple and a whisper of almond, rounded out with house lime cordial.",
+    "recipe": "Add all ingredients to a shaker with ice. Shake well for 10 sec. Double-strain into a chilled coupe. Garnish with a thin green-apple fan.",
+    "glasses": [
+      "Coupe",
+      "Martini"
+    ],
+    "garnishes": [
+      "Green-apple fan",
+      "Lime twist"
+    ],
+    "mood": "Curious"
+  },
+  {
+    "id": "bacardi-symphony",
+    "name": "Bacardi Symphony",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Signature"
+    ],
+    "ingredients": [
+      "White Rum",
+      "Martini Bitter",
+      "Dry Vermouth",
+      "Bénédictine",
+      "Cointreau"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "15 ml",
+      "15 ml",
+      "5 ml",
+      "5 ml"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "0.5 oz",
+      "0.5 oz",
+      "1 tsp",
+      "1 tsp"
+    ],
+    "history": "An IBA listing from 2000 that reimagines the Negroni family on a base of light Bacardi rum.",
+    "description": "A spirit-forward, bittersweet rum aperitif — red bitter and dry vermouth layered with honeyed Bénédictine and a lick of orange.",
+    "recipe": "Add all ingredients to a mixing glass with ice. Stir 30 sec until well chilled. Strain over a large cube in a rocks glass (or into a chilled coupe). Garnish with an orange twist.",
+    "glasses": [
+      "Rocks",
+      "Coupe"
+    ],
+    "garnishes": [
+      "Orange twist"
+    ],
+    "mood": "Bold"
+  },
+  {
+    "id": "maid-in-cuba",
+    "name": "Maid in Cuba",
+    "baseSpirit": "Rum",
+    "tags": [
+      "Refreshing"
+    ],
+    "ingredients": [
+      "White Rum",
+      "Lime",
+      "Rich Syrup",
+      "Mint",
+      "Cucumber",
+      "Absinthe",
+      "Soda"
+    ],
+    "measurementsMl": [
+      "60 ml",
+      "22 ml",
+      "15 ml",
+      "7 leaves",
+      "2 slices",
+      "Rinse",
+      "10 ml"
+    ],
+    "measurementsOz": [
+      "2 oz",
+      "0.75 oz",
+      "0.5 oz",
+      "7 leaves",
+      "2 slices",
+      "Rinse",
+      "0.33 oz"
+    ],
+    "history": "A modern Cuban-inspired riff on the Southside and mojito, pairing garden cucumber with an absinthe whisper.",
+    "description": "Bright white rum shaken with lime, mint and cucumber over an absinthe-rinsed glass, finished with a splash of soda — crisp and herbaceous.",
+    "recipe": "Rinse a chilled glass with absinthe and discard the excess. Lightly muddle the cucumber slices and mint with the lime and rich syrup. Add rum and ice, shake 10 sec. Fine-strain over fresh ice. Top with the soda. Garnish with a cucumber ribbon and mint sprig.",
+    "glasses": [
+      "Highball",
+      "Rocks"
+    ],
+    "garnishes": [
+      "Cucumber ribbon & mint sprig"
+    ],
+    "mood": "Fresh"
   }
 ]
