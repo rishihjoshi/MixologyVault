@@ -939,3 +939,66 @@ body[data-screen="decide"] #nav-decide { color: var(--amber); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* ── Account button + auth modal ───────────────────────── */
+.hero-top { position: relative; }
+.account-btn {
+  margin-left: auto;
+  background: var(--chip-bg);
+  color: var(--text-2);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-xl);
+  padding: .35rem .8rem;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.account-btn:hover { color: var(--amber-hi); border-color: var(--stroke-amber); }
+
+#auth-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.6); padding: var(--gutter);
+}
+#auth-overlay[hidden] { display: none; }
+#auth-modal {
+  position: relative;
+  width: 100%; max-width: 360px;
+  background: var(--surface-high);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-lg);
+  padding: 1.5rem;
+}
+#auth-modal h2 { margin: 0 0 .25rem; font-family: 'Playfair Display', serif; }
+#auth-close {
+  position: absolute; top: .6rem; right: .6rem;
+  width: 2rem; height: 2rem; line-height: 1;
+  background: none; border: none; color: var(--muted);
+  font-size: 1.5rem; cursor: pointer;
+}
+.auth-sub { color: var(--muted); font-size: .85rem; margin: .25rem 0 1rem; }
+.auth-msg { color: var(--copper-text); font-size: .8rem; min-height: 1rem; margin: 0; }
+.auth-msg:empty { min-height: 0; }
+.auth-input {
+  width: 100%; margin-bottom: .6rem; padding: .7rem .8rem;
+  background: var(--surface-input); color: var(--text);
+  border: 1px solid var(--stroke); border-radius: var(--r);
+  font-size: .95rem;
+}
+.auth-or {
+  text-align: center; color: var(--muted-2); font-size: .75rem;
+  margin: .8rem 0; text-transform: uppercase; letter-spacing: .1em;
+}
+
+/* ── Shopping list rows ─────────────────────────────────── */
+.shop-row {
+  display: flex; align-items: center; gap: .75rem;
+  width: 100%; text-align: left;
+  padding: .7rem .8rem; margin-bottom: .4rem;
+  background: var(--surface-mid); border: 1px solid var(--stroke);
+  border-radius: var(--r); color: var(--text); cursor: pointer;
+}
+.shop-row input { width: 1.1rem; height: 1.1rem; accent-color: var(--amber); }
+.shop-row.done .shop-name { text-decoration: line-through; color: var(--muted-2); }
+.shop-name { font-weight: 600; }
+.shop-brand { color: var(--muted); font-size: .8rem; margin-left: auto; }

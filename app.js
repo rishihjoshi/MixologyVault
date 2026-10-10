@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '3.4.1';
+const APP_VERSION = '3.5.0';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -21,6 +21,16 @@ let activeUnit        = 'oz';
 let activeModalId     = null;
 let barActiveFilter   = 'all';
 let vaultMode         = 'shelf';  // 'shelf' | 'make' — My bar view toggle
+let checkedShopping   = new Set(); // ingIds ticked off on the shopping list
+
+// ── SUPABASE ─────────────────────────────────────────────
+// Client is null when config.js is missing or the CDN failed — the app then
+// runs exactly as before (localStorage only), so auth stays purely additive.
+const sb = (window.supabase && window.MV_SUPABASE_URL &&
+            window.MV_SUPABASE_ANON_KEY && !window.MV_SUPABASE_ANON_KEY.startsWith('PASTE_'))
+  ? window.supabase.createClient(window.MV_SUPABASE_URL, window.MV_SUPABASE_ANON_KEY)
+  : null;
+let currentUser = null;
 
 // ── AGE GATE (21+) ───────────────────────────────────────
 // Confirmation is remembered on-device. A "no" is not remembered, so the
@@ -55,6 +65,7 @@ function loadFavourites() {
 }
 function saveFavourites() {
   try { localStorage.setItem('mv_favourites', JSON.stringify([...favourites])); } catch {}
+  syncState();
 }
 
 // ── INGREDIENT OVERRIDES ─────────────────────────────────
@@ -83,11 +94,162 @@ let ingredientOverrides = {};
 
 function saveOverrides() {
   try { localStorage.setItem('mv_ing_overrides', JSON.stringify(ingredientOverrides)); } catch {}
+  syncState();
+}
+
+// ── SHOPPING-LIST TICKS (persisted) ──────────────────────
+function loadShopping() {
+  try {
+    const ids = JSON.parse(localStorage.getItem('mv_shopping_checked') || '[]');
+    if (Array.isArray(ids)) checkedShopping = new Set(ids.filter(x => typeof x === 'string'));
+  } catch {}
+}
+function saveShopping() {
+  try { localStorage.setItem('mv_shopping_checked', JSON.stringify([...checkedShopping])); } catch {}
+  syncState();
 }
 
 function getIngStatus(ing) {
   if (ingredientOverrides[ing.id] !== undefined) return ingredientOverrides[ing.id];
   return ing.have ? 'have' : 'need';
+}
+
+// ── AUTH + CLOUD SYNC ────────────────────────────────────
+// Bar/favourites/shopping state lives in localStorage (offline cache) always.
+// When signed in, the same state write-throughs to one user_state row and is
+// pulled back on sign-in. RLS (user_id = auth.uid()) is what isolates users.
+
+// Debounced so a burst of pill taps becomes one upsert.
+let syncTimer = null;
+function syncState() {
+  if (!sb || !currentUser) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => {
+    if (!sb || !currentUser) return; // signed out during the debounce window
+    sb.from('user_state').upsert({
+      user_id:    currentUser.id,
+      overrides:  ingredientOverrides,
+      favourites: [...favourites],
+      checked:    [...checkedShopping],
+      updated_at: new Date().toISOString(),
+    }).then(({ error }) => { if (error) console.warn('sync:', error.message); });
+  }, 600);
+}
+
+// Pull the cloud row into memory. On first sign-in the row may be empty, so we
+// merge the local state up rather than wiping it.
+async function pullUserState() {
+  if (!sb || !currentUser) return;
+  const { data, error } = await sb.from('user_state').select('overrides, favourites, checked')
+    .eq('user_id', currentUser.id).maybeSingle();
+  if (error) { console.warn('pull:', error.message); return; }
+
+  const cloudEmpty = !data ||
+    (Object.keys(data.overrides || {}).length === 0 &&
+     (data.favourites || []).length === 0 && (data.checked || []).length === 0);
+
+  if (cloudEmpty) {
+    // First sign-in: push whatever is already on this device up.
+    if (Object.keys(ingredientOverrides).length || favourites.size || checkedShopping.size) {
+      await sb.from('user_state').upsert({
+        user_id: currentUser.id, overrides: ingredientOverrides,
+        favourites: [...favourites], checked: [...checkedShopping],
+        updated_at: new Date().toISOString(),
+      });
+    }
+    return; // keep local state as-is
+  }
+
+  // Cloud wins on an established account (authoritative across devices).
+  ingredientOverrides = sanitizeOverrides(data.overrides);
+  favourites = new Set((data.favourites || []).filter(x => typeof x === 'string'));
+  checkedShopping = new Set((data.checked || []).filter(x => typeof x === 'string'));
+  try {
+    localStorage.setItem('mv_ing_overrides', JSON.stringify(ingredientOverrides));
+    localStorage.setItem('mv_favourites', JSON.stringify([...favourites]));
+    localStorage.setItem('mv_shopping_checked', JSON.stringify([...checkedShopping]));
+  } catch {}
+}
+
+// Same validation the localStorage loader uses — guards prototype pollution.
+function sanitizeOverrides(obj) {
+  const safe = Object.create(null);
+  if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
+    for (const [k, v] of Object.entries(obj)) {
+      if (typeof k === 'string' && /^[\w-]+$/.test(k) && k.length <= 120 && (v === 'have' || v === 'need')) safe[k] = v;
+    }
+  }
+  return safe;
+}
+
+const authMsg = (t) => { const el = document.getElementById('auth-msg'); if (el) el.textContent = t || ''; };
+
+async function signInEmail() {
+  if (!sb) return;
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  authMsg('Signing in…');
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  authMsg(error ? error.message : '');
+  if (!error) closeAuthModal();
+}
+async function signUpEmail() {
+  if (!sb) return;
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  authMsg('Creating account…');
+  const { error } = await sb.auth.signUp({ email, password });
+  authMsg(error ? error.message : 'Check your email to confirm, then sign in.');
+}
+async function signInGoogle() {
+  if (!sb) return;
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: 'google', options: { redirectTo: window.location.origin + window.location.pathname },
+  });
+  if (error) authMsg(error.message);
+}
+async function signOut() {
+  if (!sb) return;
+  await sb.auth.signOut();
+  closeAuthModal();
+}
+
+// Reflect auth state in the account button + modal, and re-render data views.
+function updateAccountUI() {
+  const btn = document.getElementById('account-btn');
+  if (btn) btn.textContent = currentUser ? '✓ Account' : 'Sign in';
+  const inView = document.getElementById('auth-signed-in');
+  const outView = document.getElementById('auth-signed-out');
+  if (inView && outView) {
+    inView.hidden = !currentUser;
+    outView.hidden = !!currentUser;
+    if (currentUser) document.getElementById('auth-user-email').textContent = currentUser.email || '';
+  }
+}
+
+function openAuthModal() {
+  authMsg('');
+  updateAccountUI();
+  document.getElementById('auth-overlay').hidden = false;
+}
+function closeAuthModal() {
+  document.getElementById('auth-overlay').hidden = true;
+}
+
+// Wire auth once; onAuthStateChange fires on load (restores session), sign-in,
+// and sign-out — the single place state is reconciled with the cloud.
+function initAuth() {
+  if (!sb) return; // config missing → app already works offline
+  sb.auth.onAuthStateChange(async (_event, session) => {
+    const wasUser = currentUser;
+    currentUser = session?.user || null;
+    if (currentUser) await pullUserState();
+    updateAccountUI();
+    // Re-render everything that depends on bar/favourites once state changes.
+    if (allIngredients.length && (currentUser || wasUser)) {
+      renderBar(); renderShopping(); renderHomeStats(); refreshStockViews();
+    }
+  });
 }
 
 // ── CATEGORY META ────────────────────────────────────────
@@ -309,46 +471,82 @@ function ingredientLine(c, n) {
 const HEART_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 7.9 3.6 4.5 7 4.5c2 0 3.6 1.1 5 2.9 1.4-1.8 3-2.9 5-2.9 3.4 0 5.6 3.4 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>';
 
 // ── LOCAL JSON LOADERS ───────────────────────────────────
+// Pure: one raw ingredient record (same shape in JSON and the DB) → card shape.
+function ingToCard(ing) {
+  return {
+    id:      ing.id,
+    category: ing.category,
+    item:    ing.name,                        // normalise to 'item' for rest of app
+    brand:   ing.brand  || '',
+    status:  ing.status,
+    notes:   ing.notes  || '',
+    have:    ing.status === 'have',
+    canGet:  ing.status === 'can-get',
+  };
+}
+
 async function loadIngredients() {
+  if (sb) {
+    const { data, error } = await sb.from('ingredients')
+      .select('id, category, name, brand, status, notes').eq('is_pantry', true);
+    if (!error && data) return data.map(ingToCard);
+    console.warn('Supabase ingredients failed, falling back to JSON:', error?.message);
+  }
   try {
     const res  = await fetch(DATA_BASE + 'ingredients.json');
     const data = await res.json();
-    return data.map(ing => ({
-      id:      ing.id,
-      category: ing.category,
-      item:    ing.name,                        // normalise to 'item' for rest of app
-      brand:   ing.brand  || '',
-      status:  ing.status,
-      notes:   ing.notes  || '',
-      have:    ing.status === 'have',
-      canGet:  ing.status === 'can-get',
-    }));
+    return data.map(ingToCard);
   } catch (e) {
     console.warn('Failed to load ingredients.json:', e.message);
     return [];
   }
 }
 
+// A recipes_full DB row → the raw-JSON record shape the card mappers expect.
+function dbRecipeToRaw(r) {
+  return {
+    id: r.id, name: r.name,
+    baseSpirit: r.base, baseIngredient: r.base,
+    tags: r.tags || [],
+    ingredients: r.ingredients || [],
+    measurementsMl: r.measurements_ml || [],
+    measurementsOz: r.measurements_oz || [],
+    recipe: r.instructions || '',
+    glasses: r.glasses || [], garnishes: r.garnishes || [],
+    history: r.history || '', description: r.description || '', mood: r.mood || '',
+  };
+}
+
+// Pure: one raw cocktails.json / DB record → normalized card shape.
+function cocktailToCard(c) {
+  return {
+    id:          c.id,
+    name:        c.name,
+    baseSpirit:  c.baseSpirit  || '',
+    tag:         (c.tags || []).join(', '),
+    ingredients: (c.ingredients     || []).join('\n'),
+    measML:      (c.measurementsMl  || []).join('\n'),
+    measOz:      (c.measurementsOz  || []).join('\n'),
+    steps:       c.recipe      || '',
+    glasses:     c.glasses     || [],
+    garnishes:   c.garnishes   || [],
+    history:     c.history     || '',
+    description: c.description || '',
+    mood:        normaliseMood(c.mood),
+    spiritKey:   normaliseSpiritKey(c.baseSpirit),
+  };
+}
+
 async function loadCocktails() {
+  if (sb) {
+    const { data, error } = await sb.from('recipes_full').select('*').eq('kind', 'cocktail');
+    if (!error && data) return data.map(dbRecipeToRaw).map(cocktailToCard);
+    console.warn('Supabase cocktails failed, falling back to JSON:', error?.message);
+  }
   try {
     const res  = await fetch(DATA_BASE + 'cocktails.json');
     const data = await res.json();
-    return data.map(c => ({
-      id:          c.id,
-      name:        c.name,
-      baseSpirit:  c.baseSpirit  || '',
-      tag:         (c.tags || []).join(', '),
-      ingredients: (c.ingredients     || []).join('\n'),
-      measML:      (c.measurementsMl  || []).join('\n'),
-      measOz:      (c.measurementsOz  || []).join('\n'),
-      steps:       c.recipe      || '',
-      glasses:     c.glasses     || [],
-      garnishes:   c.garnishes   || [],
-      history:     c.history     || '',
-      description: c.description || '',
-      mood:        normaliseMood(c.mood),
-      spiritKey:   normaliseSpiritKey(c.baseSpirit),
-    }));
+    return data.map(cocktailToCard);
   } catch (e) {
     console.warn('Failed to load cocktails.json:', e.message);
     return [];
@@ -378,6 +576,11 @@ function mocktailToCard(m) {
 }
 
 async function loadMocktails() {
+  if (sb) {
+    const { data, error } = await sb.from('recipes_full').select('*').eq('kind', 'mocktail');
+    if (!error && data) return data.map(dbRecipeToRaw).map(mocktailToCard);
+    console.warn('Supabase mocktails failed, falling back to JSON:', error?.message);
+  }
   try {
     const res  = await fetch(DATA_BASE + 'mocktails.json');
     const data = await res.json();
@@ -583,6 +786,45 @@ function renderBar() {
       setTimeout(() => { renderBar(); refreshStockViews(); }, 180);
     });
   });
+}
+
+// ── SHOPPING LIST ─────────────────────────────────────────
+// The list is derived: every ingredient currently marked 'need'. Ticks are a
+// separate set so you can check items off without changing your bar inventory.
+function renderShopping() {
+  const container = document.getElementById('shopping-sections');
+  if (!container) return;
+  const needed = allIngredients.filter(i => getIngStatus(i) === 'need');
+  if (!needed.length) {
+    container.innerHTML = '<div class="empty"><div class="empty-icon">🛒</div><div class="empty-sub">Nothing on your list. Mark ingredients as missing in My bar.</div></div>';
+    return;
+  }
+  container.innerHTML = needed.map(ing => {
+    const done = checkedShopping.has(ing.id);
+    return `<label class="shop-row ${done ? 'done' : ''}">
+      <input type="checkbox" data-shop-id="${esc(ing.id)}" ${done ? 'checked' : ''}>
+      <span class="shop-name">${esc(ing.item)}</span>
+      ${ing.brand ? `<span class="shop-brand">${esc(ing.brand)}</span>` : ''}
+    </label>`;
+  }).join('');
+  container.querySelectorAll('input[data-shop-id]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const id = cb.dataset.shopId;
+      if (cb.checked) checkedShopping.add(id); else checkedShopping.delete(id);
+      saveShopping();
+      cb.closest('.shop-row')?.classList.toggle('done', cb.checked);
+    });
+  });
+}
+
+function exportShopping() {
+  const needed = allIngredients.filter(i => getIngStatus(i) === 'need');
+  if (!needed.length) { alert('Your shopping list is empty.'); return; }
+  const text = 'Shopping list — Mixology Vault\n' +
+    needed.map(i => `- ${i.item}${i.brand ? ' (' + i.brand + ')' : ''}`).join('\n');
+  if (navigator.share) navigator.share({ title: 'Shopping list', text }).catch(() => {});
+  else if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => alert('Shopping list copied to clipboard')).catch(() => alert(text));
+  else alert(text);
 }
 
 // "What can you pour tonight?" summary on My bar.
@@ -865,7 +1107,7 @@ function closeModal(e) {
 }
 
 // ── NAVIGATION ────────────────────────────────────────────
-const VALID_SCREENS = new Set(['home','bar','cocktails','mocktails','decide']);
+const VALID_SCREENS = new Set(['home','bar','cocktails','mocktails','decide','shopping']);
 function switchScreen(id, btn) {
   if (!VALID_SCREENS.has(id)) return; // reject unknown screen IDs
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -875,6 +1117,7 @@ function switchScreen(id, btn) {
   if (btn?.classList) btn.classList.add('active');
   document.getElementById('scroll-area').scrollTop = 0;
   document.body.dataset.screen = id;
+  if (id === 'shopping') renderShopping();
   if (id !== 'bar' && makeShowAll.size) { makeShowAll.clear(); if (vaultMode === 'make') renderVaultMake(); }
 }
 
@@ -1221,11 +1464,23 @@ async function camCallClaude(base64, mediaType) {
 function camParseIngredients(apiResp) {
   try {
     const text  = apiResp?.content?.[0]?.text || '';
-    // Greedy match captures the longest [...] span — Claude sometimes prefixes
-    // its real answer with a short example array, and the real list is the one we want.
-    const match = text.match(/\[[\s\S]*\]/);
-    if (!match) return [];
-    const arr = JSON.parse(match[0]);
+    // Scan every balanced [...] span and keep the last one that parses to an
+    // array. Claude sometimes prefixes its real answer with a short example
+    // array, so the last array is the one we want — and unlike a single greedy
+    // match, this never splices two prose-separated arrays into invalid JSON
+    // and loses everything (EVALUATION.md #7).
+    // ponytail: bracket-depth scan, not a real JSON tokenizer — a ']' inside a
+    // string value would close a span early. Ingredient names have no brackets;
+    // revisit only if that ever appears in a reply.
+    let arr = null, depth = 0, start = -1;
+    for (let i = 0; i < text.length; i++) {
+      if (text[i] === '[') { if (depth === 0) start = i; depth++; }
+      else if (text[i] === ']' && depth > 0 && --depth === 0) {
+        try { const span = JSON.parse(text.slice(start, i + 1)); if (Array.isArray(span)) arr = span; }
+        catch { /* not JSON — skip this span */ }
+        start = -1;
+      }
+    }
     if (!Array.isArray(arr)) return [];
     return arr
       .filter(x => typeof x === 'string' && x.trim().length > 1 && x.trim().length < 80)
@@ -1551,6 +1806,26 @@ async function init() {
     switchScreen(btn.dataset.screen, navBtn);
   });
 
+  // Account / auth modal — hidden entirely until a Supabase key is configured,
+  // so the live site never shows an inert "Sign in" button.
+  const accountBtn = document.getElementById('account-btn');
+  if (accountBtn) accountBtn.hidden = !sb;
+  accountBtn?.addEventListener('click', openAuthModal);
+  document.getElementById('auth-close')?.addEventListener('click', closeAuthModal);
+  document.getElementById('auth-overlay')?.addEventListener('click', e => {
+    if (e.target.id === 'auth-overlay') closeAuthModal();
+  });
+  document.getElementById('auth-signin')?.addEventListener('click', signInEmail);
+  document.getElementById('auth-signup')?.addEventListener('click', signUpEmail);
+  document.getElementById('auth-google')?.addEventListener('click', signInGoogle);
+  document.getElementById('auth-signout')?.addEventListener('click', signOut);
+
+  // Shopping list: open from My bar, back, export
+  document.getElementById('open-shopping')?.addEventListener('click', () => switchScreen('shopping', null));
+  document.getElementById('shopping-back')?.addEventListener('click', () =>
+    switchScreen('bar', document.getElementById('nb-bar')));
+  document.getElementById('shopping-export')?.addEventListener('click', exportShopping);
+
   // Modal — close on overlay backdrop click (not on modal content itself)
   document.getElementById('modal-overlay')?.addEventListener('click', closeModal);
   document.getElementById('modal-close-btn')?.addEventListener('click', () => closeModal(null));
@@ -1589,8 +1864,10 @@ async function init() {
   wireCardArea(document.getElementById('results-list'));
   wireCardArea(document.getElementById('cam-cocktail-results'));
 
-  // Load local JSON files in parallel
+  // Restore on-device state, then start auth (it reconciles with the cloud).
   loadFavourites();
+  loadShopping();
+  initAuth();
   [allIngredients, allCocktails, allMocktails] = await Promise.all([
     loadIngredients(),
     loadCocktails(),
