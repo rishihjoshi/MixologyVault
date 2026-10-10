@@ -1,8 +1,10 @@
 // Release ritual: bump CACHE_NAME here AND APP_VERSION in app.js together.
-const CACHE_NAME = 'mixvault-v20';
+const CACHE_NAME = 'mixvault-v21';
 const STATIC_ASSETS = [
   './index.html',
   './app.js',
+  './config.js',
+  './vendor/supabase.js',
   './styles.css',
   './manifest.json',
   './AppIcon.png',

@@ -1,0 +1,786 @@
+[
+ {
+  "id": "tequila-sour",
+  "name": "Tequila Sour",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/tequila-sour.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Tequila Sour. Served in a heavy cut-crystal rocks glass, several clear ice cubes. The drink is hazy golden-amber with a thin silky froth on top. Garnish: lemon wheel, placed exactly as a professional bartender would. Built from: Tequila Anejo, Fresh Lemon Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: slightly brighter, lively highlights and sparkle."
+ },
+ {
+  "id": "tequila-old-fashioned",
+  "name": "Tequila Old Fashioned",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/tequila-old-fashioned.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Tequila Old Fashioned. Served in a heavy cut-crystal rocks glass, one large crystal-clear ice sphere, like the reference. The drink is clear rich golden-amber. Garnish: lime peel, placed exactly as a professional bartender would. Built from: Tequila Anejo, Demerara Sugar Syrup, Angostura Aromatic Bitters (show only the finished drink, not bottles). On the bar beside it: a halved orange. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "bee-s-knees",
+  "name": "Bee's Knees",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/bee-s-knees.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Bee's Knees. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is luminous lavender-pink (Empress gin turned by citrus), slightly hazy. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Fresh Lemon Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved orange. No smoke. Mood: intimate candlelit glow."
+ },
+ {
+  "id": "french-75",
+  "name": "French 75",
+  "type": "cocktail",
+  "glass": "Flute",
+  "file": "assets/img/french-75.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: French 75. Served in a tall slender champagne flute, served up with no ice. The drink is luminous lavender-pink (Empress gin turned by citrus) with fine rising bubbles. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Fresh Lemon Juice, Simple Syrup, Prosecco (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: intimate candlelit glow."
+ },
+ {
+  "id": "rob-roy",
+  "name": "Rob Roy",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/rob-roy.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Rob Roy. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is clear, rich glowing amber. Garnish: cocktail cherry, placed exactly as a professional bartender would. Built from: Monkey Shoulder Scotch, Dolin Vermouth, Angostura Aromatic Bitters (show only the finished drink, not bottles). On the bar beside it: a small sprig of rosemary lying on the bar as in the reference. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "scotch-sour",
+  "name": "Scotch Sour",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/scotch-sour.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Scotch Sour. Served in a heavy cut-crystal rocks glass, several clear ice cubes. The drink is hazy golden-amber with a thin silky froth on top. Garnish: lemon wheel and cherry, placed exactly as a professional bartender would. Built from: Glenfiddich 12 Scotch, Fresh Lemon Juice, Demerara Sugar Syrup (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "godfather",
+  "name": "Godfather",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/godfather.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Godfather. Served in a heavy cut-crystal rocks glass, one large crystal-clear ice sphere, like the reference. The drink is clear rich amber-brown. Garnish: orange peel, placed exactly as a professional bartender would. Built from: Monkey Shoulder Scotch, Disaronno Amaretto (show only the finished drink, not bottles). On the bar beside it: a halved orange. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "amaretto-sour",
+  "name": "Amaretto Sour",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/amaretto-sour.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Amaretto Sour. Served in a heavy cut-crystal rocks glass, several clear ice cubes. The drink is hazy golden-amber with a thin silky froth on top. Garnish: lemon wheel and cherry, placed exactly as a professional bartender would. Built from: Disaronno Amaretto, Fresh Lemon Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "disaronno-fizz",
+  "name": "Disaronno Fizz",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/disaronno-fizz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Disaronno Fizz. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is sparkling pale amber-gold with bubbles. Garnish: lemon wedge, placed exactly as a professional bartender would. Built from: Disaronno Amaretto, Fresh Lemon Juice, Simple Syrup, Prosecco (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "vodka-sour",
+  "name": "Vodka Sour",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/vodka-sour.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Vodka Sour. Served in a heavy cut-crystal rocks glass, several clear ice cubes. The drink is hazy pale straw-yellow with a thin silky froth on top. Garnish: lemon wheel, placed exactly as a professional bartender would. Built from: Vodka, Fresh Lemon Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: slightly brighter, lively highlights and sparkle."
+ },
+ {
+  "id": "kamikaze",
+  "name": "Kamikaze",
+  "type": "cocktail",
+  "glass": "Martini",
+  "file": "assets/img/kamikaze.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Kamikaze. Served in a classic V-shaped stemmed martini glass, served up with no ice. The drink is hazy pale straw-yellow with a thin silky froth on top. Garnish: lime wheel, placed exactly as a professional bartender would. Built from: Vodka, Cointreau, Fresh Lime Juice (show only the finished drink, not bottles). On the bar beside it: a halved lime. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "pomegranate-martini",
+  "name": "Pomegranate Martini",
+  "type": "cocktail",
+  "glass": "Martini",
+  "file": "assets/img/pomegranate-martini.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Pomegranate Martini. Served in a classic V-shaped stemmed martini glass, served up with no ice. The drink is jewel-toned ruby-red. Garnish: lime twist, placed exactly as a professional bartender would. Built from: Vodka, Cointreau, Pomegranate Juice, Fresh Lime Juice (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds, a halved lime. No smoke. Mood: intimate candlelit glow."
+ },
+ {
+  "id": "screwdriver",
+  "name": "Screwdriver",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/screwdriver.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Screwdriver. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is bright opaque fresh orange juice. Garnish: orange slice, placed exactly as a professional bartender would. Built from: Vodka, Orange Juice (show only the finished drink, not bottles). On the bar beside it: a halved orange. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "tequila-sunrise",
+  "name": "Tequila Sunrise",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/tequila-sunrise.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Tequila Sunrise. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is a layered sunrise gradient: glowing orange on top fading into deep ruby-red pomegranate at the bottom. Garnish: orange slice, placed exactly as a professional bartender would. Built from: Tequila Anejo, Orange Juice, Pomegranate Juice (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds, a halved orange. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "white-lady",
+  "name": "White Lady",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/white-lady.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: White Lady. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is luminous lavender-pink (Empress gin turned by citrus), slightly hazy. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Cointreau, Fresh Lemon Juice (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: intimate candlelit glow."
+ },
+ {
+  "id": "vodka-martini",
+  "name": "Vodka Martini",
+  "type": "cocktail",
+  "glass": "Martini",
+  "file": "assets/img/vodka-martini.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Vodka Martini. Served in a classic V-shaped stemmed martini glass, served up with no ice. The drink is crystal-clear, ice-cold. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Vodka, Dolin Vermouth (Dry/Blanc) (show only the finished drink, not bottles). On the bar beside it: a small sprig of rosemary lying on the bar as in the reference. No smoke. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "vodka-gimlet",
+  "name": "Vodka Gimlet",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/vodka-gimlet.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Vodka Gimlet. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is hazy pale straw-yellow with a thin silky froth on top. Garnish: lime wheel, placed exactly as a professional bartender would. Built from: Vodka, Fresh Lime Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved lime. No smoke. Mood: slightly brighter, lively highlights and sparkle."
+ },
+ {
+  "id": "lemon-drop",
+  "name": "Lemon Drop",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/lemon-drop.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Lemon Drop. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is hazy pale straw-yellow with a thin silky froth on top. Garnish: sugar rim and lemon twist, placed exactly as a professional bartender would. The rim is neatly coated. Built from: Vodka, Cointreau, Fresh Lemon Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "vesper-blanc-style",
+  "name": "Vesper (Blanc Style)",
+  "type": "cocktail",
+  "glass": "Martini",
+  "file": "assets/img/vesper-blanc-style.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Vesper (Blanc Style). Served in a classic V-shaped stemmed martini glass, served up with no ice. The drink is crystal-clear with a faint violet tint, ice-cold. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Vodka, Dolin Vermouth (show only the finished drink, not bottles). On the bar beside it: a small sprig of rosemary lying on the bar as in the reference. No smoke. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "tequila-martini",
+  "name": "Tequila Martini",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/tequila-martini.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Tequila Martini. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is clear, rich glowing amber. Garnish: lime twist, placed exactly as a professional bartender would. Built from: Tequila Anejo, Dolin Vermouth (show only the finished drink, not bottles). On the bar beside it: a small sprig of rosemary lying on the bar as in the reference. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "blanc-manhattan-tequila",
+  "name": "Blanc Manhattan (Tequila)",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/blanc-manhattan-tequila.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Blanc Manhattan (Tequila). Served in an elegant stemmed crystal coupe, served up with no ice. The drink is clear, rich glowing amber. Garnish: lime peel, placed exactly as a professional bartender would. Built from: Tequila Anejo, Dolin Vermouth, Angostura Bitters (show only the finished drink, not bottles). On the bar beside it: a small sprig of rosemary lying on the bar as in the reference. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: warm, inviting glow."
+ },
+ {
+  "id": "godmother",
+  "name": "Godmother",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/godmother.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Godmother. Served in a heavy cut-crystal rocks glass, one large crystal-clear ice sphere, like the reference. The drink is clear light golden-amber. Garnish: lemon peel, placed exactly as a professional bartender would. Built from: Vodka, Disaronno Amaretto (show only the finished drink, not bottles). On the bar beside it: a small sprig of rosemary lying on the bar as in the reference. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: warm, inviting glow."
+ },
+ {
+  "id": "amaretto-old-fashioned",
+  "name": "Amaretto Old Fashioned",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/amaretto-old-fashioned.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Amaretto Old Fashioned. Served in a heavy cut-crystal rocks glass, one large crystal-clear ice sphere, like the reference. The drink is clear deep amber-gold. Garnish: lemon peel, placed exactly as a professional bartender would. Built from: Disaronno Amaretto, Angostura Bitters (show only the finished drink, not bottles). On the bar beside it: a small sprig of rosemary lying on the bar as in the reference. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: warm, inviting glow."
+ },
+ {
+  "id": "pomegranate-spritz",
+  "name": "Pomegranate Spritz",
+  "type": "cocktail",
+  "glass": "Wine glass",
+  "file": "assets/img/pomegranate-spritz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Pomegranate Spritz. Served in a large stemmed balloon wine glass, filled with large clear ice cubes. The drink is sparkling bright ruby-pink with bubbles. Garnish: lime wheel, placed exactly as a professional bartender would. Built from: Prosecco, Pomegranate Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "gin-pomegranate-collins-soda-free",
+  "name": "Gin & Pomegranate Collins (Soda-free)",
+  "type": "cocktail",
+  "glass": "Collins",
+  "file": "assets/img/gin-pomegranate-collins-soda-free.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Gin & Pomegranate Collins (Soda-free). Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is deep rose-magenta, hazy. Garnish: lemon wheel, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Pomegranate Juice, Lemon Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds, a halved lemon. No smoke. Mood: slightly brighter, lively highlights and sparkle."
+ },
+ {
+  "id": "scotch-amaretto-sour",
+  "name": "Scotch & Amaretto Sour",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/scotch-amaretto-sour.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Scotch & Amaretto Sour. Served in a heavy cut-crystal rocks glass, several clear ice cubes. The drink is hazy golden-amber with a thin silky froth on top. Garnish: lemon peel, placed exactly as a professional bartender would. Built from: Glenfiddich 12, Disaronno Amaretto, Lemon Juice (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "americano",
+  "name": "Americano",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/americano.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Americano — Light, bubbly, and gently bitter — Campari's herbal bite softened by vermouth and lifted by soda. The perfect pre-dinner drink. Note: Traditional recipe uses sweet red vermouth; Dolin Dry/Blanc makes it drier and more floral. Served in a heavy cut-crystal rocks glass, one large crystal-clear ice sphere, like the reference. The drink is translucent ruby-red with lively bubbles. Garnish: orange half-wheel and lemon twist, placed exactly as a professional bartender would. Built from: Campari, Dolin Vermouth, Soda (show only the finished drink, not bottles). On the bar beside it: a halved orange. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "dark-rum-manhattan",
+  "name": "Dark Rum Manhattan",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/dark-rum-manhattan.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Dark Rum Manhattan — A rich, spirit-forward cocktail showcasing aged rum’s molasses depth softened by herbal vermouth and warming bitters. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is clear, rich glowing amber. Garnish: lime peel, placed exactly as a professional bartender would. Built from: Dark Rum, Dolin Vermouth, Angostura Aromatic Bitters (show only the finished drink, not bottles). On the bar beside it: a halved orange. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: warm, inviting glow."
+ },
+ {
+  "id": "kingston-highball",
+  "name": "Kingston Highball",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/kingston-highball.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Kingston Highball — A lively, refreshing highball with spicy ginger, bright citrus, and rich aged rum backbone. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is hazy caramel-gold with ginger beer bubbles. Garnish: lime wedge, placed exactly as a professional bartender would. Built from: Dark Rum, Fresh Lime Juice, Simple Syrup, Ginger Beer (show only the finished drink, not bottles). On the bar beside it: a halved lime, a knob of fresh ginger. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "rum-pomegranate-spritz",
+  "name": "Rum Pomegranate Spritz",
+  "type": "cocktail",
+  "glass": "Wine glass",
+  "file": "assets/img/rum-pomegranate-spritz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Rum Pomegranate Spritz — A light, elegant spritz combining dark rum’s depth with bright fruit and sparkling wine. Served in a large stemmed balloon wine glass, filled with large clear ice cubes. The drink is sparkling deep garnet with bubbles. Garnish: lime wheel, placed exactly as a professional bartender would. Built from: Dark Rum, Pomegranate Juice, Demerara Sugar Syrup, Prosecco, Soda (optional) (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "blossom-of-love",
+  "name": "Blossom of Love",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/blossom-of-love.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Blossom of Love — A smooth, floral martini with a gentle citrus lift and a blush pink hue, offering a balanced, slightly sweet, and elegant sipping experience Served in an elegant stemmed crystal coupe, served up with no ice. The drink is soft blush-pink shading into lavender. Garnish: edible rose petal, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Dolin Vermouth, Fresh Lime Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved lime, scattered dried rose petals. No smoke. Mood: intimate candlelit glow."
+ },
+ {
+  "id": "rose-empress-fizz",
+  "name": "Rose Empress Fizz",
+  "type": "cocktail",
+  "glass": "Wine glass",
+  "file": "assets/img/rose-empress-fizz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Rose Empress Fizz — A floral, blush-toned fizz where rose and cooling botanicals from Rooh Afza soften the juniper of Empress gin, brightened with fresh lemon and finished with lively Prosecco bubbles. Elegant, aromatic, and romantic. Served in a large stemmed balloon wine glass, filled with large clear ice cubes. The drink is sparkling rose-pink to magenta with fine bubbles. Garnish: edible rose petal, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Rooh Afza, Fresh Lemon Juice, Prosecco (show only the finished drink, not bottles). On the bar beside it: a halved lemon, scattered dried rose petals. No smoke. Mood: intimate candlelit glow."
+ },
+ {
+  "id": "dark-rum-daiquiri",
+  "name": "Dark Rum Daiquiri",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/dark-rum-daiquiri.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Dark Rum Daiquiri — Three ingredients, perfectly balanced - aged rum's molasses richness brightened with fresh lime and a whisper of sweetness. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is hazy golden-amber with a thin silky froth on top. Garnish: lime wheel, placed exactly as a professional bartender would. Built from: Dark Rum, Fresh Lime Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved lime. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "rum-old-fashioned",
+  "name": "Rum Old Fashioned",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/rum-old-fashioned.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Rum Old Fashioned — Slow, rich, and complex - molasses-forward rum dressed with caramel syrup and warming bitters over a single large cube. Served in a heavy cut-crystal rocks glass, one large crystal-clear ice sphere, like the reference. The drink is clear, rich glowing amber. Garnish: orange peel, placed exactly as a professional bartender would. Built from: Dark Rum, Demerara Sugar Syrup, Angostura Aromatic Bitters (show only the finished drink, not bottles). On the bar beside it: a halved orange. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: warm, inviting glow."
+ },
+ {
+  "id": "tom-collins",
+  "name": "Tom Collins",
+  "type": "cocktail",
+  "glass": "Collins",
+  "file": "assets/img/tom-collins.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Tom Collins — A tall, refreshing classic - gin, citrus, and sugar topped with soda. The Empress gin adds a stunning indigo colour. Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is luminous lavender-pink (Empress gin turned by citrus) with fine rising bubbles. Garnish: lemon slice and cherry, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Fresh Lemon Juice, Simple Syrup, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "gin-fizz",
+  "name": "Gin Fizz",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/gin-fizz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Gin Fizz — Lighter and more citrus-forward than a Collins - shaken to a silky froth, then lifted with a short soda top. Served in a tall clear highball glass, served without ice. The drink is hazy pale lavender with a tall frothy white head. Garnish: lemon wheel, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Fresh Lemon Juice, Simple Syrup, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "empress-tonic",
+  "name": "Empress & Tonic",
+  "type": "cocktail",
+  "glass": "Copa",
+  "file": "assets/img/empress-tonic.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Empress & Tonic — Empress 1908 turns a magical lavender-indigo as it meets tonic - visually stunning and effortlessly elegant. Served in a large balloon copa (gin & tonic) glass, filled with large clear ice cubes. The drink is a striking gradient from deep indigo at the bottom to lavender-pink at the top where lime meets it, with tonic bubbles. Garnish: lime wheel and lavender sprig, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Tonic, Fresh Lime Juice (show only the finished drink, not bottles). On the bar beside it: a halved lime. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "scotch-highball",
+  "name": "Scotch Highball",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/scotch-highball.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Scotch Highball — The simplest way to enjoy Monkey Shoulder - soda opens up the malt and honey notes without masking them. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is clear light amber with fine rising bubbles. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Monkey Shoulder Scotch, Soda (show only the finished drink, not bottles). On the bar beside it: a small sprig of rosemary lying on the bar as in the reference. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "scotch-manhattan",
+  "name": "Scotch Manhattan",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/scotch-manhattan.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Scotch Manhattan — Silky and spirit-forward, with Monkey Shoulder's malt depth balanced by herbal vermouth and bitters. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is clear, rich glowing amber. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Monkey Shoulder Scotch, Dolin Vermouth, Angostura Aromatic Bitters (show only the finished drink, not bottles). On the bar beside it: a halved orange. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "irish-whiskey-sour",
+  "name": "Irish Whiskey Sour",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/irish-whiskey-sour.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Irish Whiskey Sour — Softer and rounder than its Scotch cousin - Red Breast's fruit-forward character sings with citrus and rich demerara. Served in a heavy cut-crystal rocks glass, several clear ice cubes. The drink is hazy golden with a thin silky froth. Garnish: lemon wheel, placed exactly as a professional bartender would. Built from: Red Breast 12 Irish Whiskey, Fresh Lemon Juice, Demerara Sugar Syrup (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "irish-old-fashioned",
+  "name": "Irish Old Fashioned",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/irish-old-fashioned.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Irish Old Fashioned — Lush, warming, and complex - Red Breast's orchard fruit and spice elevated by caramel syrup and a hint of chocolate. Served in a heavy cut-crystal rocks glass, one large crystal-clear ice sphere, like the reference. The drink is clear, rich glowing amber. Garnish: orange peel, placed exactly as a professional bartender would. Built from: Red Breast 12 Irish Whiskey, Demerara Sugar Syrup, Angostura Aromatic Bitters, Angostura Cocoa Bitters (show only the finished drink, not bottles). On the bar beside it: a halved orange. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: warm, inviting glow."
+ },
+ {
+  "id": "vodka-collins",
+  "name": "Vodka Collins",
+  "type": "cocktail",
+  "glass": "Collins",
+  "file": "assets/img/vodka-collins.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Vodka Collins — Clean, crisp, and endlessly refreshing. The vodka Collins lets lemon and soda do the talking. Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is crystal-clear pale with fine rising bubbles. Garnish: lemon slice, placed exactly as a professional bartender would. Built from: Vodka, Fresh Lemon Juice, Simple Syrup, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "moscow-mule",
+  "name": "Moscow Mule",
+  "type": "cocktail",
+  "glass": "Copper mug",
+  "file": "assets/img/moscow-mule.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Moscow Mule — Sharp, spicy ginger beer meeting clean vodka and bright lime over crushed ice - a crowd-pleaser that never goes out of style. Served in a hammered copper Moscow mule mug, packed with crushed ice. The drink is hazy pale gold ginger beer with lively bubbles. Garnish: lime wheel, placed exactly as a professional bartender would. Built from: Vodka, Fresh Lime Juice, Ginger Beer (show only the finished drink, not bottles). On the bar beside it: a halved lime, a knob of fresh ginger. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "tequila-mule",
+  "name": "Tequila Mule",
+  "type": "cocktail",
+  "glass": "Copper mug",
+  "file": "assets/img/tequila-mule.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Tequila Mule — Ginger's heat meets tequila's agave soul with bright lime - bolder and earthier than the original Mule. Served in a hammered copper Moscow mule mug, packed with crushed ice. The drink is hazy golden-amber ginger beer with lively bubbles. Garnish: lime wheel, placed exactly as a professional bartender would. Built from: Tequila Anejo, Fresh Lime Juice, Ginger Beer (show only the finished drink, not bottles). On the bar beside it: a halved lime, a knob of fresh ginger. No smoke. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "scottish-mule",
+  "name": "Scottish Mule",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/scottish-mule.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Scottish Mule — Earthy, spiced, and warming - ginger amplifies the whisky's natural spice while lime cuts through its depth. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is hazy golden-amber ginger beer with lively bubbles. Garnish: lime wedge, placed exactly as a professional bartender would. Built from: Monkey Shoulder Scotch, Fresh Lime Juice, Ginger Beer, Angostura Aromatic Bitters (show only the finished drink, not bottles). On the bar beside it: a halved lime, a knob of fresh ginger. No smoke. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "pomegranate-margarita",
+  "name": "Pomegranate Margarita",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/pomegranate-margarita.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Pomegranate Margarita — Deep ruby-red and vibrant - classic margarita character with a jewel-toned, antioxidant-rich twist. Served in a heavy cut-crystal rocks glass, several clear ice cubes. The drink is jewel-toned ruby-red. Garnish: salt rim and lime wheel, placed exactly as a professional bartender would. The rim is neatly coated. Built from: Tequila Anejo, Cointreau, Fresh Lime Juice, Pomegranate Juice (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds, a halved lime. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "tequila-collins",
+  "name": "Tequila Collins",
+  "type": "cocktail",
+  "glass": "Collins",
+  "file": "assets/img/tequila-collins.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Tequila Collins — A tall, sunlit drink - aged tequila's warmth stretched with citrus and soda into something surprisingly delicate. Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is light golden with fine rising bubbles. Garnish: lemon slice, placed exactly as a professional bartender would. Built from: Tequila Anejo, Fresh Lemon Juice, Simple Syrup, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "rum-sour",
+  "name": "Rum Sour",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/rum-sour.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Rum Sour — Rich and rounded - the rum's caramel notes play beautifully against bright lemon and the depth of demerara. Served in a heavy cut-crystal rocks glass, several clear ice cubes. The drink is hazy honey-amber with a thin froth and a few drops of bitters on top. Garnish: lemon wheel and bitters dash, placed exactly as a professional bartender would. Built from: Dark Rum, Fresh Lemon Juice, Demerara Sugar Syrup (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "mojito-royale",
+  "name": "Mojito Royale",
+  "type": "cocktail",
+  "glass": "Wine glass",
+  "file": "assets/img/mojito-royale.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Mojito Royale — A sophisticated, celebratory mojito - same rum, mint, and lime soul, crowned with sparkling prosecco. Served in a large stemmed balloon wine glass, packed with crushed ice. The drink is pale sparkling straw with bruised mint leaves and lime inside. Garnish: mint crown and lime wheel, placed exactly as a professional bartender would. Built from: Dark Rum, Fresh Lime Juice, Simple Syrup, Mint, Prosecco (show only the finished drink, not bottles). On the bar beside it: a few fresh mint sprigs, a halved lime. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "scotch-julep",
+  "name": "Scotch Julep",
+  "type": "cocktail",
+  "glass": "Julep cup",
+  "file": "assets/img/scotch-julep.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Scotch Julep — Crushed ice, heady fresh mint, and the golden warmth of Monkey Shoulder - contemplative, aromatic, and deeply satisfying. Served in a frosted silver julep cup, packed with crushed ice. The drink is amber whisky under a dome of finely crushed ice, the cup heavily frosted. Garnish: mint bouquet, placed exactly as a professional bartender would. Built from: Monkey Shoulder Scotch, Demerara Sugar Syrup, Mint (show only the finished drink, not bottles). On the bar beside it: a few fresh mint sprigs. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "rum-fizz",
+  "name": "Rum Fizz",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/rum-fizz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Rum Fizz — Bright and bubbly - rum's molasses depth lifted by lemon and soda into a light, effervescent crowd-pleaser. Served in a tall clear highball glass, served without ice. The drink is hazy light amber with a tall frothy white head. Garnish: lemon slice, placed exactly as a professional bartender would. Built from: Dark Rum, Fresh Lemon Juice, Simple Syrup, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "pomegranate-gin-sour",
+  "name": "Pomegranate Gin Sour",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/pomegranate-gin-sour.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Pomegranate Gin Sour — Jewel-toned and arresting - floral gin, tart pomegranate, and citrus in a perfectly balanced sour. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is deep rose-magenta, hazy. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Pomegranate Juice, Fresh Lemon Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds, a halved lemon. No smoke. Mood: intimate candlelit glow."
+ },
+ {
+  "id": "bittersweet-scotch",
+  "name": "Bittersweet Scotch",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/bittersweet-scotch.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Bittersweet Scotch — Delicately bitter and silky - Glenfiddich's pear and vanilla meet herbal vermouth with a lingering chocolate finish. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is clear, rich glowing amber. Garnish: orange peel, placed exactly as a professional bartender would. Built from: Glenfiddich 12 Scotch, Dolin Vermouth, Angostura Cocoa Bitters (show only the finished drink, not bottles). On the bar beside it: a halved orange. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: warm, inviting glow."
+ },
+ {
+  "id": "tequila-fizz",
+  "name": "Tequila Fizz",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/tequila-fizz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Tequila Fizz — The margarita's refreshing cousin - shaken tequila and lime topped with soda for a lighter, longer drink. Served in a tall clear highball glass, served without ice. The drink is hazy pale straw with a tall frothy white head. Garnish: lime wheel, placed exactly as a professional bartender would. Built from: Tequila Anejo, Fresh Lime Juice, Simple Syrup, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lime. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "whiskey-collins",
+  "name": "Whiskey Collins",
+  "type": "cocktail",
+  "glass": "Collins",
+  "file": "assets/img/whiskey-collins.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Whiskey Collins — A gentle giant - Red Breast's complex fruit and spice stretched into a long, summery Collins. Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is light golden with fine rising bubbles. Garnish: lemon slice, placed exactly as a professional bartender would. Built from: Red Breast 12 Irish Whiskey, Fresh Lemon Juice, Simple Syrup, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "rum-cooler",
+  "name": "Rum Cooler",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/rum-cooler.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Rum Cooler — Stripped back and honest - rum, lime, a breath of demerara, and soda. No frills, full flavour. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is light golden with fine rising bubbles. Garnish: lime wedge, placed exactly as a professional bartender would. Built from: Dark Rum, Fresh Lime Juice, Demerara Sugar Syrup, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lime. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "naked-famous-home-bar-edit",
+  "name": "Naked & Famous (Home Bar Edit)",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/naked-famous-home-bar-edit.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Naked & Famous (Home Bar Edit) — Equal-parts and perfectly balanced - tequila, orange liqueur, citrus, and a bittersweet cocoa finish. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is hazy pale golden-amber with a silky texture. No garnish — the drink stands alone. Built from: Tequila Anejo, Cointreau, Fresh Lime Juice, Angostura Cocoa Bitters (show only the finished drink, not bottles). On the bar beside it: a halved lime. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: warm, inviting glow."
+ },
+ {
+  "id": "rum-punch",
+  "name": "Rum Punch",
+  "type": "cocktail",
+  "glass": "Collins",
+  "file": "assets/img/rum-punch.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Rum Punch — Vivid, tropical, and celebratory - dark rum's depth carrying layers of citrus and fruit in every sip. Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is deep sunset red-orange. Garnish: lime wheel and mint sprig, placed exactly as a professional bartender would. Built from: Dark Rum, Fresh Lime Juice, Orange Juice, Pomegranate Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds, a halved orange. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "negroni-bianco",
+  "name": "Negroni Bianco",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/negroni-bianco.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Negroni Bianco — Paler and more delicate than the original - Empress gin's floral botanicals bloom through the vermouth with a bitter whisper from both bitters. Served in a heavy cut-crystal rocks glass, one large crystal-clear ice sphere, like the reference. The drink is clear deep indigo-violet with a hint of amber. Garnish: lemon peel, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Dolin Vermouth, Angostura Aromatic Bitters, Angostura Cocoa Bitters (show only the finished drink, not bottles). On the bar beside it: a small sprig of rosemary lying on the bar as in the reference. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: warm, inviting glow."
+ },
+ {
+  "id": "amaretto-spritz",
+  "name": "Amaretto Spritz",
+  "type": "cocktail",
+  "glass": "Wine glass",
+  "file": "assets/img/amaretto-spritz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Amaretto Spritz — Sparkling, nutty, and gently sweet - Disaronno's almond warmth lifted by Prosecco bubbles and a squeeze of lemon. Served in a large stemmed balloon wine glass, filled with large clear ice cubes. The drink is sparkling light amber-gold with bubbles. Garnish: lemon slice, placed exactly as a professional bartender would. Built from: Disaronno Amaretto, Prosecco, Fresh Lemon Juice (show only the finished drink, not bottles). On the bar beside it: a halved orange. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "lime-daisy-tequila",
+  "name": "Lime Daisy (Tequila)",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/lime-daisy-tequila.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Lime Daisy (Tequila) — Essentially the missing link between a Margarita and a Collins - longer, lighter, and endlessly refreshing. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is light golden with fine rising bubbles. Garnish: lime wheel, placed exactly as a professional bartender would. Built from: Tequila Anejo, Cointreau, Fresh Lime Juice, Simple Syrup, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lime. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "scotch-sour-cocoa-twist",
+  "name": "Scotch Sour (Cocoa Twist)",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/scotch-sour-cocoa-twist.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Scotch Sour (Cocoa Twist) — A whisky sour with a moody undercurrent - the cocoa bitters add a dry, bittersweet layer that makes the lemon pop. Served in a heavy cut-crystal rocks glass, several clear ice cubes. The drink is hazy golden with a thin froth and dark cocoa bitters drops floating on the surface. Garnish: lemon wheel, placed exactly as a professional bartender would. Built from: Glenfiddich 12 Scotch, Fresh Lemon Juice, Demerara Sugar Syrup, Angostura Cocoa Bitters (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "old-pal",
+  "name": "Old Pal",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/old-pal.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Old Pal — Bracing and dry — unlike the Boulevardier, this one is built for Dolin Dry. Campari's bitterness meets whisky's warmth with a crisp, herbal finish. Perfect use of your Dolin Dry/Blanc. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is clear, glowing crimson-amber. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Monkey Shoulder Scotch, Campari, Dolin Vermouth (show only the finished drink, not bottles). On the bar beside it: a small sprig of rosemary lying on the bar as in the reference. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "campari-spritz",
+  "name": "Campari Spritz",
+  "type": "cocktail",
+  "glass": "Wine glass",
+  "file": "assets/img/campari-spritz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Campari Spritz — Brighter, more bitter, and more complex than an Aperol Spritz — Campari's herbal punch cuts through the Prosecco's sweetness for the ultimate Italian aperitivo. Served in a large stemmed balloon wine glass, filled with large clear ice cubes. The drink is bright sparkling scarlet-orange with bubbles. Garnish: orange slice, placed exactly as a professional bartender would. Built from: Campari, Prosecco, Soda (show only the finished drink, not bottles). On the bar beside it: a halved orange. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "negroni-sbagliato",
+  "name": "Negroni Sbagliato",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/negroni-sbagliato.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Negroni Sbagliato — A lighter, effervescent Negroni — Prosecco's bubbles open up Campari's bitterness into something elegant and sessionable. Traditional recipe uses sweet vermouth; Dolin Dry makes it more floral. Served in a heavy cut-crystal rocks glass, one large crystal-clear ice sphere, like the reference. The drink is sparkling translucent ruby-red with fine bubbles. Garnish: orange half-wheel, placed exactly as a professional bartender would. Built from: Campari, Dolin Vermouth, Prosecco (show only the finished drink, not bottles). On the bar beside it: a halved orange. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "garibaldi",
+  "name": "Garibaldi",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/garibaldi.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Garibaldi — Deceptively simple — just two ingredients, but when the orange juice is fresh and frothy, the result is magic. Campari's bitter edge tamed by bright citrus. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is frothy, fluffy coral-orange with a light foamy head. Garnish: orange wedge, placed exactly as a professional bartender would. Built from: Campari, Orange Juice (show only the finished drink, not bottles). On the bar beside it: a halved orange. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "jasmine",
+  "name": "Jasmine",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/jasmine.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Jasmine — Looks like a Cosmopolitan, drinks like a Negroni meets a White Lady. A stunning balance of bitter, sweet, and citrus — pink, elegant, and deceptively complex. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is soft opaque pale pink-grapefruit hue, silky and chilled. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Campari, Cointreau, Fresh Lemon Juice (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "campari-sour",
+  "name": "Campari Sour",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/campari-sour.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Campari Sour — Ruby red, tart, and refreshing — Campari's herbal bitterness balanced perfectly by bright lemon and a kiss of sweetness. Served in a heavy cut-crystal rocks glass, several clear ice cubes. The drink is hazy vivid pinkish-red with a thin silky froth. Garnish: orange slice, placed exactly as a professional bartender would. Built from: Campari, Fresh Lemon Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved orange. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "dark-n-stormy",
+  "name": "Dark 'n Stormy",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/dark-n-stormy.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Dark 'n Stormy — A stormy, spicy, unapologetically rum-forward highball. Dark rum's molasses depth meets the bite of ginger beer with a lime squeeze to balance. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is cloudy pale-gold ginger beer with a dramatic dark rum float swirling down from the top like storm clouds. Garnish: lime wedge, placed exactly as a professional bartender would. Built from: Dark Rum, Fresh Lime Juice, Ginger Beer (show only the finished drink, not bottles). On the bar beside it: a halved lime, a knob of fresh ginger. No smoke. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "gin-buck",
+  "name": "Gin Buck",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/gin-buck.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Gin Buck — A long, spicy refresher — Empress gin's floral character lifted by the sharp kick of ginger and a bright lemon squeeze. Lighter and more aromatic than a Mule. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is luminous lavender-pink (Empress gin turned by citrus) with fine rising bubbles. Garnish: lemon wedge, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Fresh Lemon Juice, Ginger Beer (show only the finished drink, not bottles). On the bar beside it: a halved lemon, a knob of fresh ginger. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "hot-toddy",
+  "name": "Hot Toddy",
+  "type": "cocktail",
+  "glass": "Heatproof mug",
+  "file": "assets/img/hot-toddy.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Hot Toddy — The ultimate cold-weather cocktail — Red Breast's orchard-fruit warmth amplified by hot water, with lemon to cut through and demerara to round out. Traditional cold cure, traditional soul warmer. Served in a clear glass heatproof toddy mug with a handle, no ice, served hot. The drink is steaming hot translucent honey-amber, wisps of steam rising (instead of smoke). Garnish: clove-studded lemon wheel and cinnamon stick, placed exactly as a professional bartender would. Built from: Red Breast 12 Irish Whiskey, Demerara Sugar Syrup, Fresh Lemon Juice, Hot Water (show only the finished drink, not bottles). On the bar beside it: a cinnamon stick and a few cloves, a halved lemon. Gentle steam rises from the mug. Mood: warm, inviting glow."
+ },
+ {
+  "id": "mamie-taylor",
+  "name": "Mamie Taylor",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/mamie-taylor.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Mamie Taylor — Scotch's forgotten highball — smoky, honeyed malt lengthened with fresh lime and a lively ginger kick. Elegant, balanced, and dangerously easy to drink. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is hazy golden-amber ginger beer with lively bubbles. Garnish: lime wedge, placed exactly as a professional bartender would. Built from: Monkey Shoulder Scotch, Fresh Lime Juice, Ginger Beer (show only the finished drink, not bottles). On the bar beside it: a halved lime, a knob of fresh ginger. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "saint-germain-cocktail",
+  "name": "Saint-Germain Cocktail",
+  "type": "cocktail",
+  "glass": "Collins",
+  "file": "assets/img/saint-germain-cocktail.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Saint-Germain Cocktail — Elegant and effervescent — equal-parts sparkling wine and elderflower, dressed with a whisper of lemon. The cocktail that put St-Germain on the map. Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is sparkling pale gold with bubbles. Garnish: long lemon twist, placed exactly as a professional bartender would. Built from: St-Germain, Prosecco, Soda, Fresh Lemon Juice (show only the finished drink, not bottles). On the bar beside it: a halved lemon, a small sprig of elderflower blossoms. No smoke. Mood: intimate candlelit glow."
+ },
+ {
+  "id": "elderflower-martini",
+  "name": "Elderflower Martini",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/elderflower-martini.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Elderflower Martini — Floral, citrus-bright, and stunning — Empress gin's lavender hue meets elderflower's honeyed sweetness. The lemon cuts through to keep it balanced and bracing. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is luminous lavender-pink (Empress gin turned by citrus), slightly hazy. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, St-Germain, Fresh Lemon Juice (show only the finished drink, not bottles). On the bar beside it: a halved lemon, a small sprig of elderflower blossoms. No smoke. Mood: intimate candlelit glow."
+ },
+ {
+  "id": "elderflower-collins",
+  "name": "Elderflower Collins",
+  "type": "cocktail",
+  "glass": "Collins",
+  "file": "assets/img/elderflower-collins.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Elderflower Collins — A long, floral, garden-fresh refresher — gin's botanicals dance with elderflower honey, brightened by lemon and lifted by soda. Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is luminous lavender-pink (Empress gin turned by citrus) with fine rising bubbles. Garnish: lemon wheel and mint sprig, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, St-Germain, Fresh Lemon Juice, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lemon, a small sprig of elderflower blossoms. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "empress-elderflower-spritz",
+  "name": "Empress Elderflower Spritz",
+  "type": "cocktail",
+  "glass": "Wine glass",
+  "file": "assets/img/empress-elderflower-spritz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Empress Elderflower Spritz — A magenta spritz with serious botanical depth — Empress gin shifts to a soft pink against the lemon-tinted base, while elderflower adds floral honey notes against the crisp Prosecco. Served in a large stemmed balloon wine glass, filled with large clear ice cubes. The drink is luminous lavender-pink (Empress gin turned by citrus) with fine rising bubbles. Garnish: lime wheel and mint sprig, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, St-Germain, Fresh Lime Juice, Prosecco, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lime, a small sprig of elderflower blossoms. No smoke. Mood: intimate candlelit glow."
+ },
+ {
+  "id": "elderflower-margarita",
+  "name": "Elderflower Margarita",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/elderflower-margarita.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Elderflower Margarita — A softer, more elegant Margarita — añejo tequila's caramel depth meets elderflower's floral honey, balanced by Cointreau and bright lime. Less aggressive, more romantic. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is hazy golden-amber with a thin silky froth on top. Garnish: lime wheel, placed exactly as a professional bartender would. Built from: Tequila Anejo, St-Germain, Cointreau, Fresh Lime Juice (show only the finished drink, not bottles). On the bar beside it: a halved lime, a small sprig of elderflower blossoms. No smoke. Mood: intimate candlelit glow."
+ },
+ {
+  "id": "floradora",
+  "name": "Floradora",
+  "type": "cocktail",
+  "glass": "Collins",
+  "file": "assets/img/floradora.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Floradora — Pretty, pink, and spicy — gin and floral elderflower meet tart pomegranate and the ginger beer's kick. A vintage cocktail with a modern, floral upgrade. Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is sparkling rosy-pink with bubbles. Garnish: lime wedge and pomegranate seeds, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, St-Germain, Fresh Lime Juice, Pomegranate Juice, Ginger Beer (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds, a halved lime. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "elderflower-whisky-sour",
+  "name": "Elderflower Whisky Sour",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/elderflower-whisky-sour.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Elderflower Whisky Sour — A whisky sour with romance — Red Breast's creamy pot-still fruit meets elderflower honey and bright lemon, with demerara adding warmth. Sophisticated and easy-drinking. Served in a heavy cut-crystal rocks glass, several clear ice cubes. The drink is hazy pale golden with a thin froth and a few drops of bitters on top. Garnish: lemon wheel and bitters dash, placed exactly as a professional bartender would. Built from: Red Breast 12 Irish Whiskey, St-Germain, Fresh Lemon Juice, Demerara Sugar Syrup (show only the finished drink, not bottles). On the bar beside it: a halved lemon, a small sprig of elderflower blossoms. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "vodka-elderflower-fizz",
+  "name": "Vodka Elderflower Fizz",
+  "type": "cocktail",
+  "glass": "Collins",
+  "file": "assets/img/vodka-elderflower-fizz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Vodka Elderflower Fizz — Crisp, clean, and floral — vodka's neutrality lets St-Germain's honeyed elderflower take centre stage, with citrus and soda for refreshment. Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is crystal-clear pale with fine rising bubbles. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Vodka, St-Germain, Fresh Lemon Juice, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lemon, a small sprig of elderflower blossoms. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "gentlemans-knock",
+  "name": "Gentleman’s Knock",
+  "type": "cocktail",
+  "glass": "Nick & Nora",
+  "file": "assets/img/gentlemans-knock.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Gentleman’s Knock — Bourbon-forward, herbal, lightly sweet, with baking spice, warm chile, and orange. The bourbon stays the star; Bénédictine adds honeyed herbal complexity without turning syrupy, and Ancho Reyes brings a gentle chile finish. Served in a delicate stemmed Nick & Nora glass, served up with no ice. The drink is clear deep mahogany-amber with a rich sheen. Garnish: orange twist, placed exactly as a professional bartender would. Built from: Bourbon, Sweet Vermouth, DOM Bénédictine, Ancho Reyes Chile Liqueur (show only the finished drink, not bottles). On the bar beside it: a halved orange, a single dried ancho chile. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "monte-carlo",
+  "name": "Monte Carlo",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/monte-carlo.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Monte Carlo — An Old Fashioned’s richer cousin — Bénédictine’s honeyed herbs and baking spice wrap around bourbon, with Angostura keeping it dry and aromatic. Served in a heavy cut-crystal rocks glass, one large crystal-clear ice sphere, like the reference. The drink is clear, rich glowing amber. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Bourbon, DOM Bénédictine, Angostura Aromatic Bitters (show only the finished drink, not bottles). On the bar beside it: a small sprig of rosemary lying on the bar as in the reference. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "frisco-sour",
+  "name": "Frisco Sour",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/frisco-sour.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Frisco Sour — A whiskey sour with herbal depth — Bénédictine brings honey and spice in place of syrup, while lemon and lime keep it bright and dry. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is hazy golden-amber with a thin silky froth on top. Garnish: lemon twist, placed exactly as a professional bartender would. Built from: Bourbon, DOM Bénédictine, Fresh Lemon Juice, Fresh Lime Juice (show only the finished drink, not bottles). On the bar beside it: a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "whiskey-smash",
+  "name": "Whiskey Smash",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/whiskey-smash.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Whiskey Smash — Bright, minty, and easy-drinking — bourbon’s vanilla warmth meets fresh lemon and cooling mint over crushed ice. A julep with a citrus kick. Served in a heavy cut-crystal rocks glass, packed with crushed ice. The drink is hazy golden amber over crushed ice with muddled mint flecks. Garnish: mint sprig, placed exactly as a professional bartender would. Built from: Bourbon, Fresh Lemon Juice, Simple Syrup, Mint (show only the finished drink, not bottles). On the bar beside it: a few fresh mint sprigs, a halved lemon. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: warm, inviting glow."
+ },
+ {
+  "id": "whiskey-sour",
+  "name": "Whiskey Sour",
+  "type": "cocktail",
+  "glass": "Rocks",
+  "file": "assets/img/whiskey-sour.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Whiskey Sour — Bourbon squared up by fresh lemon and a little sugar — the benchmark sour. Served in a heavy cut-crystal rocks glass, several clear ice cubes. The drink is hazy golden-amber with a thin silky froth on top. Garnish: orange half-wheel and cherry, placed exactly as a professional bartender would. Built from: Bourbon, Fresh Lemon Juice, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a halved orange. No smoke. Mood: deep, dramatic shadows."
+ },
+ {
+  "id": "manhattan",
+  "name": "Manhattan",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/manhattan.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Manhattan — Whiskey and sweet vermouth laced with bitters — elegant and spirit-forward. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is clear, rich glowing amber. Garnish: cocktail cherry, placed exactly as a professional bartender would. Built from: Bourbon, Sweet Vermouth, Angostura Aromatic Bitters (show only the finished drink, not bottles). On the bar beside it: a halved orange. Thin wisps of aromatic smoke curl up beside the glass, as in the reference. Mood: warm, inviting glow."
+ },
+ {
+  "id": "southside",
+  "name": "Southside",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/southside.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Southside — A minty gin sour — the crisp, spirit-forward cousin of the Mojito. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is luminous lavender-pink (Empress gin turned by citrus), slightly hazy. Garnish: mint sprig, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Fresh Lemon Juice, Simple Syrup, Mint (show only the finished drink, not bottles). On the bar beside it: a few fresh mint sprigs, a halved lemon. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "gin-rickey",
+  "name": "Gin Rickey",
+  "type": "cocktail",
+  "glass": "Highball",
+  "file": "assets/img/gin-rickey.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Gin Rickey — Dry, fizzy, and unsweetened — gin and fresh lime lengthened with soda. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is luminous lavender-pink (Empress gin turned by citrus) with fine rising bubbles. Garnish: lime wedge, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Fresh Lime Juice, Soda (show only the finished drink, not bottles). On the bar beside it: a halved lime. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "corpse-reviver-no-2",
+  "name": "Corpse Reviver No. 2",
+  "type": "cocktail",
+  "glass": "Coupe",
+  "file": "assets/img/corpse-reviver-no-2.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Corpse Reviver No. 2 — Equal parts gin, orange, and aromatised wine over an anise whisper — bright and complex. Served in an elegant stemmed crystal coupe, served up with no ice. The drink is pale lavender-tinted, slightly cloudy and ice-cold. Garnish: orange twist, placed exactly as a professional bartender would. Built from: Empress 1908 Gin, Cointreau, Vermouth, Fresh Lemon Juice, Anise Bitters (show only the finished drink, not bottles). On the bar beside it: a halved orange. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "pomegranate-lemonade",
+  "name": "Pomegranate Lemonade",
+  "type": "mocktail",
+  "glass": "Collins",
+  "file": "assets/img/pomegranate-lemonade.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Pomegranate Lemonade — Jewel-toned and tart — bright lemon balanced by sweet-tart pomegranate, finished with a lively soda lift. Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is jewel-toned ruby-red with fine rising bubbles. Garnish: lemon wheel and pomegranate seeds, placed exactly as a professional bartender would. Built from: Pomegranate Juice, Fresh Lemon Juice, Simple Syrup, Soda (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds, a halved lemon. No smoke. Mood: slightly brighter, lively highlights and sparkle."
+ },
+ {
+  "id": "virgin-pomegranate-spritz",
+  "name": "Virgin Pomegranate Spritz",
+  "type": "mocktail",
+  "glass": "Wine glass",
+  "file": "assets/img/virgin-pomegranate-spritz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Virgin Pomegranate Spritz — A jewel-toned non-alcoholic spritz — pomegranate's tart sweetness brightened by lime, lifted by soda and finished with tonic's bitter botanicals. Served in a large stemmed balloon wine glass, filled with large clear ice cubes. The drink is jewel-toned ruby-red with fine rising bubbles. Garnish: orange slice and pomegranate seeds, placed exactly as a professional bartender would. Built from: Pomegranate Juice, Fresh Lime Juice, Simple Syrup, Soda, Tonic (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds, a halved orange. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "nojito-royale",
+  "name": "Nojito Royale",
+  "type": "mocktail",
+  "glass": "Highball",
+  "file": "assets/img/nojito-royale.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Nojito Royale — A blush-pink mojito with attitude — mint and lime over crushed ice with a pomegranate twist. Looks like a cocktail, drinks like summer. Served in a tall clear highball glass, packed with crushed ice. The drink is sparkling pale-pink with mint leaves and lime inside. Garnish: mint crown and lime wheel, placed exactly as a professional bartender would. Built from: Mint, Fresh Lime Juice, Simple Syrup, Pomegranate Juice, Soda (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds, a few fresh mint sprigs. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "citrus-cooler",
+  "name": "Citrus Cooler",
+  "type": "mocktail",
+  "glass": "Collins",
+  "file": "assets/img/citrus-cooler.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Citrus Cooler — Brightly citrus and endlessly refreshing — three different citrus juices layered with sweet syrup and a long soda top. Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is sunny pale-orange, lightly sparkling. Garnish: orange wheel and lemon twist, placed exactly as a professional bartender would. Built from: Fresh Lemon Juice, Fresh Lime Juice, Orange Juice, Simple Syrup, Soda (show only the finished drink, not bottles). On the bar beside it: a halved orange. No smoke. Mood: slightly brighter, lively highlights and sparkle."
+ },
+ {
+  "id": "ginger-lime-fizz",
+  "name": "Ginger Lime Fizz",
+  "type": "mocktail",
+  "glass": "Copper mug",
+  "file": "assets/img/ginger-lime-fizz.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Ginger Lime Fizz — Spicy, tart, and grown-up — ginger beer's punch with bright lime and a hint of demerara's caramel depth. Served in a hammered copper Moscow mule mug, packed with crushed ice. The drink is hazy pale gold ginger beer with lively bubbles. Garnish: mint sprig and lime wedge, placed exactly as a professional bartender would. Built from: Fresh Lime Juice, Demerara Sugar Syrup, Ginger Beer, Mint (show only the finished drink, not bottles). On the bar beside it: a few fresh mint sprigs, a halved lime. No smoke. Mood: slightly brighter, lively highlights and sparkle."
+ },
+ {
+  "id": "cinderella",
+  "name": "Cinderella",
+  "type": "mocktail",
+  "glass": "Collins",
+  "file": "assets/img/cinderella.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Cinderella — A simple, sunny refresher — orange and lemon balanced by a touch of sweetness and a lively soda lift. Served in a tall narrow Collins glass, tall clear ice cubes stacked to the rim. The drink is bright opaque golden-orange with sparkle on top. Garnish: orange wedge and maraschino cherry, placed exactly as a professional bartender would. Built from: Orange Juice, Fresh Lemon Juice, Simple Syrup, Soda (show only the finished drink, not bottles). On the bar beside it: a halved orange. No smoke. Mood: warm, inviting glow."
+ },
+ {
+  "id": "pomegranate-mint-cooler",
+  "name": "Pomegranate Mint Cooler",
+  "type": "mocktail",
+  "glass": "Wine glass",
+  "file": "assets/img/pomegranate-mint-cooler.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Pomegranate Mint Cooler — Aromatic, complex, and refreshing — pomegranate's tartness meets mint's coolness with tonic's gentle bitter finish. Served in a large stemmed balloon wine glass, filled with large clear ice cubes. The drink is jewel-toned ruby-red with fine rising bubbles. Garnish: mint sprig and pomegranate seeds, placed exactly as a professional bartender would. Built from: Pomegranate Juice, Fresh Lemon Juice, Mint, Simple Syrup, Tonic (show only the finished drink, not bottles). On the bar beside it: a halved pomegranate with glossy seeds, a few fresh mint sprigs. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "empress-g-t-virgin",
+  "name": "Empress G&T (Virgin)",
+  "type": "mocktail",
+  "glass": "Copa",
+  "file": "assets/img/empress-g-t-virgin.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Empress G&T (Virgin) — Quietly sophisticated — tonic's botanical depth lifted by mint, lime, and a whisper of sweetness. The grown-up zero-proof option. Served in a large balloon copa (gin & tonic) glass, filled with large clear ice cubes. The drink is crystal-clear sparkling tonic with bubbles, bright green mint leaves suspended in the glass. Garnish: lime wheel and mint sprig, placed exactly as a professional bartender would. Built from: Tonic, Fresh Lime Juice, Mint, Simple Syrup (show only the finished drink, not bottles). On the bar beside it: a few fresh mint sprigs, a halved lime. No smoke. Mood: relaxed, soft warm glow."
+ },
+ {
+  "id": "rooh-afza-rose-cooler",
+  "name": "Rooh Afza Rose Cooler",
+  "type": "mocktail",
+  "glass": "Highball",
+  "file": "assets/img/rooh-afza-rose-cooler.jpg",
+  "prompt": "Photorealistic editorial cocktail photograph, matching the reference image's style exactly: moody low-key lighting, warm amber candlelight and golden bokeh bar lights in a softly blurred dark background, polished dark walnut bar top with subtle reflections, glass sharply in focus at center, shallow depth of field, eye-level 3/4 angle, square 1:1 composition with the glass filling about 60% of the frame, a brass double jigger standing to the right as in the reference. Crisp condensation where the drink is cold. No text, no labels, no logos, no bottles with readable branding, no people, no hands.\n\nSubject: Rooh Afza Rose Cooler — A rose-tinted, cardamom-kissed refresher — Rooh Afza's iconic floral sweetness brightened by lemon and lifted by soda. Served in a tall clear highball glass, tall clear ice cubes stacked to the rim. The drink is vivid rose-red with sparkling bubbles. Garnish: mint sprig and lemon slice, placed exactly as a professional bartender would. Built from: Rooh Afza, Fresh Lemon Juice, Mint, Soda (show only the finished drink, not bottles). On the bar beside it: a few fresh mint sprigs, a halved lemon. No smoke. Mood: intimate candlelit glow."
+ }
+]

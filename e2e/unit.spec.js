@@ -226,10 +226,10 @@ test.describe('camParseIngredients()', () => {
     expect(out).toEqual(['Tanqueray', 'Campari', 'Vermouth']);
   });
 
-  test('known limitation: two separate arrays with prose between → [] (greedy span is invalid JSON)', async ({ page }) => {
+  test('two separate arrays with prose between → takes the last real one', async ({ page }) => {
     const out = await call(page, 'camParseIngredients',
-      wrap('Example: ["a"]. Actual: ["Tanqueray","Campari"]'));
-    expect(out).toEqual([]);
+      wrap('Example: ["Gin"]. Actual: ["Tanqueray","Campari"]'));
+    expect(out).toEqual(['Tanqueray', 'Campari']);
   });
 
   test('filters non-strings and out-of-range lengths', async ({ page }) => {
