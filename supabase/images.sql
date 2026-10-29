@@ -108,6 +108,7 @@ update recipes set image_filename = 'assets/img/look-coupe-pale-lemon-twist.jpg'
 update recipes set image_filename = 'assets/img/look-coupe-golden-lime.jpg' where id = 'golden-autumn';
 update recipes set image_filename = 'assets/img/look-rocks-red-orange-slice.jpg' where id = 'bacardi-symphony';
 update recipes set image_filename = 'assets/img/virgin-mojito.jpg' where id = 'maid-in-cuba';
+update recipes set image_filename = 'assets/img/look-coupe-red-lemon-twist.jpg' where id = 'crimson-flight';
 update recipes set image_filename = 'assets/img/virgin-mojito.jpg' where id = 'virgin-mojito';
 update recipes set image_filename = 'assets/img/look-highball-pink-citrus-mint.jpg' where id = 'pomegranate-lemonade';
 update recipes set image_filename = 'assets/img/shirley-temple.jpg' where id = 'shirley-temple';
