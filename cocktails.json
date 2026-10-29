@@ -3972,5 +3972,45 @@
       "Cucumber ribbon & mint sprig"
     ],
     "mood": "Fresh"
+  },
+  {
+    "id": "crimson-flight",
+    "name": "The Crimson Flight",
+    "baseSpirit": "Bourbon",
+    "tags": [
+      "Modern Classic",
+      "Sour"
+    ],
+    "ingredients": [
+      "Bourbon",
+      "Campari",
+      "Cointreau",
+      "Fresh Lemon Juice",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "22.5 ml",
+      "15 ml",
+      "15 ml",
+      "22.5 ml",
+      "2–3 dashes"
+    ],
+    "measurementsOz": [
+      "0.75 oz",
+      "0.5 oz",
+      "0.5 oz",
+      "0.75 oz",
+      "2–3 dashes"
+    ],
+    "history": "A variant of Sam Ross's Paper Plane (2008), which splits bourbon with Aperol, Amaro Nonino and lemon. The Crimson Flight trades Aperol for Campari and the amaro for Cointreau, then adds aromatic bitters for spine.",
+    "description": "Bourbon's vanilla, oak and caramel against Campari's bitter orange and red fruit, with Cointreau for bright sweetness, lemon for balance and Angostura for warm spice.",
+    "recipe": "Add all five ingredients to a cocktail shaker. Fill with ice and shake vigorously 12–15 seconds. Double-strain into a chilled coupe. Garnish with a thin orange twist, expressing the oils over the drink. Bartender's adjustment: start with 2 dashes of bitters and add the third if you want more spice; if it tastes too bitter, add ¼ oz more Cointreau.",
+    "glasses": [
+      "Coupe"
+    ],
+    "garnishes": [
+      "Orange twist"
+    ],
+    "mood": "Bold"
   }
 ]

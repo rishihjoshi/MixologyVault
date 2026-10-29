@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '3.5.0';
+const APP_VERSION = '3.6.0';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -362,7 +362,7 @@ const SHARED_PHOTOS = {
     'manhattan', 'rob-roy',
   ],
   'assets/img/look-coupe-red-lemon-twist.jpg': [
-    'old-pal', 'jasmine',
+    'old-pal', 'jasmine', 'crimson-flight',
   ],
   'assets/img/look-highball-sunrise.jpg': [
     'tequila-sunrise', 'garibaldi',
