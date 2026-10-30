@@ -4012,5 +4012,96 @@
       "Orange twist"
     ],
     "mood": "Bold"
+  },
+  {
+    "id": "the-confluence",
+    "name": "The Confluence",
+    "baseSpirit": "Bourbon & Cognac",
+    "tags": [
+      "Spirit-Forward",
+      "Stirred"
+    ],
+    "ingredients": [
+      "Bourbon",
+      "Cognac VSOP",
+      "Sweet Vermouth",
+      "Demerara Sugar Syrup",
+      "Angostura Aromatic Bitters",
+      "Orange Bitters"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "30 ml",
+      "15 ml",
+      "7.5 ml",
+      "2 dashes",
+      "1 dash"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "1 oz",
+      "0.5 oz",
+      "0.25 oz",
+      "2 dashes",
+      "1 dash"
+    ],
+    "history": "A riff that sits between the Manhattan and the Old Fashioned, in the spirit of the New Orleans Vieux Carré, which first paired rye whiskey with cognac. Splitting the base between bourbon and cognac, then leaning on sugar and bitters rather than a full vermouth pour, pulls the drink toward Old Fashioned territory.",
+    "description": "Bourbon's caramel and oak meet cognac's dried-fruit and grape warmth, framed by a touch of sweet vermouth, demerara and a double hit of bitters. Spirit-forward and rich, like a Manhattan that leans into an Old Fashioned.",
+    "recipe": "Add demerara syrup and both bitters to a mixing glass. Add bourbon, cognac and sweet vermouth, then fill with ice. Stir 30 seconds until well chilled and diluted. Strain over one large ice cube in a rocks glass (or up into a chilled coupe). Express an orange peel over the surface and drop it in; add a brandied cherry. Bartender's adjustment: start with 2 dashes Angostura and more syrup if you want it rounder, or drop the vermouth to 0.25 oz for a drier, more Old Fashioned feel.",
+    "glasses": [
+      "Rocks",
+      "Coupe"
+    ],
+    "garnishes": [
+      "Orange peel & brandied cherry",
+      "Orange twist"
+    ],
+    "mood": "Bold"
+  },
+  {
+    "id": "vieux-carre",
+    "name": "Vieux Carré",
+    "baseSpirit": "Rye Whiskey & Cognac",
+    "tags": [
+      "Classic",
+      "Spirit-Forward",
+      "Stirred"
+    ],
+    "ingredients": [
+      "Rye Whiskey",
+      "Cognac VSOP",
+      "Sweet Vermouth",
+      "Bénédictine",
+      "Peychaud's Bitters",
+      "Angostura Aromatic Bitters"
+    ],
+    "measurementsMl": [
+      "30 ml",
+      "30 ml",
+      "30 ml",
+      "7.5 ml",
+      "2 dashes",
+      "2 dashes"
+    ],
+    "measurementsOz": [
+      "1 oz",
+      "1 oz",
+      "1 oz",
+      "0.25 oz",
+      "2 dashes",
+      "2 dashes"
+    ],
+    "history": "Created around 1938 by Walter Bergeron, head bartender at the Carousel Bar in the Hotel Monteleone in New Orleans' French Quarter. The name is French for \"Old Square,\" the locals' term for the French Quarter itself. It is a landmark New Orleans classic that marries American rye whiskey with French cognac, Italian vermouth and herbal Bénédictine, a liquid map of the city's blended heritage.",
+    "description": "A rich, layered sipper splitting its base between spicy rye and grapey cognac, rounded with sweet vermouth and honeyed-herbal Bénédictine, then lifted by both Peychaud's and Angostura bitters. Complex and warming, a Manhattan's more baroque cousin.",
+    "recipe": "Add rye, cognac, sweet vermouth, Bénédictine and both bitters to a mixing glass. Fill with ice and stir 30 seconds until well chilled. Strain over fresh ice in a rocks glass. Express a lemon peel over the surface and drop it in. Bartender's adjustment: the Bénédictine is assertive, start with a scant 0.25 oz and build up; serve up in a chilled coupe for a more elegant, less diluted drink.",
+    "glasses": [
+      "Rocks",
+      "Coupe"
+    ],
+    "garnishes": [
+      "Lemon twist",
+      "Lemon peel & brandied cherry"
+    ],
+    "mood": "Bold"
   }
 ]
