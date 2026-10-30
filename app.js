@@ -8,7 +8,7 @@
 const DATA_BASE = './'; // path prefix for JSON data files
 
 // App version — bump this AND CACHE_NAME in sw.js together on every release.
-const APP_VERSION = '3.7.0';
+const APP_VERSION = '3.7.1';
 
 // ── STATE ────────────────────────────────────────────────
 let allIngredients    = [];
@@ -317,7 +317,7 @@ const SHARED_PHOTOS = {
     'gin-pomegranate-collins-soda-free', 'floradora', 'pomegranate-lemonade', 'rum-punch', 'nojito-royale', 'rooh-afza-rose-cooler',
   ],
   'assets/img/look-rocks-amber-lemon-twist.jpg': [
-    'godmother', 'amaretto-old-fashioned', 'monte-carlo', 'negroni-bianco',
+    'godmother', 'amaretto-old-fashioned', 'monte-carlo', 'negroni-bianco', 'vieux-carre',
   ],
   'assets/img/look-rocks-golden-sour-lemon.jpg': [
     'irish-whiskey-sour', 'rum-sour', 'scotch-sour-cocoa-twist', 'elderflower-whisky-sour', 'scotch-amaretto-sour',
@@ -389,7 +389,7 @@ const SHARED_PHOTOS = {
     'amaretto-spritz',
   ],
   'assets/img/old-fashioned.jpg': [
-    'godfather', 'rum-old-fashioned', 'irish-old-fashioned',
+    'godfather', 'rum-old-fashioned', 'irish-old-fashioned', 'the-confluence',
   ],
   'assets/img/gimlet.jpg': [
     'vodka-gimlet', 'kamikaze', 'southside',
